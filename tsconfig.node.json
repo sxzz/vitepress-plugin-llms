@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"composite": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"types": ["@types/node"]
+	},
+
+	"include": ["src/**/*.ts"]
+}

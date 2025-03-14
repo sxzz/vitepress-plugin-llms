@@ -1,0 +1,13 @@
+{
+	"name": "vitepress-plugin-llms",
+	"scripts": {},
+	"dependencies": {
+		"picocolors": "^1.1.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "^22.13.10",
+		"vitepress": "^1.6.3"
+	},
+	"trustedDependencies": ["@biomejs/biome"]
+}
