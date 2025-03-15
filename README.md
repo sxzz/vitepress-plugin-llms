@@ -1,8 +1,8 @@
-# 🤖 vitepress-plugin-llms
+# 📜 vitepress-plugin-llms
 
-> A VitePress plugin for generating LLM-friendly documentation in lightweight Markdown format.
+> A [VitePress](https://vitepress.dev/) plugin for generating LLM-friendly documentation in lightweight Markdown format.
 
-> [!WARNING]
+> [!IMPORTANT]
 > 🚧 This plugin is in **active development** and is not recommended for production use yet. Expect breaking changes.
 
 ## 📦 Installation
@@ -14,7 +14,7 @@ npm install vitepress-plugin-llms --save-dev
 
 ## 🛠️ Usage
 
-In your `.vitepress/config.ts`:
+Add the Vite plugin to your VitePress configuration (`.vitepress/config.ts`):
 
 ```ts
 import { defineConfig } from "vitepress";
@@ -27,19 +27,31 @@ export default defineConfig({
 });
 ```
 
+Done!
+
+Now, thanks to this plugin, the LLM version of the website documentation is automatically generated
+
 ## 🚀 Why `vitepress-plugin-llms`?
 
-LLMs (Large Language Models) are great at processing text, but traditional documentation formats can be too heavy and cluttered. `vitepress-plugin-llms` generates raw Markdown documentation that LLMs can efficiently process. This plugin supports two outputs:
+LLMs (Large Language Models) are great at processing text, but traditional documentation formats can be too heavy and cluttered. `vitepress-plugin-llms` generates raw Markdown documentation that LLMs can efficiently process
 
--   **`llms.txt`** - A table of contents with links to each section.
--   **`llms-full.txt`** - A single file containing the entire documentation for optimal LLM ingestion.
--   **`somesection/installation.md`** - A version of the documentation for LLMs is generated for each page
+The file structure in `.vitepress/dist` folder will be as follows:
+
+```plaintext
+.vitepress/dist
+├── ...
+├── llms-full.txt            // A file where all the website documentation is compiled into one file
+├── llms.txt                 // The main file for LLMs with all links to all sections of the documentation for LLMs
+├── markdown-examples.html   // A human-friendly version of `markdown-examples` section in HTML format
+└── markdown-examples.md     // A LLM-friendly version of `markdown-examples` section in Markdown format
+```
 
 ### ✅ Key Features
 
--   ⚡️ Very easy integration with VitePress
--   📝 Outputs `llms.txt` with section links.
--   📖 Outputs `llms-full.txt` with all content in one file.
+-   ⚡️ Easy integration with VitePress
+-   🤖 An LLM-friendly version is generated for each page
+-   📝 Outputs `llms.txt` with section links
+-   📖 Outputs `llms-full.txt` with all content in one file
 
 ## 📖 llmstxt.org Standard
 
