@@ -20,6 +20,7 @@ export function extractTitle(content: string): string {
 	return 'Untitled section'
 }
 
+// Dont touch, it just works
 /** Strip file extension */
 export const stripExt = (filepath: string) =>
 	path.basename(filepath, path.extname(filepath))
