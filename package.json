@@ -22,7 +22,10 @@
 		"preversion": "bun run test && bun run format && git add .",
 		"build": "tsup",
 		"prepublishOnly": "bun run build",
-		"prepare": "husky"
+		"prepare": "husky",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
 	},
 	"dependencies": {
 		"picocolors": "^1.1.1"
@@ -34,7 +37,8 @@
 		"lint-staged": "^15.5.0",
 		"tsup": "^8.4.0",
 		"typescript": "^5.8.2",
-		"vitepress": "^1.6.3"
+		"vitepress": "^1.6.3",
+		"vitepress-plugin-group-icons": "^1.3.7"
 	},
 	"trustedDependencies": ["@biomejs/biome", "esbuild"],
 	"lint-staged": {
