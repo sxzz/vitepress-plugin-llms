@@ -1,13 +1,44 @@
 {
 	"name": "vitepress-plugin-llms",
-	"scripts": {},
+	"version": "0.0.0",
+	"description": "",
+	"license": "MIT",
+	"type": "module",
+	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/okineadev/vitepress-plugin-llms"
+	},
+	"author": {
+		"name": "Okinea Dev",
+		"email": "hi@okinea.dev",
+		"url": "https://github.com/okineadev"
+	},
+	"keywords": ["vitepress", "plugin", "llms", "documentation", "ai"],
+	"scripts": {
+		"lint": "biome check --fix",
+		"format": "biome format --write",
+		"test": "bun test",
+		"preversion": "bun run test && bun run format && git add .",
+		"build": "tsup",
+		"prepublishOnly": "bun run build",
+		"prepare": "husky"
+	},
 	"dependencies": {
 		"picocolors": "^1.1.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "^22.13.10",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.5.0",
+		"tsup": "^8.4.0",
+		"typescript": "^5.8.2",
 		"vitepress": "^1.6.3"
 	},
-	"trustedDependencies": ["@biomejs/biome"]
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
+	"lint-staged": {
+		"{src,tests}/**/*.ts": "bun test",
+		"*": "bun run format --no-errors-on-unmatched"
+	}
 }

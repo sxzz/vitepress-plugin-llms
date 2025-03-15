@@ -1,8 +1,22 @@
 {
+	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
 		"composite": true,
-		"strict": true,
-		"esModuleInterop": true,
+		// Enable latest features
+		"lib": ["ESNext", "DOM"],
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleDetection": "force",
+		"allowJs": true,
+
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"emitDeclarationOnly": true,
+        "esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+
 		"types": ["@types/node"]
 	},
 

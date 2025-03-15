@@ -1,7 +1,7 @@
 import type { Plugin, ViteDevServer } from 'vite'
 
-import fs from 'node:fs'
-import path from 'node:path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 import pc from 'picocolors'
 import log from './logger'

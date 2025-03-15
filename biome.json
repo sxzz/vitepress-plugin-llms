@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"ignore": []
+		"ignore": ["tsconfig*.json"]
 	},
 	"formatter": {
 		"enabled": true,

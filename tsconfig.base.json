@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		// Best practices
+		"strict": true,
+		"skipLibCheck": false,
+		"noFallthroughCasesInSwitch": true,
+
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noPropertyAccessFromIndexSignature": false
+	}
+}
