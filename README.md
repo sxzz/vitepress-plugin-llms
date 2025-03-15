@@ -45,6 +45,10 @@ LLMs (Large Language Models) are great at processing text, but traditional docum
 
 This plugin follows the [llmstxt.org](https://llmstxt.org/) standard, which defines the best practices for LLM-friendly documentation.
 
+## ❤️ Support
+
+If you like this project, consider supporting it by starring ⭐ it on GitHub, sharing it with your friends, or [buying me a coffee ☕](https://github.com/okineadev/vitepress-plugin-llms?sponsor=1)
+
 ## 📜 License
 
-MIT License © 2025 Yurii Bogdan
+[MIT License](./LICENSE) © 2025-present [Yurii Bogdan](https://github.com/okineadev)
