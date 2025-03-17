@@ -1,4 +1,4 @@
-name: 🧪 Tests
+name: 🔄️ CI
 
 on:
   # https://blog.esciencecenter.nl/reduce-reuse-recycle-save-the-planet-one-github-action-at-a-time-4ab602255c3f
@@ -23,7 +23,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
 
     steps:

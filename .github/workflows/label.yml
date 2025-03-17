@@ -11,8 +11,6 @@ permissions:
 
 jobs:
   label:
-    name: Label
-
     runs-on: ubuntu-latest
 
     steps:
