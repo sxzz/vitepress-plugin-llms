@@ -1,6 +1,70 @@
+import fs from 'node:fs'
 import path from 'node:path'
+import type { PreparedFile } from './types'
 
-// Helper function to extract title from markdown file
+/**
+ * Strip file extension
+ *
+ * @param filepath - The path to the file
+ * @returns The filename without the extension
+ */
+export const stripExt = (filepath: string) =>
+	path.basename(filepath, path.extname(filepath))
+
+/**
+ * Generates a Table of Contents (TOC) for the provided prepared files.
+ *
+ * Each entry in the TOC is formatted as a markdown link to the corresponding
+ * text file
+ *
+ * @param preparedFiles - An array of prepared files
+ * @returns A string representing the formatted Table of Contents.
+ */
+export function generateTOC(preparedFiles: PreparedFile[]) {
+	let tableOfContent = ''
+
+	for (const file of preparedFiles) {
+		tableOfContent += `- [${file.title}](/${stripExt(file.path)}.txt)\n`
+	}
+
+	return tableOfContent
+}
+
+/**
+ * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
+ *
+ * @param preparedFiles - An array of prepared files
+ * @returns A string representing the llms.txt` file content.
+ *
+ * @see https://llmstxt.org
+ */
+export function generateLLMsTxt(preparedFiles: PreparedFile[]) {
+	const llmsTxtContent = `
+# LLMs Documentation
+
+This file contains links to all documentation sections.
+
+## Table of Contents
+
+${generateTOC(preparedFiles)}`
+
+	return llmsTxtContent
+}
+
+export function generateLLMsFullTxt(preparedFiles: PreparedFile[]) {
+	const llmsFullTxtContent = preparedFiles
+		.map((file) => fs.readFileSync(file.path, 'utf-8'))
+		.join('\n---\n\n')
+
+	return llmsFullTxtContent
+}
+
+/**
+ * Extracts the title from a markdown file.
+ *
+ * @param content - The content of the markdown file
+ * @returns The title of the markdown file
+ */
 export function extractTitle(content: string): string {
 	// Look for first # heading
 	const titleMatch = content.match(/^#\s+(.+)$/m)
@@ -19,8 +83,3 @@ export function extractTitle(content: string): string {
 	// Fallback to filename if no title found
 	return 'Untitled section'
 }
-
-// Dont touch, it just works
-/** Strip file extension */
-export const stripExt = (filepath: string) =>
-	path.basename(filepath, path.extname(filepath))

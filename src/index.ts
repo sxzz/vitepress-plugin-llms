@@ -1,12 +1,23 @@
-import type { Plugin, ViteDevServer } from 'vite'
+import type { ViteDevServer, UserConfig, Plugin } from 'vite'
 
-import * as fs from 'node:fs'
-import * as path from 'node:path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import pc from 'picocolors'
-import { extractTitle, stripExt } from './helpers'
+import {
+	extractTitle,
+	generateLLMsFullTxt,
+	generateLLMsTxt,
+	stripExt,
+} from './helpers'
 import log from './logger'
-import type { llmstxtSettings } from './types'
+import type { LlmstxtSettings, PreparedFile } from './types'
+
+interface VitePressConfig extends UserConfig {
+	vitepress?: {
+		outDir: string
+	}
+}
 
 /**
  * [VitePress](http://vitepress.dev/) plugin for generating raw documentation
@@ -15,14 +26,13 @@ import type { llmstxtSettings } from './types'
  * @see https://llmstxt.org/
  */
 export default function llmstxt(
-	settings: llmstxtSettings = {
+	settings: LlmstxtSettings = {
 		generateLLMsFullTxt: true,
 		generateLLMsTxt: true,
 	},
 ): Plugin {
 	// Store the resolved Vite config
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	let config: any
+	let config: VitePressConfig
 
 	// Set to store all markdown files paths
 	const mdFiles: Set<string> = new Set()
@@ -35,7 +45,7 @@ export default function llmstxt(
 		enforce: 'post', // Run after other plugins
 
 		configResolved(resolvedConfig) {
-			config = resolvedConfig
+			config = resolvedConfig as unknown as VitePressConfig
 			// Detect if this is the SSR build
 			isSsrBuild = !!resolvedConfig.build?.ssr
 			log.info(
@@ -50,9 +60,9 @@ export default function llmstxt(
 				if (req.url?.endsWith('.md') || req.url?.endsWith('.txt')) {
 					try {
 						// Try to read and serve the markdown file
-						const filePath = path.join(
-							config.vitepress?.outDir,
-							`${path.basename(req.url, path.extname(req.url))}.md`,
+						const filePath = path.resolve(
+							config.vitepress?.outDir ?? 'dist',
+							`${stripExt(req.url)}.md`,
 						)
 						const content = fs.readFileSync(filePath, 'utf-8')
 						res.setHeader('Content-Type', 'text/markdown')
@@ -82,7 +92,7 @@ export default function llmstxt(
 		 * Process each file that Vite transforms
 		 * Collect markdown files regardless of build type
 		 */
-		transform(_, id) {
+		transform(_, id: string) {
 			if (id.endsWith('.md')) {
 				// Add markdown file path to our collection
 				mdFiles.add(id)
@@ -102,12 +112,12 @@ export default function llmstxt(
 				return
 			}
 
+			const outDir = config.vitepress?.outDir ?? 'dist'
+
 			// Create output directory if it doesn't exist
-			if (!fs.existsSync(config.vitepress.outDir)) {
-				log.info(
-					`Creating output directory: ${pc.cyan(config.vitepress.outDir)}`,
-				)
-				fs.mkdirSync(config.vitepress.outDir, { recursive: true })
+			if (!fs.existsSync(outDir)) {
+				log.info(`Creating output directory: ${pc.cyan(outDir)}`)
+				fs.mkdirSync(outDir, { recursive: true })
 			}
 
 			const mdFilesList = Array.from(mdFiles)
@@ -121,20 +131,18 @@ export default function llmstxt(
 
 			log.info(`Processing ${pc.bold(fileCount.toString())} markdown files...`)
 
-			const preparedFiles = []
+			const preparedFiles: PreparedFile[] = []
 
 			// Copy all markdown files to output directory
 			for (const file of mdFilesList) {
 				const fileName = path.basename(file)
-				const targetPath = path.resolve(config.vitepress.outDir, fileName)
-				// const fileNameWithoutExt = path.basename(file, '.md')
+				const targetPath = path.resolve(outDir, fileName)
 
 				try {
 					const content = fs.readFileSync(file, 'utf-8')
 					const title = extractTitle(content)
-					const fileName = path.basename(file)
 
-					preparedFiles.push({ title, fileName })
+					preparedFiles.push({ title, path: file })
 
 					// Copy file to output directory
 					fs.copyFileSync(file, targetPath)
@@ -150,20 +158,11 @@ export default function llmstxt(
 
 			// Generate llms.txt - table of contents with links
 			if (settings.generateLLMsTxt) {
-				const llmsTxtPath = path.resolve(config.vitepress.outDir, 'llms.txt')
+				const llmsTxtPath = path.resolve(outDir, 'llms.txt')
 
-				let llmsTxtContent =
-					'# LLMs Documentation\n\nThis file contains links to all documentation sections.\n\n'
+				const llmsTxt = generateLLMsTxt(preparedFiles)
 
-				// Add table of contents
-				llmsTxtContent += '## Table of Contents\n\n'
-
-				for (const file of preparedFiles) {
-					llmsTxtContent += `- [${file.title}](/${stripExt(file.fileName)}.txt)\n`
-				}
-
-				// Write content to llms.txt
-				fs.writeFileSync(llmsTxtPath, llmsTxtContent, 'utf-8')
+				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')
 				log.success(
 					`Generated ${pc.cyan('llms.txt')} with ${pc.bold(fileCount.toString())} documentation sections`,
 				)
@@ -171,28 +170,14 @@ export default function llmstxt(
 
 			// Generate llms-full.txt - all content in one file
 			if (settings.generateLLMsFullTxt) {
-				const llmsFullTxtPath = path.resolve(
-					config.vitepress.outDir,
-					'llms-full.txt',
-				)
-				let llmsFullTxtFileContent = ''
+				const llmsFullTxtPath = path.resolve(outDir, 'llms-full.txt')
 
 				log.info(`Generating ${pc.cyan('llms-full.txt')}...`)
 
-				// Build content string using for loop
-				for (const file of preparedFiles) {
-					llmsFullTxtFileContent += fs.readFileSync(
-						path.resolve(config.vitepress.outDir, file.fileName),
-					)
-
-					// Add newline for all but the last item
-					if (preparedFiles.lastIndexOf(file) !== preparedFiles.length - 1) {
-						llmsFullTxtFileContent += '\n---\n\n'
-					}
-				}
+				const llmsFullTxt = generateLLMsFullTxt(preparedFiles)
 
 				// Write content to llms-full.txt
-				fs.writeFileSync(llmsFullTxtPath, llmsFullTxtFileContent, 'utf-8')
+				fs.writeFileSync(llmsFullTxtPath, llmsFullTxt, 'utf-8')
 				log.success(
 					`Generated ${pc.cyan('llms-full.txt')} with ${pc.bold(fileCount.toString())} markdown files`,
 				)
