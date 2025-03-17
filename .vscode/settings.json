@@ -1,4 +1,9 @@
 {
 	"editor.defaultFormatter": "biomejs.biome",
+
+	"files.readonlyInclude": {
+		"bun.lock": true,
+		"tests/__snapshots__/**/*.snap": true
+	},
 	"typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,0 +1,22 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
+"
+# LLMs Documentation
+
+This file contains links to all documentation sections.
+
+## Table of Contents
+
+- [My Title](/my-title.txt)
+"
+`;
+
+exports[`generateLLMsFullTxt generates a \`llms-full.txt\` file 1`] = `
+"# Hello
+
+---
+
+# Hello
+"
+`;

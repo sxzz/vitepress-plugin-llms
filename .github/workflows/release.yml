@@ -40,15 +40,18 @@ jobs:
       - name: 🚀 Prepare release
         run: bun run preversion
 
+      - name: 🧪 Test package
+        run: bun run test
+
+      - name: 🛠️ Build package
+        run: bun run build
+
       - name: 📜 Generate changelog and release notes
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           bunx changelogen --release --push -r $VERSION
           bunx changelogen github release --token ${{ secrets.GITHUB_TOKEN }} -r $VERSION
-
-      - name: 🛠️ Build package
-        run: bun run build
 
       - name: 📦 Publish to NPM Registry
         run: |

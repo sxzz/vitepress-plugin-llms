@@ -1,14 +1,58 @@
-import { describe, expect, test } from 'bun:test'
-// @ts-ignore
-import { extractTitle, stripExt } from '../src/helpers'
+import { describe, expect, it, mock, test } from 'bun:test'
+
+mock.module('fs', () => {
+	return {
+		default: {
+			readFileSync: () => '# Hello\n',
+		},
+	}
+})
+
+import {
+	extractTitle,
+	generateLLMsFullTxt,
+	generateLLMsTxt,
+	generateTOC,
+	// @ts-ignore
+} from '../src/helpers'
+
+import type { PreparedFile } from '../src/types'
+
+const preparedFileSample: PreparedFile = {
+	title: 'My Title',
+	path: 'my-title.md',
+}
+const preparedFilesSample = [preparedFileSample]
+
+describe('generateTOC', () => {
+	it('generates a table of contents', () => {
+		expect(generateTOC(preparedFilesSample)).toBe(
+			'- [My Title](/my-title.txt)\n',
+		)
+	})
+})
+
+describe('generateLLMsTxt', () => {
+	it('generates a `llms.txt` file', () => {
+		expect(generateLLMsTxt(preparedFilesSample)).toMatchSnapshot()
+	})
+})
+
+describe('generateLLMsFullTxt', () => {
+	it('generates a `llms-full.txt` file', () => {
+		expect(
+			generateLLMsFullTxt(Array(2).fill(preparedFileSample)),
+		).toMatchSnapshot()
+	})
+})
 
 describe('extractTitle', () => {
-	test('extracts title from h1 heading', () => {
+	it('extracts title from h1 heading', () => {
 		const content = '# My Title\nSome content'
 		expect(extractTitle(content)).toBe('My Title')
 	})
 
-	test.todo('extracts first line when no h1 heading', () => {
+	it('extracts first line when no h1 heading', () => {
 		const content = 'First Line\nSecond Line'
 		expect(extractTitle(content)).toBe('First Line')
 	})
@@ -18,15 +62,7 @@ describe('extractTitle', () => {
 		expect(extractTitle(content)).toBe('Actual Content')
 	})
 
-	test.todo('truncates long lines to 50 characters', () => {
-		const longLine =
-			'This is a very long line that should be truncated at fifty characters'
-		expect(extractTitle(longLine)).toBe(
-			'This is a very long line that should be truncated at f...',
-		)
-	})
-
-	test('returns default when no content found', () => {
+	it('returns default when no content found', () => {
 		expect(extractTitle('')).toBe('Untitled section')
 	})
 })
