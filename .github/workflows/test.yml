@@ -40,3 +40,6 @@ jobs:
 
       - name: 🧪 Run tests
         run: bun run test
+
+      - name: ⚡ Publish prerelease
+        run: bunx pkg-pr-new publish
