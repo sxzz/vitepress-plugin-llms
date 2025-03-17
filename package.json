@@ -4,6 +4,7 @@
 	"description": "A VitePress plugin for generating LLM-friendly documentation in lightweight Markdown format",
 	"license": "MIT",
 	"type": "module",
+	"main": "dist/index.js",
 	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
 	"repository": {
 		"type": "git",
