@@ -41,5 +41,8 @@ jobs:
       - name: 🧪 Run tests
         run: bun run test
 
+      - name: ⚒️ Build package
+        run: bun run build
+
       - name: ⚡ Publish prerelease
         run: bunx pkg-pr-new publish
