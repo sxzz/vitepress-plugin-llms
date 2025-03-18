@@ -1,6 +1,10 @@
+<div align="center">
+
+  ![Banner](assets/banner.png)
+
 # 📜 vitepress-plugin-llms
 
-> A [VitePress](https://vitepress.dev/) plugin for generating LLM-friendly documentation in lightweight Markdown format.
+</div>
 
 > [!IMPORTANT]
 > 🚧 This plugin is in **active development** and is not recommended for production use yet. Expect breaking changes.
@@ -21,9 +25,9 @@ import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
 
 export default defineConfig({
-	vite: {
-		plugins: [llmstxt()],
-	},
+  vite: {
+    plugins: [llmstxt()],
+  },
 });
 ```
 
@@ -65,10 +69,10 @@ The file structure in `.vitepress/dist` folder will be as follows:
 
 ### ✅ Key Features
 
--   ⚡️ Easy integration with VitePress
--   🤖 An LLM-friendly version is generated for each page
--   📝 Outputs `llms.txt` with section links
--   📖 Outputs `llms-full.txt` with all content in one file
+- ⚡️ Easy integration with VitePress
+- 🤖 An LLM-friendly version is generated for each page
+- 📝 Outputs `llms.txt` with section links
+- 📖 Outputs `llms-full.txt` with all content in one file
 
 ## 📖 llmstxt.org Standard
 
