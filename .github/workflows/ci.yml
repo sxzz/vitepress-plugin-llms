@@ -1,4 +1,4 @@
-name: 🧪 Test
+name: 🔄️ CI
 
 on:
   # https://blog.esciencecenter.nl/reduce-reuse-recycle-save-the-planet-one-github-action-at-a-time-4ab602255c3f
@@ -40,3 +40,9 @@ jobs:
 
       - name: 🧪 Run tests
         run: bun run test
+
+      - name: ⚒️ Build package
+        run: bun run build
+
+      - name: ⚡ Publish prerelease
+        run: bunx pkg-pr-new publish
