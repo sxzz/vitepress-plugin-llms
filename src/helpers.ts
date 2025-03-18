@@ -9,7 +9,10 @@ import type { PreparedFile } from './types'
  * @returns The filename without the extension
  */
 export const stripExt = (filepath: string) =>
-	path.basename(filepath, path.extname(filepath))
+	path.join(
+		path.dirname(filepath),
+		path.basename(filepath, path.extname(filepath)),
+	)
 
 /**
  * Generates a Table of Contents (TOC) for the provided prepared files.
@@ -24,7 +27,8 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
 	let tableOfContent = ''
 
 	for (const file of preparedFiles) {
-		tableOfContent += `- [${file.title}](/${stripExt(file.path)}.txt)\n`
+		const relativePath = path.relative(process.cwd(), file.path)
+		tableOfContent += `- [${file.title}](/${stripExt(relativePath)}.txt)\n`
 	}
 
 	return tableOfContent
@@ -39,7 +43,7 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
  * @see https://llmstxt.org
  */
 export function generateLLMsTxt(preparedFiles: PreparedFile[]) {
-	const llmsTxtContent = `
+	const llmsTxtContent = `\
 # LLMs Documentation
 
 This file contains links to all documentation sections.

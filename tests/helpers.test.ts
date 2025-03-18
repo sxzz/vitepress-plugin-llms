@@ -18,17 +18,22 @@ import {
 
 import type { PreparedFile } from '../src/types'
 
-const preparedFileSample: PreparedFile = {
-	title: 'My Title',
-	path: 'my-title.md',
-}
-const preparedFilesSample = [preparedFileSample]
+const preparedFilesSample: PreparedFile[] = [
+	{
+		title: 'My Title',
+		path: 'test.md',
+	},
+	{
+		title: 'My Title 2',
+		path: 'test/test.md',
+	},
+]
 
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
-		expect(generateTOC(preparedFilesSample)).toBe(
-			'- [My Title](/my-title.txt)\n',
-		)
+		expect(generateTOC(preparedFilesSample)).toBe(`\
+- [My Title](/test.txt)
+- [My Title 2](/test/test.txt)\n`)
 	})
 })
 
@@ -40,9 +45,7 @@ describe('generateLLMsTxt', () => {
 
 describe('generateLLMsFullTxt', () => {
 	it('generates a `llms-full.txt` file', () => {
-		expect(
-			generateLLMsFullTxt(Array(2).fill(preparedFileSample)),
-		).toMatchSnapshot()
+		expect(generateLLMsFullTxt(preparedFilesSample)).toMatchSnapshot()
 	})
 })
 
