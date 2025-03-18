@@ -1,4 +1,4 @@
-import type { ViteDevServer, UserConfig, Plugin } from 'vite'
+import type { ViteDevServer, Plugin } from 'vite'
 
 import fs from 'node:fs'
 import path from 'node:path'
@@ -11,13 +11,7 @@ import {
 	stripExt,
 } from './helpers'
 import log from './logger'
-import type { LlmstxtSettings, PreparedFile } from './types'
-
-interface VitePressConfig extends UserConfig {
-	vitepress?: {
-		outDir: string
-	}
-}
+import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 
 /**
  * [VitePress](http://vitepress.dev/) plugin for generating raw documentation
@@ -135,8 +129,8 @@ export default function llmstxt(
 
 			// Copy all markdown files to output directory
 			for (const file of mdFilesList) {
-				const fileName = path.basename(file)
-				const targetPath = path.resolve(outDir, fileName)
+				const relativePath = path.relative(process.cwd(), file)
+				const targetPath = path.resolve(outDir, relativePath)
 
 				try {
 					const content = fs.readFileSync(file, 'utf-8')
@@ -144,12 +138,15 @@ export default function llmstxt(
 
 					preparedFiles.push({ title, path: file })
 
+					// Ensure target directory exists
+					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
+
 					// Copy file to output directory
 					fs.copyFileSync(file, targetPath)
-					log.success(`Copied ${pc.cyan(fileName)} to output directory`)
+					log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
 				} catch (error) {
 					// @ts-ignore
-					log.error(`Failed to copy ${pc.cyan(fileName)}: ${error.message}`)
+					log.error(`Failed to copy ${pc.cyan(relativePath)}: ${error.message}`)
 				}
 			}
 

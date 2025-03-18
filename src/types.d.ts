@@ -1,4 +1,4 @@
-import type { Plugin } from 'vite'
+import type { UserConfig } from 'vite'
 
 export interface LlmstxtSettings {
 	/**
@@ -20,4 +20,10 @@ export type PreparedFile = {
 	title: string
 	// fileName: string
 	path: string
+}
+
+interface VitePressConfig extends UserConfig {
+	vitepress: {
+		outDir: string
+	}
 }
