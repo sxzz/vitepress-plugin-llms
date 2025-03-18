@@ -1,12 +1,10 @@
 import { describe, expect, it, mock, test } from 'bun:test'
 
-mock.module('fs', () => {
-	return {
-		default: {
-			readFileSync: () => '# Hello\n',
-		},
-	}
-})
+mock.module('fs', () => ({
+	default: {
+		readFileSync: () => '# Hello\n',
+	},
+}))
 
 import {
 	extractTitle,
@@ -32,8 +30,8 @@ const preparedFilesSample: PreparedFile[] = [
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
 		expect(generateTOC(preparedFilesSample)).toBe(`\
-- [My Title](/test.txt)
-- [My Title 2](/test/test.txt)\n`)
+- [My Title](/test.md)
+- [My Title 2](/test/test.md)\n`)
 	})
 })
 

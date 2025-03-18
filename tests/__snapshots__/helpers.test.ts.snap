@@ -7,8 +7,8 @@ This file contains links to all documentation sections.
 
 ## Table of Contents
 
-- [My Title](/test.txt)
-- [My Title 2](/test/test.txt)
+- [My Title](/test.md)
+- [My Title 2](/test/test.md)
 "
 `;
 
