@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-llms",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A VitePress plugin for generating LLM-friendly documentation in lightweight Markdown format",
 	"license": "MIT",
 	"type": "module",

@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.2
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.1...v0.0.2)
+
+### 🩹 Fixes
+
+- Fix `package.json` ([3c95d24](https://github.com/okineadev/vitepress-plugin-llms/commit/3c95d24))
+- 🚑 fix links in `llms.txt` ([5cb8007](https://github.com/okineadev/vitepress-plugin-llms/commit/5cb8007))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.1
 
 
