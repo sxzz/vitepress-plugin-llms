@@ -1,5 +1,6 @@
 {
 	"editor.defaultFormatter": "biomejs.biome",
+	"[json]": { "editor.defaultFormatter": "biomejs.biome" },
 
 	"files.readonlyInclude": {
 		"bun.lock": true,

@@ -8,7 +8,7 @@
 	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/okineadev/vitepress-plugin-llms"
+		"url": "git+https://github.com/okineadev/vitepress-plugin-llms.git"
 	},
 	"author": {
 		"name": "Okinea Dev",
