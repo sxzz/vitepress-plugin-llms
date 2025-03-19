@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.3...v0.0.4)
+
+### 🚀 Enhancements
+
+- Add frontmatter to generated data files for better navigation ([180b252](https://github.com/okineadev/vitepress-plugin-llms/commit/180b252))
+
+### 🩹 Fixes
+
+- **docs:** Load banner from GitHub instead of file ([132387c](https://github.com/okineadev/vitepress-plugin-llms/commit/132387c))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.3
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.2...v0.0.3)
