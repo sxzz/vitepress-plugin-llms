@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.0.5
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.4...v0.0.5)
+
+### 🚀 Enhancements
+
+- Add `customLLMsTxtTemplate` option ([65fb933](https://github.com/okineadev/vitepress-plugin-llms/commit/65fb933))
+
+### 📖 Documentation
+
+- Remove the note that the project is not recommended for use in production because almost all of the plugin's functionality is ready ([b366442](https://github.com/okineadev/vitepress-plugin-llms/commit/b366442))
+
+### 🎨 Styles
+
+- Minor formatting improvements ([5c1f7d3](https://github.com/okineadev/vitepress-plugin-llms/commit/5c1f7d3))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.4
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.3...v0.0.4)
