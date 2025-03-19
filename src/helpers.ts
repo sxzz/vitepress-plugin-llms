@@ -4,6 +4,7 @@ import type { PreparedFile } from './types'
 import matter from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
+import { defaultLLMsTxtTemplate } from './constants'
 
 /** @param filepath - The path to the file */
 export const splitDirAndFile = (filepath: string) => ({
@@ -36,7 +37,13 @@ export const stripExtPosix = (filepath: string) => {
  * @returns The title of the markdown file
  */
 export function extractTitle(content: string) {
-	return matter(content).data?.hero?.name || markdownTitle(content)
+	const contentData = matter(content)
+	return (
+		contentData.data?.title ||
+		contentData.data?.hero?.name ||
+		markdownTitle(content) ||
+		''
+	)
 }
 
 /**
@@ -63,13 +70,14 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
  * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
  *
  * @param preparedFiles - An array of prepared files
+ * @param llmsTxtTemplate - Template to use for generating `llms.txt`
  * @returns A string representing the llms.txt` file content.
  *
  * @see https://llmstxt.org
  */
 export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
-	llmsTxtTemplate: string,
+	llmsTxtTemplate: string = defaultLLMsTxtTemplate,
 ) {
 	let llmsTxtContent = llmsTxtTemplate
 	const indexFile = preparedFiles.find(

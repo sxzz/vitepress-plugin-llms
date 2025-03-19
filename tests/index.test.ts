@@ -85,7 +85,7 @@ describe('llmstxt plugin', () => {
 		it('should not collect non-markdown files', () => {
 			// @ts-ignore
 			const result = plugin.transform(0, 'test.ts')
-			expect(result).toBeUndefined()
+			expect(result).toBeNull()
 		})
 	})
 

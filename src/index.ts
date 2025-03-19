@@ -23,14 +23,16 @@ import { defaultLLMsTxtTemplate } from './constants'
  *
  * @see https://llmstxt.org/
  */
-export default function llmstxt(
-	settings: LlmstxtSettings = {
+export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
+	// Create a settings object with defaults explicitly merged
+	const settings: LlmstxtSettings = {
 		generateLLMsFullTxt: true,
 		generateLLMsTxt: true,
 		ignoreFiles: [],
 		customLLMsTxtTemplate: defaultLLMsTxtTemplate,
-	},
-): Plugin {
+		...userSettings,
+	}
+
 	// Store the resolved Vite config
 	let config: VitePressConfig
 
@@ -93,19 +95,22 @@ export default function llmstxt(
 		 * Collect markdown files regardless of build type
 		 */
 		transform(_, id: string) {
-			if (id.endsWith('.md')) {
-				if (settings.ignoreFiles?.length) {
-					for (const pattern of settings.ignoreFiles) {
-						if (minimatch(id, pattern)) {
-							return
-						}
-					}
-				}
-				// Add markdown file path to our collection
-				mdFiles.add(id)
-				// Return null to avoid modifying the file
+			if (!id.endsWith('.md')) {
 				return null
 			}
+
+			if (settings?.ignoreFiles?.length) {
+				for (const pattern of settings.ignoreFiles) {
+					if (typeof pattern === 'string' && minimatch(id, pattern)) {
+						return null
+					}
+				}
+			}
+
+			// Add markdown file path to our collection
+			mdFiles.add(id)
+			// Return null to avoid modifying the file
+			return null
 		},
 
 		/**
@@ -154,12 +159,19 @@ export default function llmstxt(
 					// Ensure target directory exists
 					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
 
+					fileContent.data = {
+						url: `/${stripExtPosix(relativePath)}.md`,
+					}
+
+					if (fileContent.data?.description?.length) {
+						// biome-ignore lint/correctness/noSelfAssign: <explanation>
+						fileContent.data.description = fileContent.data?.description
+					}
+
 					// Copy file to output directory
 					fs.writeFileSync(
 						targetPath,
-						matter.stringify(fileContent.content, {
-							url: `/${stripExtPosix(relativePath)}.md`,
-						}),
+						matter.stringify(fileContent.content, fileContent.data),
 					)
 					log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
 				} catch (error) {
@@ -177,8 +189,7 @@ export default function llmstxt(
 
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
-					// @ts-ignore
-					settings.customLLMsTxtTemplate,
+					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 				)
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')

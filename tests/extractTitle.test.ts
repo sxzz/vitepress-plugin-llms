@@ -31,9 +31,9 @@ Content goes here`
 		expect(extractTitle(markdown)).toBe('Title From Heading')
 	})
 
-	it('returns `undefined` when no frontmatter `hero.name` or markdown title exists', () => {
+	it('returns empty string when no frontmatter `hero.name` or markdown title exists', () => {
 		const markdown = 'Some content without any headings or frontmatter'
 
-		expect(extractTitle(markdown)).toBeUndefined()
+		expect(extractTitle(markdown)).toBe('')
 	})
 })
