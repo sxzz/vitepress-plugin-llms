@@ -1,6 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { PreparedFile } from './types'
+import matter from 'gray-matter'
+// @ts-ignore
+import markdownTitle from 'markdown-title'
 
 /** @param filepath - The path to the file */
 export const splitDirAndFile = (filepath: string) => ({
@@ -24,6 +27,16 @@ export const stripExtPosix = (filepath: string) => {
 	const { dir, file } = splitDirAndFile(filepath)
 
 	return path.posix.join(dir, path.basename(file, path.extname(file)))
+}
+
+/**
+ * Extracts the title from a markdown file.
+ *
+ * @param content - The content of the markdown file
+ * @returns The title of the markdown file
+ */
+export function extractTitle(content: string) {
+	return matter(content).data?.hero?.name || markdownTitle(content)
 }
 
 /**
@@ -55,10 +68,22 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
  * @see https://llmstxt.org
  */
 export function generateLLMsTxt(preparedFiles: PreparedFile[]) {
-	const llmsTxtContent = `\
-# LLMs Documentation
+	let llmsTxtHead = ''
 
-This file contains links to all documentation sections.
+	const indexFile = preparedFiles.find(
+		(file: PreparedFile) => file.path === 'index.md',
+	)
+
+	if (indexFile) {
+		const indexFileData = matter(fs.readFileSync(indexFile.path))
+		llmsTxtHead = `\
+# ${extractTitle(indexFileData.content) || 'LLMs Documentation'}
+
+${indexFileData.data?.hero?.tagline || 'This file contains links to all documentation sections.'}`
+	}
+
+	const llmsTxtContent = `\
+${llmsTxtHead}
 
 ## Table of Contents
 
@@ -69,33 +94,15 @@ ${generateTOC(preparedFiles)}`
 
 export function generateLLMsFullTxt(preparedFiles: PreparedFile[]) {
 	const llmsFullTxtContent = preparedFiles
-		.map((file) => fs.readFileSync(file.path, 'utf-8'))
+		.map((file) => {
+			const relativePath = path.relative(process.cwd(), file.path)
+			const fileContent = matter(fs.readFileSync(file.path, 'utf-8'))
+
+			return matter.stringify(fileContent.content, {
+				url: `/${stripExtPosix(relativePath)}.md`,
+			})
+		})
 		.join('\n---\n\n')
 
 	return llmsFullTxtContent
-}
-
-/**
- * Extracts the title from a markdown file.
- *
- * @param content - The content of the markdown file
- * @returns The title of the markdown file
- */
-export function extractTitle(content: string): string {
-	// Look for first # heading
-	const titleMatch = content.match(/^#\s+(.+)$/m)
-	if (titleMatch?.[1]) {
-		return titleMatch[1].trim()
-	}
-
-	// If no h1 heading, try to find the first line with content
-	const lines = content.split('\n').map((line) => line.trim())
-	for (const line of lines) {
-		if (line && !line.startsWith('#') && !line.startsWith('---')) {
-			return line.substring(0, 50) + (line.length > 50 ? '...' : '')
-		}
-	}
-
-	// Fallback to filename if no title found
-	return 'Untitled section'
 }

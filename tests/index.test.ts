@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test'
-import type { Plugin, ViteDevServer, UserConfig } from 'vite'
+import type { Plugin, ViteDevServer } from 'vite'
 
 // Mock the fs module before it's imported by the module under test
 const existsSync = mock(() => true)
 const mkdirSync = mock()
-const readFileSync = mock(() => '')
+const readFileSync = mock(() => '# Some cool stuff')
 const copyFileSync = mock()
 const writeFileSync = mock()
 
@@ -31,8 +31,8 @@ mock.module('../src/logger', () => ({
 // Import the module under test AFTER mocking its dependencies
 // @ts-ignore
 import llmstxt from '../src/index'
-import path from 'node:path'
 import type { VitePressConfig } from '../src/types'
+import path from 'node:path'
 
 describe('llmstxt plugin', () => {
 	let plugin: Plugin
@@ -53,7 +53,7 @@ describe('llmstxt plugin', () => {
 			build: {
 				ssr: false,
 			},
-		} as UserConfig & { vitepress: { outDir: string } }
+		} as VitePressConfig
 
 		// Setup mock server
 		mockServer = {
@@ -122,16 +122,16 @@ describe('llmstxt plugin', () => {
 			plugin.generateBundle()
 
 			// Verify that files were written
-			expect(copyFileSync).toHaveBeenCalledTimes(2)
-			expect(copyFileSync).toHaveBeenNthCalledWith(
+			expect(writeFileSync).toHaveBeenCalledTimes(2)
+			expect(writeFileSync).nthCalledWith(
 				1,
-				'test.md',
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
+				'---\nurl: /test.md\n---\n# Some cool stuff\n',
 			)
-			expect(copyFileSync).toHaveBeenNthCalledWith(
+			expect(writeFileSync).nthCalledWith(
 				2,
-				'test/test.md',
-				path.resolve(mockConfig.vitepress.outDir, 'test', 'test.md'),
+				path.resolve(mockConfig.vitepress.outDir, 'test/test.md'),
+				'---\nurl: /test/test.md\n---\n# Some cool stuff\n',
 			)
 		})
 
@@ -151,10 +151,10 @@ describe('llmstxt plugin', () => {
 			plugin.generateBundle()
 
 			// Verify that only non-ignored files were written
-			expect(copyFileSync).toHaveBeenCalledTimes(1)
-			expect(copyFileSync).toHaveBeenCalledWith(
-				'test.md',
+			expect(writeFileSync).toHaveBeenCalledTimes(1)
+			expect(writeFileSync).toBeCalledWith(
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
+				'---\nurl: /test.md\n---\n# Some cool stuff\n',
 			)
 		})
 	})

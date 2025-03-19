@@ -10,9 +10,11 @@ import {
 	generateLLMsFullTxt,
 	generateLLMsTxt,
 	stripExt,
+	stripExtPosix,
 } from './helpers'
 import log from './logger'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
+import matter from 'gray-matter'
 
 /**
  * [VitePress](http://vitepress.dev/) plugin for generating raw documentation
@@ -142,8 +144,8 @@ export default function llmstxt(
 				const targetPath = path.resolve(outDir, relativePath)
 
 				try {
-					const content = fs.readFileSync(file, 'utf-8')
-					const title = extractTitle(content)
+					const fileContent = matter(fs.readFileSync(file, 'utf-8'))
+					const title = extractTitle(fileContent.content)
 
 					preparedFiles.push({ title, path: file })
 
@@ -151,7 +153,12 @@ export default function llmstxt(
 					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
 
 					// Copy file to output directory
-					fs.copyFileSync(file, targetPath)
+					fs.writeFileSync(
+						targetPath,
+						matter.stringify(fileContent.content, {
+							url: `/${stripExtPosix(relativePath)}.md`,
+						}),
+					)
 					log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
 				} catch (error) {
 					// @ts-ignore
