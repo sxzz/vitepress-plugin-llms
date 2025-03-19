@@ -6,9 +6,6 @@
 
 </div>
 
-> [!IMPORTANT]
-> 🚧 This plugin is in **active development** and is not recommended for production use yet. Expect breaking changes.
-
 ## 📦 Installation
 
 ```bash
