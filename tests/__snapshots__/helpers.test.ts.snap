@@ -26,3 +26,15 @@ url: /test/test.md
 # Some cool stuff
 "
 `;
+
+exports[`generateLLMsTxt works correctly with a custom template 1`] = `
+"# Custom title
+
+> Custom description
+
+## TOC
+
+- [My Title](/index.md)
+- [My Title 2](/test/test.md)
+"
+`;

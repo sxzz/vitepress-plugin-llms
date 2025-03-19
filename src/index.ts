@@ -15,6 +15,7 @@ import {
 import log from './logger'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 import matter from 'gray-matter'
+import { defaultLLMsTxtTemplate } from './constants'
 
 /**
  * [VitePress](http://vitepress.dev/) plugin for generating raw documentation
@@ -27,6 +28,7 @@ export default function llmstxt(
 		generateLLMsFullTxt: true,
 		generateLLMsTxt: true,
 		ignoreFiles: [],
+		customLLMsTxtTemplate: defaultLLMsTxtTemplate,
 	},
 ): Plugin {
 	// Store the resolved Vite config
@@ -173,7 +175,11 @@ export default function llmstxt(
 			if (settings.generateLLMsTxt) {
 				const llmsTxtPath = path.resolve(outDir, 'llms.txt')
 
-				const llmsTxt = generateLLMsTxt(preparedFiles)
+				const llmsTxt = generateLLMsTxt(
+					preparedFiles,
+					// @ts-ignore
+					settings.customLLMsTxtTemplate,
+				)
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')
 				log.success(

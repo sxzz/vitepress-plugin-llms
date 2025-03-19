@@ -67,27 +67,29 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
  *
  * @see https://llmstxt.org
  */
-export function generateLLMsTxt(preparedFiles: PreparedFile[]) {
-	let llmsTxtHead = ''
-
+export function generateLLMsTxt(
+	preparedFiles: PreparedFile[],
+	llmsTxtTemplate: string,
+) {
+	let llmsTxtContent = llmsTxtTemplate
 	const indexFile = preparedFiles.find(
 		(file: PreparedFile) => file.path === 'index.md',
 	)
 
 	if (indexFile) {
 		const indexFileData = matter(fs.readFileSync(indexFile.path))
-		llmsTxtHead = `\
-# ${extractTitle(indexFileData.content) || 'LLMs Documentation'}
-
-${indexFileData.data?.hero?.tagline || 'This file contains links to all documentation sections.'}`
+		llmsTxtContent = llmsTxtContent.replace(
+			/{title}/gi,
+			extractTitle(indexFileData.content) || 'LLMs Documentation',
+		)
+		llmsTxtContent = llmsTxtContent.replace(
+			/{description}/gi,
+			indexFileData.data?.hero?.tagline ||
+				'This file contains links to all documentation sections.',
+		)
 	}
 
-	const llmsTxtContent = `\
-${llmsTxtHead}
-
-## Table of Contents
-
-${generateTOC(preparedFiles)}`
+	llmsTxtContent = llmsTxtContent.replace(/{toc}/gi, generateTOC(preparedFiles))
 
 	return llmsTxtContent
 }

@@ -52,6 +52,30 @@ Now, thanks to this plugin, the LLM version of the website documentation is auto
 - **Description**: An array of strings representing file paths to be ignored.
 - **Default**: `[]`
 
+#### `customLLMsTxtTemplate`
+
+**Description**:
+
+Custom template for `llms.txt` file, useful if you want to make your own order of elements
+
+List of available template elements:
+
+- `{title}` - Title taken from frontmater or from the first h1 heading in the main document (`index.md`)
+- `{description}` - Description taken from `hero.tagline`
+- `{toc}` - Automatically generated **T**able **O**f **C**ontents
+
+**Default**:
+
+```markdown
+# {title}
+
+{description}
+
+## Table of Contents
+
+{toc}
+```
+
 ## 🚀 Why `vitepress-plugin-llms`?
 
 LLMs (Large Language Models) are great at processing text, but traditional documentation formats can be too heavy and cluttered. `vitepress-plugin-llms` generates raw Markdown documentation that LLMs can efficiently process

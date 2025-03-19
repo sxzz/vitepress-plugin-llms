@@ -19,6 +19,25 @@ export interface LlmstxtSettings {
 	 * @default []
 	 */
 	ignoreFiles?: string[]
+	/**
+	 * Custom template for `llms.txt` file, useful if you want to make your own order of elements
+	 *
+	 * List of available template elements:
+	 *
+	 * - `{title}` - Title taken from frontmater or from the first h1 heading in the main document (`index.md`)
+	 * - `{description}` - Description taken from `hero.tagline`
+	 * - `{toc}` - Automatically generated **T**able **O**f **C**ontents
+	 *
+	 * @default
+	 * `# {title}
+
+	 {description}
+
+	 ## Table of Contents
+
+	 {toc}`
+	 */
+	customLLMsTxtTemplate?: string
 }
 
 /**

@@ -14,6 +14,8 @@ import {
 } from '../src/helpers'
 
 import type { PreparedFile } from '../src/types'
+// @ts-ignore
+import { defaultLLMsTxtTemplate } from '../src/constants'
 
 const preparedFilesSample: PreparedFile[] = [
 	{
@@ -36,7 +38,24 @@ describe('generateTOC', () => {
 
 describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', () => {
-		expect(generateLLMsTxt(preparedFilesSample)).toMatchSnapshot()
+		expect(
+			generateLLMsTxt(preparedFilesSample, defaultLLMsTxtTemplate),
+		).toMatchSnapshot()
+	})
+	it('works correctly with a custom template', () => {
+		expect(
+			generateLLMsTxt(
+				preparedFilesSample,
+				`\
+# Custom title
+
+> Custom description
+
+## TOC
+
+{toc}`,
+			),
+		).toMatchSnapshot()
 	})
 })
 
