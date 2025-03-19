@@ -1,6 +1,40 @@
 # Changelog
 
 
+## v0.0.3
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.2...v0.0.3)
+
+### 🚀 Enhancements
+
+- **ci:** 🪟 add windows tests ([d1e946d](https://github.com/okineadev/vitepress-plugin-llms/commit/d1e946d))
+
+### 🩹 Fixes
+
+- 🛂 use `minimatch` for ignoring files ([a381566](https://github.com/okineadev/vitepress-plugin-llms/commit/a381566))
+- **ci:** Fix windows tests ([17efe5e](https://github.com/okineadev/vitepress-plugin-llms/commit/17efe5e))
+- Fix TOC link generation to ensure consistent path across OS ([#7](https://github.com/okineadev/vitepress-plugin-llms/pull/7))
+- **ci:** Run `pkg-pr-new` only after all tests ([f365ac9](https://github.com/okineadev/vitepress-plugin-llms/commit/f365ac9))
+
+### 📖 Documentation
+
+- 🍱  add banner in the readme ([5d4f33b](https://github.com/okineadev/vitepress-plugin-llms/commit/5d4f33b))
+- Use banner with rounded corners ([4a7d796](https://github.com/okineadev/vitepress-plugin-llms/commit/4a7d796))
+
+### 🏡 Chore
+
+- Improve banner ([31c01d6](https://github.com/okineadev/vitepress-plugin-llms/commit/31c01d6))
+- **docs:** Add link for the banner ([c7382f3](https://github.com/okineadev/vitepress-plugin-llms/commit/c7382f3))
+
+### 🤖 CI
+
+- ✅ add reusable `tests.yml` workflow ([8f8a150](https://github.com/okineadev/vitepress-plugin-llms/commit/8f8a150))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+- Kravets ([@kravetsone](https://github.com/kravetsone))
+
 ## v0.0.2
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.1...v0.0.2)
