@@ -16,11 +16,17 @@ import log from './logger'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 import matter from 'gray-matter'
 import { defaultLLMsTxtTemplate } from './constants'
+import { name as packageName } from '../package.json'
+
+const PLUGIN_NAME = packageName
 
 /**
  * [VitePress](http://vitepress.dev/) plugin for generating raw documentation
  * for **LLMs** in Markdown format which is much lighter and more efficient for LLMs
  *
+ * @param [userSettings={}] - Plugin settings.
+ *
+ * @see https://github.com/okineadev/vitepress-plugin-llms
  * @see https://llmstxt.org/
  */
 export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
@@ -36,16 +42,17 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 	// Store the resolved Vite config
 	let config: VitePressConfig
 
-	// Set to store all markdown files paths
+	// Set to store all markdown file paths
 	const mdFiles: Set<string> = new Set()
 
 	// Flag to identify which build we're in
 	let isSsrBuild = false
 
 	return {
-		name: 'vitepress-plugin-llms',
+		name: PLUGIN_NAME,
 		enforce: 'post', // Run after other plugins
 
+		/** Resolves the Vite configuration and sets up the working directory. */
 		configResolved(resolvedConfig) {
 			config = resolvedConfig as unknown as VitePressConfig
 			if (settings.workDir) {
@@ -63,7 +70,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			)
 		},
 
-		/** Configure the development server to handle llms.txt and markdown files for LLMs */
+		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
 		configureServer(server: ViteDevServer) {
 			log.info('Development server configured to serve markdown files')
 			server.middlewares.use((req, res, next) => {
@@ -90,8 +97,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/**
-		 * Reset the collection of markdown files when build starts
-		 * This ensures we don't include stale data from previous builds
+		 * Resets the collection of markdown files when the build starts.
+		 * This ensures we don't include stale data from previous builds.
 		 */
 		buildStart() {
 			mdFiles.clear()
@@ -99,8 +106,10 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/**
-		 * Process each file that Vite transforms
-		 * Collect markdown files regardless of build type
+		 * Processes each file that Vite transforms and collects markdown files.
+		 * @param _ - The file content (not used).
+		 * @param id - The file identifier (path).
+		 * @returns null if the file is processed, otherwise returns the original content.
 		 */
 		transform(_, id: string) {
 			if (!id.endsWith('.md')) {
@@ -130,8 +139,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/**
-		 * Run ONLY in the client build (not SSR) after completion
-		 * This ensures the processing happens exactly once
+		 * Runs only in the client build (not SSR) after completion.
+		 * This ensures the processing happens exactly once.
 		 */
 		generateBundle() {
 			// Skip processing during SSR build

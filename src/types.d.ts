@@ -7,22 +7,24 @@ export interface LlmstxtSettings {
 	 * @default true
 	 */
 	generateLLMsFullTxt?: boolean
+
 	/**
-	 * Determines whether to generate the `llms.txt` which contains a list of sections with links
+	 * Indicates whether to generate the `llms.txt` file, which contains a list of sections with corresponding links.
 	 *
 	 * @default true
 	 */
 	generateLLMsTxt?: boolean
+
 	/**
-	 * An array of strings representing file paths to be ignored
+	 * An array of file path patterns to be ignored during processing.
 	 *
-	 * Useful if you want to exclude certain files from LLMs (e.g. files that are not related to documentation - sponsors, team, etc.)
+	 * This is useful for excluding certain files from LLMs, such as those not related to documentation (e.g., sponsors, team, etc.).
 	 *
 	 * @example
 	 * llmstxt({
 	 *     ignoreFiles: [
 	 *         'about/team/*',
-	 *         'sponsor/*
+	 *         'sponsor/*'
 	 *         // ...
 	 *     ]
 	 * })
@@ -30,29 +32,31 @@ export interface LlmstxtSettings {
 	 * @default []
 	 */
 	ignoreFiles?: string[]
+
 	/**
-	 * Custom template for `llms.txt` file, useful if you want to make your own order of elements
+	 * A custom template for the `llms.txt` file, allowing for a personalized order of elements.
 	 *
-	 * List of available template elements:
+	 * Available template elements include:
 	 *
-	 * - `{title}` - Title taken from frontmater or from the first h1 heading in the main document (`index.md`)
-	 * - `{description}` - Description taken from `hero.tagline`
-	 * - `{toc}` - Automatically generated **T**able **O**f **C**ontents
+	 * - `{title}`: The title extracted from the frontmatter or the first h1 heading in the main document (`index.md`).
+	 * - `{description}`: The description.
+	 * - `{toc}`: An automatically generated **T**able **O**f **C**ontents.
 	 *
 	 * @default
 	 * `# {title}
-
-	 {description}
-
-	 ## Table of Contents
-
-	 {toc}`
+	 *
+	 * {description}
+	 *
+	 * ## Table of Contents
+	 *
+	 * {toc}`
 	 */
 	customLLMsTxtTemplate?: string
+
 	/**
-	 * Folder from which files will be processed
+	 * The directory from which files will be processed.
 	 *
-	 * Useful if you want to configure the plugin to generate documentation for LLMs in only one language
+	 * This is useful for configuring the plugin to generate documentation for LLMs in a specific language.
 	 *
 	 * @example
 	 * llmstxt({
@@ -65,18 +69,18 @@ export interface LlmstxtSettings {
 }
 
 /**
- * Represents a prepared file with its title and path.
+ * Represents a prepared file, including its title and path.
  */
 export type PreparedFile = {
 	/**
-	 * The title of the file
+	 * The title of the file.
 	 *
 	 * @example 'Guide'
 	 */
 	title: string
 
 	/**
-	 * The absolute path to the file
+	 * The absolute path to the file.
 	 *
 	 * @example 'guide/getting-started.md'
 	 */
@@ -87,11 +91,11 @@ export type PreparedFile = {
  * Configuration interface for VitePress, extending the UserConfig from Vite.
  */
 interface VitePressConfig extends UserConfig {
-	/** The **VitePress** configuration */
+	/** The configuration settings specific to **VitePress**. */
 	vitepress: {
-		/** The source directory */
+		/** The source directory for the documentation files. */
 		srcDir: string
-		/** The directory where the output files will be generated */
+		/** The directory where the generated output files will be stored. */
 		outDir: string
 	}
 }
