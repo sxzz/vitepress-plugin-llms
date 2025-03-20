@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.0.7
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.6...v0.0.7)
+
+### 🩹 Fixes
+
+- 🚑 fix `ignoreFiles` ([143ac77](https://github.com/okineadev/vitepress-plugin-llms/commit/143ac77))
+- 🚑 fix issue with missing title and description when `index.md` file is excluded ([cac5690](https://github.com/okineadev/vitepress-plugin-llms/commit/cac5690))
+
+### 🤖 CI
+
+- ♻️ optimize workflows ([1b069e4](https://github.com/okineadev/vitepress-plugin-llms/commit/1b069e4))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.6
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.5...v0.0.6)
