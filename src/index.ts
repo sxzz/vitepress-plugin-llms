@@ -192,6 +192,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
+					path.resolve(process.cwd(), 'index.md'),
 					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 				)
 

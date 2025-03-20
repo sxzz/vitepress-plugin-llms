@@ -1,9 +1,22 @@
 import { describe, expect, it, mock, test } from 'bun:test'
 
-mock.module('fs', () => ({
+const readFileSync = mock((path) => {
+	if (path === 'index.md') {
+		return `---
+title: My Site
+description: A cool site
+---
+# Welcome
+Content goes here`
+	}
+	return '# Some cool stuff'
+})
+
+mock.module('node:fs', () => ({
 	default: {
-		readFileSync: () => '# Some cool stuff\n',
+		readFileSync,
 	},
+	readFileSync,
 }))
 
 import {
@@ -39,13 +52,14 @@ describe('generateTOC', () => {
 describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', () => {
 		expect(
-			generateLLMsTxt(preparedFilesSample, defaultLLMsTxtTemplate),
+			generateLLMsTxt(preparedFilesSample, 'index.md', defaultLLMsTxtTemplate),
 		).toMatchSnapshot()
 	})
 	it('works correctly with a custom template', () => {
 		expect(
 			generateLLMsTxt(
 				preparedFilesSample,
+				'index.md',
 				`\
 # Custom title
 

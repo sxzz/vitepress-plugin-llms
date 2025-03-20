@@ -70,6 +70,7 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
  * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
  *
  * @param preparedFiles - An array of prepared files
+ * @param indexMd - Path to main documentation file `index.md`
  * @param llmsTxtTemplate - Template to use for generating `llms.txt`
  * @returns A string representing the llms.txt` file content.
  *
@@ -77,25 +78,22 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
  */
 export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
+	indexMd: string,
 	llmsTxtTemplate: string = defaultLLMsTxtTemplate,
 ) {
+	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
 	let llmsTxtContent = llmsTxtTemplate
-	const indexFile = preparedFiles.find(
-		(file: PreparedFile) => file.path === 'index.md',
-	)
 
-	if (indexFile) {
-		const indexFileData = matter(fs.readFileSync(indexFile.path))
-		llmsTxtContent = llmsTxtContent.replace(
-			/{title}/gi,
-			extractTitle(indexFileData.content) || 'LLMs Documentation',
-		)
-		llmsTxtContent = llmsTxtContent.replace(
-			/{description}/gi,
-			indexFileData.data?.hero?.tagline ||
-				'This file contains links to all documentation sections.',
-		)
-	}
+	llmsTxtContent = llmsTxtContent.replace(
+		/{title}/gi,
+		extractTitle(indexMdFile.orig as unknown as string) || 'LLMs Documentation',
+	)
+	llmsTxtContent = llmsTxtContent.replace(
+		/{description}/gi,
+		indexMdFile.data?.hero?.tagline ||
+			indexMdFile.data?.titleTemplate ||
+			'This file contains links to all documentation sections.',
+	)
 
 	llmsTxtContent = llmsTxtContent.replace(/{toc}/gi, generateTOC(preparedFiles))
 

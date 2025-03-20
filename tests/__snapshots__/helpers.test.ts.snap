@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
-"# Some cool stuff
+"# My Site
 
 This file contains links to all documentation sections.
 
@@ -9,21 +9,6 @@ This file contains links to all documentation sections.
 
 - [My Title](/index.md)
 - [My Title 2](/test/test.md)
-"
-`;
-
-exports[`generateLLMsFullTxt generates a \`llms-full.txt\` file 1`] = `
-"---
-url: /index.md
----
-# Some cool stuff
-
----
-
----
-url: /test/test.md
----
-# Some cool stuff
 "
 `;
 
@@ -36,5 +21,21 @@ exports[`generateLLMsTxt works correctly with a custom template 1`] = `
 
 - [My Title](/index.md)
 - [My Title 2](/test/test.md)
+"
+`;
+
+exports[`generateLLMsFullTxt generates a \`llms-full.txt\` file 1`] = `
+"---
+url: /index.md
+---
+# Welcome
+Content goes here
+
+---
+
+---
+url: /test/test.md
+---
+# Some cool stuff
 "
 `;
