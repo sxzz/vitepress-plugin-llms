@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import type { PreparedFile } from './types'
+import type { PreparedFile, VitePressConfig } from './types'
 import matter from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
@@ -36,13 +36,13 @@ export const stripExtPosix = (filepath: string) => {
  * @param content - The content of the markdown file
  * @returns The title of the markdown file
  */
-export function extractTitle(content: string) {
+export function extractTitle(content: string): string {
 	const contentData = matter(content)
 	return (
 		contentData.data?.title ||
 		contentData.data?.hero?.name ||
 		markdownTitle(content) ||
-		''
+		'Untitled'
 	)
 }
 
@@ -55,11 +55,14 @@ export function extractTitle(content: string) {
  * @param preparedFiles - An array of prepared files
  * @returns A string representing the formatted Table of Contents.
  */
-export function generateTOC(preparedFiles: PreparedFile[]) {
+export function generateTOC(
+	preparedFiles: PreparedFile[],
+	srcDir: VitePressConfig['vitepress']['srcDir'],
+) {
 	let tableOfContent = ''
 
 	for (const file of preparedFiles) {
-		const relativePath = path.relative(process.cwd(), file.path)
+		const relativePath = path.relative(srcDir, file.path)
 		tableOfContent += `- [${file.title}](/${stripExtPosix(relativePath)}.md)\n`
 	}
 
@@ -79,6 +82,7 @@ export function generateTOC(preparedFiles: PreparedFile[]) {
 export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
 	indexMd: string,
+	srcDir: VitePressConfig['vitepress']['srcDir'],
 	llmsTxtTemplate: string = defaultLLMsTxtTemplate,
 ) {
 	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
@@ -86,7 +90,7 @@ export function generateLLMsTxt(
 
 	llmsTxtContent = llmsTxtContent.replace(
 		/{title}/gi,
-		extractTitle(indexMdFile.orig as unknown as string) || 'LLMs Documentation',
+		extractTitle(indexMdFile.orig.toString()) || 'LLMs Documentation',
 	)
 	llmsTxtContent = llmsTxtContent.replace(
 		/{description}/gi,
@@ -95,15 +99,21 @@ export function generateLLMsTxt(
 			'This file contains links to all documentation sections.',
 	)
 
-	llmsTxtContent = llmsTxtContent.replace(/{toc}/gi, generateTOC(preparedFiles))
+	llmsTxtContent = llmsTxtContent.replace(
+		/{toc}/gi,
+		generateTOC(preparedFiles, srcDir),
+	)
 
 	return llmsTxtContent
 }
 
-export function generateLLMsFullTxt(preparedFiles: PreparedFile[]) {
+export function generateLLMsFullTxt(
+	preparedFiles: PreparedFile[],
+	srcDir: VitePressConfig['vitepress']['srcDir'],
+) {
 	const llmsFullTxtContent = preparedFiles
 		.map((file) => {
-			const relativePath = path.relative(process.cwd(), file.path)
+			const relativePath = path.relative(srcDir, file.path)
 			const fileContent = matter(fs.readFileSync(file.path, 'utf-8'))
 
 			return matter.stringify(fileContent.content, {

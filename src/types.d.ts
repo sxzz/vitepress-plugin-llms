@@ -65,6 +65,8 @@ export type PreparedFile = {
 interface VitePressConfig extends UserConfig {
 	/** The **VitePress** configuration */
 	vitepress: {
+		/** The source directory */
+		srcDir: string
 		/** The directory where the output files will be generated */
 		outDir: string
 	}

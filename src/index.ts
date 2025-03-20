@@ -103,7 +103,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				for (const pattern of settings.ignoreFiles) {
 					if (
 						typeof pattern === 'string' &&
-						minimatch(path.relative(process.cwd(), id), pattern)
+						minimatch(path.relative(config.vitepress.srcDir, id), pattern)
 					) {
 						return null
 					}
@@ -150,12 +150,12 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 			// Copy all markdown files to output directory
 			for (const file of mdFilesList) {
-				const relativePath = path.relative(process.cwd(), file)
+				const relativePath = path.relative(config.vitepress.srcDir, file)
 				const targetPath = path.resolve(outDir, relativePath)
 
 				try {
 					const fileContent = matter(fs.readFileSync(file, 'utf-8'))
-					const title = extractTitle(fileContent.content)
+					const title = extractTitle(fileContent.orig.toString())
 
 					preparedFiles.push({ title, path: file })
 
@@ -192,7 +192,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
-					path.resolve(process.cwd(), 'index.md'),
+					path.resolve(config.vitepress.srcDir, 'index.md'),
+					config.vitepress.srcDir,
 					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 				)
 
@@ -208,7 +209,10 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				log.info(`Generating ${pc.cyan('llms-full.txt')}...`)
 
-				const llmsFullTxt = generateLLMsFullTxt(preparedFiles)
+				const llmsFullTxt = generateLLMsFullTxt(
+					preparedFiles,
+					config.vitepress.srcDir,
+				)
 
 				// Write content to llms-full.txt
 				fs.writeFileSync(llmsFullTxtPath, llmsFullTxt, 'utf-8')
