@@ -6,17 +6,22 @@ import matter from 'gray-matter'
 import markdownTitle from 'markdown-title'
 import { defaultLLMsTxtTemplate } from './constants'
 
-/** @param filepath - The path to the file */
+/**
+ * Splits a file path into its directory and file components.
+ *
+ * @param filepath - The path to the file.
+ * @returns An object containing the directory and file name.
+ */
 export const splitDirAndFile = (filepath: string) => ({
 	dir: path.dirname(filepath),
 	file: path.basename(filepath),
 })
 
 /**
- * Strip file extension
+ * Strips the file extension from a given file path.
  *
- * @param filepath - The path to the file
- * @returns The filename without the extension
+ * @param filepath - The path to the file.
+ * @returns The filename without the extension.
  */
 export const stripExt = (filepath: string) => {
 	const { dir, file } = splitDirAndFile(filepath)
@@ -24,6 +29,12 @@ export const stripExt = (filepath: string) => {
 	return path.join(dir, path.basename(file, path.extname(file)))
 }
 
+/**
+ * Strips the file extension from a given file path using POSIX format.
+ *
+ * @param filepath - The path to the file.
+ * @returns The filename without the extension in POSIX format.
+ */
 export const stripExtPosix = (filepath: string) => {
 	const { dir, file } = splitDirAndFile(filepath)
 
@@ -33,8 +44,8 @@ export const stripExtPosix = (filepath: string) => {
 /**
  * Extracts the title from a markdown file.
  *
- * @param content - The content of the markdown file
- * @returns The title of the markdown file
+ * @param content - The content of the markdown file.
+ * @returns The title of the markdown file, or a default title if none is found.
  */
 export function extractTitle(content: string): string {
 	const contentData = matter(content)
@@ -42,8 +53,7 @@ export function extractTitle(content: string): string {
 		contentData.data?.titleTemplate ||
 		contentData.data?.title ||
 		contentData.data?.hero?.name ||
-		markdownTitle(content) ||
-		'Untitled'
+		markdownTitle(content)
 	)
 }
 
@@ -51,9 +61,10 @@ export function extractTitle(content: string): string {
  * Generates a Table of Contents (TOC) for the provided prepared files.
  *
  * Each entry in the TOC is formatted as a markdown link to the corresponding
- * text file
+ * text file.
  *
- * @param preparedFiles - An array of prepared files
+ * @param preparedFiles - An array of prepared files.
+ * @param srcDir - The VitePress source directory.
  * @returns A string representing the formatted Table of Contents.
  */
 export function generateTOC(
@@ -73,10 +84,10 @@ export function generateTOC(
 /**
  * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
  *
- * @param preparedFiles - An array of prepared files
- * @param indexMd - Path to main documentation file `index.md`
- * @param llmsTxtTemplate - Template to use for generating `llms.txt`
- * @returns A string representing the llms.txt` file content.
+ * @param preparedFiles - An array of prepared files.
+ * @param indexMd - Path to the main documentation file `index.md`.
+ * @param llmsTxtTemplate - Template to use for generating `llms.txt`.
+ * @returns A string representing the content of the `llms.txt` file.
  *
  * @see https://llmstxt.org
  */
@@ -108,6 +119,13 @@ export function generateLLMsTxt(
 	return llmsTxtContent
 }
 
+/**
+ * Generates a `llms-full.txt` file content with all documentation in one file.
+ *
+ * @param preparedFiles - An array of prepared files.
+ * @param srcDir - The source directory for the files.
+ * @returns A string representing the full content of the LLMs.txt file.
+ */
 export function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],

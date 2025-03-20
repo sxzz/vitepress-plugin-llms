@@ -1,16 +1,15 @@
 import { describe, expect, it, mock, test } from 'bun:test'
+import {
+	fakeCustomLlmsTxtTemplate,
+	fakeIndexMd,
+	fakeMarkdownDocument,
+} from './resources'
 
-const readFileSync = mock((path) => {
-	if (path === 'index.md') {
-		return `---
-title: My Site
-description: A cool site
----
-# Welcome
-Content goes here`
-	}
-	return '# Some cool stuff'
-})
+const srcDir = 'docs'
+
+const readFileSync = mock((path) =>
+	path === `${srcDir}/index.md` ? fakeIndexMd : fakeMarkdownDocument,
+)
 
 mock.module('node:fs', () => ({
 	default: {
@@ -33,19 +32,19 @@ import { defaultLLMsTxtTemplate } from '../src/constants'
 const preparedFilesSample: PreparedFile[] = [
 	{
 		title: 'My Title',
-		path: 'index.md',
+		path: `${srcDir}/index.md`,
 	},
 	{
 		title: 'My Title 2',
-		path: 'test/test.md',
+		path: `${srcDir}/test/test.md`,
 	},
 ]
 
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
-		expect(generateTOC(preparedFilesSample, '.')).toBe(`\
-- [My Title](/index.md)
-- [My Title 2](/test/test.md)\n`)
+		expect(generateTOC(preparedFilesSample, srcDir)).toBe(
+			'- [My Title](/index.md)\n- [My Title 2](/test/test.md)\n',
+		)
 	})
 })
 
@@ -54,8 +53,8 @@ describe('generateLLMsTxt', () => {
 		expect(
 			generateLLMsTxt(
 				preparedFilesSample,
-				'index.md',
-				'.',
+				`${srcDir}/index.md`,
+				srcDir,
 				defaultLLMsTxtTemplate,
 			),
 		).toMatchSnapshot()
@@ -65,15 +64,8 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				'index.md',
-				'.',
-				`\
-# Custom title
-
-> Custom description
-
-## TOC
-
-{toc}`,
+				srcDir,
+				fakeCustomLlmsTxtTemplate,
 			),
 		).toMatchSnapshot()
 	})
@@ -81,6 +73,6 @@ describe('generateLLMsTxt', () => {
 
 describe('generateLLMsFullTxt', () => {
 	it('generates a `llms-full.txt` file', () => {
-		expect(generateLLMsFullTxt(preparedFilesSample, '.')).toMatchSnapshot()
+		expect(generateLLMsFullTxt(preparedFilesSample, srcDir)).toMatchSnapshot()
 	})
 })

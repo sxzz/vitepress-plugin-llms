@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test'
-import type { PluginOption, Plugin, ViteDevServer } from 'vite'
+import type { PluginOption, ViteDevServer } from 'vite'
+import { fakeMarkdownDocument } from './resources'
 
 // Mock the fs module before it's imported by the module under test
 const existsSync = mock(() => true)
 const mkdirSync = mock()
-const readFileSync = mock(() => '# Some cool stuff')
+const readFileSync = mock(() => fakeMarkdownDocument)
 const copyFileSync = mock()
 const writeFileSync = mock()
 
@@ -155,6 +156,7 @@ describe('llmstxt plugin', () => {
 			// Verify that only non-ignored files were written
 			expect(writeFileSync).toHaveBeenCalledTimes(1)
 			expect(writeFileSync).toBeCalledWith(
+				// docs/test.md
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
 				'---\nurl: /test.md\n---\n# Some cool stuff\n',
 			)
