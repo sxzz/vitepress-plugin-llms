@@ -48,6 +48,14 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 		configResolved(resolvedConfig) {
 			config = resolvedConfig as unknown as VitePressConfig
+			if (settings.workDir) {
+				settings.workDir = path.resolve(
+					config.vitepress.srcDir,
+					settings.workDir as string,
+				)
+			} else {
+				settings.workDir = config.vitepress.srcDir
+			}
 			// Detect if this is the SSR build
 			isSsrBuild = !!resolvedConfig.build?.ssr
 			log.info(
@@ -99,11 +107,16 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				return null
 			}
 
+			// Skip files outside workDir if it's configured
+			if (!id.startsWith(settings.workDir as string)) {
+				return null
+			}
+
 			if (settings.ignoreFiles?.length) {
 				for (const pattern of settings.ignoreFiles) {
 					if (
 						typeof pattern === 'string' &&
-						minimatch(path.relative(config.vitepress.srcDir, id), pattern)
+						minimatch(path.relative(settings.workDir as string, id), pattern)
 					) {
 						return null
 					}
@@ -150,7 +163,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 			// Copy all markdown files to output directory
 			for (const file of mdFilesList) {
-				const relativePath = path.relative(config.vitepress.srcDir, file)
+				const relativePath = path.relative(settings.workDir as string, file)
 				const targetPath = path.resolve(outDir, relativePath)
 
 				try {
@@ -192,8 +205,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
-					path.resolve(config.vitepress.srcDir, 'index.md'),
-					config.vitepress.srcDir,
+					path.resolve(settings.workDir as string, 'index.md'),
+					settings.workDir as string,
 					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 				)
 
@@ -211,7 +224,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				const llmsFullTxt = generateLLMsFullTxt(
 					preparedFiles,
-					config.vitepress.srcDir,
+					settings.workDir as string,
 				)
 
 				// Write content to llms-full.txt

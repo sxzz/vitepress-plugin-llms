@@ -3,7 +3,7 @@ import { describe, expect, it } from 'bun:test'
 import { extractTitle } from '../src/helpers'
 
 describe('extractTitle', () => {
-	it('extracts title from frontmatter hero.name', () => {
+	it('extracts title from frontmatter', () => {
 		const markdown = `---
 hero:
   name: My Awesome Title
@@ -14,13 +14,13 @@ Content goes here`
 		expect(extractTitle(markdown)).toBe('My Awesome Title')
 	})
 
-	it('extracts title from markdown heading when no frontmatter `hero.name` exists', () => {
+	it('extracts title from markdown heading when no frontmatter exists', () => {
 		const markdown = '# My Markdown Title\nSome content here'
 
 		expect(extractTitle(markdown)).toBe('My Markdown Title')
 	})
 
-	it('extracts title from markdown heading when frontmatter exists but has no `hero.name`', () => {
+	it('extracts title from markdown heading when frontmatter exists but has no title', () => {
 		const markdown = `---
 description: Some description
 author: John Doe
@@ -31,9 +31,9 @@ Content goes here`
 		expect(extractTitle(markdown)).toBe('Title From Heading')
 	})
 
-	it('returns empty string when no frontmatter `hero.name` or markdown title exists', () => {
+	it("returns 'Untitled' when no frontmatter or markdown title exists", () => {
 		const markdown = 'Some content without any headings or frontmatter'
 
-		expect(extractTitle(markdown)).toBe('')
+		expect(extractTitle(markdown)).toBe('Untitled')
 	})
 })

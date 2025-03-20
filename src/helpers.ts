@@ -39,6 +39,7 @@ export const stripExtPosix = (filepath: string) => {
 export function extractTitle(content: string): string {
 	const contentData = matter(content)
 	return (
+		contentData.data?.titleTemplate ||
 		contentData.data?.title ||
 		contentData.data?.hero?.name ||
 		markdownTitle(content) ||

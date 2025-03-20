@@ -16,6 +16,17 @@ export interface LlmstxtSettings {
 	/**
 	 * An array of strings representing file paths to be ignored
 	 *
+	 * Useful if you want to exclude certain files from LLMs (e.g. files that are not related to documentation - sponsors, team, etc.)
+	 *
+	 * @example
+	 * llmstxt({
+	 *     ignoreFiles: [
+	 *         'about/team/*',
+	 *         'sponsor/*
+	 *         // ...
+	 *     ]
+	 * })
+	 *
 	 * @default []
 	 */
 	ignoreFiles?: string[]
@@ -38,6 +49,19 @@ export interface LlmstxtSettings {
 	 {toc}`
 	 */
 	customLLMsTxtTemplate?: string
+	/**
+	 * Folder from which files will be processed
+	 *
+	 * Useful if you want to configure the plugin to generate documentation for LLMs in only one language
+	 *
+	 * @example
+	 * llmstxt({
+	 *     // Generate documentation for LLMs from English documentation only
+	 *     workDir: 'en'
+	 * })
+	 * @default vitepress.srcDir
+	 */
+	workDir?: string
 }
 
 /**

@@ -43,7 +43,7 @@ const preparedFilesSample: PreparedFile[] = [
 
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
-		expect(generateTOC(preparedFilesSample)).toBe(`\
+		expect(generateTOC(preparedFilesSample, '.')).toBe(`\
 - [My Title](/index.md)
 - [My Title 2](/test/test.md)\n`)
 	})
@@ -52,7 +52,12 @@ describe('generateTOC', () => {
 describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', () => {
 		expect(
-			generateLLMsTxt(preparedFilesSample, 'index.md', defaultLLMsTxtTemplate),
+			generateLLMsTxt(
+				preparedFilesSample,
+				'index.md',
+				'.',
+				defaultLLMsTxtTemplate,
+			),
 		).toMatchSnapshot()
 	})
 	it('works correctly with a custom template', () => {
@@ -60,6 +65,7 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				'index.md',
+				'.',
 				`\
 # Custom title
 
@@ -75,6 +81,6 @@ describe('generateLLMsTxt', () => {
 
 describe('generateLLMsFullTxt', () => {
 	it('generates a `llms-full.txt` file', () => {
-		expect(generateLLMsFullTxt(preparedFilesSample)).toMatchSnapshot()
+		expect(generateLLMsFullTxt(preparedFilesSample, '.')).toMatchSnapshot()
 	})
 })

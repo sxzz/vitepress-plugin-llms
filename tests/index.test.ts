@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test'
-import type { Plugin, ViteDevServer } from 'vite'
+import type { PluginOption, Plugin, ViteDevServer } from 'vite'
 
 // Mock the fs module before it's imported by the module under test
 const existsSync = mock(() => true)
@@ -35,7 +35,7 @@ import type { VitePressConfig } from '../src/types'
 import path from 'node:path'
 
 describe('llmstxt plugin', () => {
-	let plugin: Plugin
+	let plugin: PluginOption
 	let mockConfig: VitePressConfig
 	let mockServer: ViteDevServer
 
@@ -49,6 +49,7 @@ describe('llmstxt plugin', () => {
 		mockConfig = {
 			vitepress: {
 				outDir: 'dist',
+				srcDir: 'docs',
 			},
 			build: {
 				ssr: false,
@@ -78,13 +79,13 @@ describe('llmstxt plugin', () => {
 	describe('transform', () => {
 		it('should collect markdown files', () => {
 			// @ts-ignore
-			const result = plugin.transform(0, 'test.md')
+			const result = plugin.transform(0, 'docs/test.md')
 			expect(result).toBeNull()
 		})
 
 		it('should not collect non-markdown files', () => {
 			// @ts-ignore
-			const result = plugin.transform(0, 'test.ts')
+			const result = plugin.transform(0, 'docs/test.ts')
 			expect(result).toBeNull()
 		})
 	})
@@ -115,14 +116,15 @@ describe('llmstxt plugin', () => {
 			// @ts-ignore
 			plugin.configResolved(mockConfig)
 			// @ts-ignore
-			plugin.transform(0, 'test.md')
+			plugin.transform(0, 'docs/test.md')
 			// @ts-ignore
-			plugin.transform(0, 'test/test.md')
+			plugin.transform(0, 'docs/test/test.md')
 			// @ts-ignore
 			plugin.generateBundle()
 
 			// Verify that files were written
 			expect(writeFileSync).toHaveBeenCalledTimes(2)
+			console.log(path.resolve(mockConfig.vitepress.outDir, 'docs', 'test.md'))
 			expect(writeFileSync).nthCalledWith(
 				1,
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
@@ -130,7 +132,7 @@ describe('llmstxt plugin', () => {
 			)
 			expect(writeFileSync).nthCalledWith(
 				2,
-				path.resolve(mockConfig.vitepress.outDir, 'test/test.md'),
+				path.resolve(mockConfig.vitepress.outDir, 'test', 'test.md'),
 				'---\nurl: /test/test.md\n---\n# Some cool stuff\n',
 			)
 		})
@@ -144,9 +146,9 @@ describe('llmstxt plugin', () => {
 			// @ts-ignore
 			plugin.configResolved(mockConfig)
 			// @ts-ignore
-			plugin.transform(0, 'test.md')
+			plugin.transform(0, 'docs/test.md')
 			// @ts-ignore
-			plugin.transform(0, 'test/test.md')
+			plugin.transform(0, 'docs/test/test.md')
 			// @ts-ignore
 			plugin.generateBundle()
 
