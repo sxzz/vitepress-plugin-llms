@@ -1,6 +1,32 @@
 # Changelog
 
 
+## v0.0.8
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.7...v0.0.8)
+
+### 🩹 Fixes
+
+- Fix a few bugs ([eb51df4](https://github.com/okineadev/vitepress-plugin-llms/commit/eb51df4))
+- Fix several bugs and improve types ([5ec5155](https://github.com/okineadev/vitepress-plugin-llms/commit/5ec5155))
+- **ci:** Fix CI triggers ([c516533](https://github.com/okineadev/vitepress-plugin-llms/commit/c516533))
+
+### 📖 Documentation
+
+- Add cool badges ([b024d98](https://github.com/okineadev/vitepress-plugin-llms/commit/b024d98))
+
+### 🏡 Chore
+
+- 💡 improve TSDoc comments ([a8b719d](https://github.com/okineadev/vitepress-plugin-llms/commit/a8b719d))
+
+### 🤖 CI
+
+- Replace `bun-version-file` with `bun-version` ([e614a52](https://github.com/okineadev/vitepress-plugin-llms/commit/e614a52))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.7
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.6...v0.0.7)
