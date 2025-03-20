@@ -4,6 +4,7 @@
 
 # 📜 vitepress-plugin-llms
 
+[![NPM Downloads](https://img.shields.io/npm/dw/vitepress-plugin-llms?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSIyNHB4IiBmaWxsPSIjMDAwMDAwIj48cGF0aCBkPSJNNDgwLTMyMCAyODAtNTIwbDU2LTU4IDEwNCAxMDR2LTMyNmg4MHYzMjZsMTA0LTEwNCA1NiA1OC0yMDAgMjAwWk0xNjAtMTYwdi0yMDBoODB2MTIwaDQ4MHYtMTIwaDgwdjIwMEgxNjBaIi8%2BPC9zdmc%2B&labelColor=FAFAFA&color=212121)](https://www.npmjs.com/package/vitepress-plugin-llms) [![NPM Version](https://img.shields.io/npm/v/aboutproject?logo=npm&logoColor=212121&label=version&labelColor=FAFAFA&color=212121)](https://npmjs.com/package/aboutproject) [![Tests Status](https://img.shields.io/github/actions/workflow/status/okineadev/vitepress-plugin-llms/ci.yml?label=tests&labelColor=212121)](https://github.com/okineadev/vitepress-plugin-llms/actions/workflows/ci.yml) [![Built with Bun](https://img.shields.io/badge/Built_with-Bun-fbf0df?logo=bun&labelColor=212121)](https://bun.sh) [![Formatted with Biome](https://img.shields.io/badge/Formatted_with-Biome-60a5fa?style=flat&logo=biome&labelColor=212121)](https://biomejs.dev/) [![sponsor](https://img.shields.io/badge/sponsor-EA4AAA?logo=githubsponsors&labelColor=FAFAFA)](https://github.com/okineadev/vitepress-plugin-llms?sponsor=1)
 </div>
 
 ## 📦 Installation
@@ -34,44 +35,7 @@ Now, thanks to this plugin, the LLM version of the website documentation is auto
 
 ### Plugin Settings
 
-#### `generateLLMsFullTxt`
-
-- **Description**: Determines whether to generate the `llms-full.txt` which contains all the documentation in one file.
-- **Default**: `true`
-
-#### `generateLLMsTxt`
-
-- **Description**: Determines whether to generate the `llms.txt` which contains a list of sections with links.
-- **Default**: `true`
-
-#### `ignoreFiles`
-
-- **Description**: An array of strings representing file paths to be ignored.
-- **Default**: `[]`
-
-#### `customLLMsTxtTemplate`
-
-**Description**:
-
-Custom template for `llms.txt` file, useful if you want to make your own order of elements
-
-List of available template elements:
-
-- `{title}` - Title taken from frontmater or from the first h1 heading in the main document (`index.md`)
-- `{description}` - Description taken from `hero.tagline`
-- `{toc}` - Automatically generated **T**able **O**f **C**ontents
-
-**Default**:
-
-```markdown
-# {title}
-
-{description}
-
-## Table of Contents
-
-{toc}
-```
+See [`src/types.d.ts`](src/types.d.ts)
 
 ## 🚀 Why `vitepress-plugin-llms`?
 
