@@ -99,9 +99,12 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				return null
 			}
 
-			if (settings?.ignoreFiles?.length) {
+			if (settings.ignoreFiles?.length) {
 				for (const pattern of settings.ignoreFiles) {
-					if (typeof pattern === 'string' && minimatch(id, pattern)) {
+					if (
+						typeof pattern === 'string' &&
+						minimatch(path.relative(process.cwd(), id), pattern)
+					) {
 						return null
 					}
 				}
