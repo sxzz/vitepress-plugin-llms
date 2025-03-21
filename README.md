@@ -67,6 +67,10 @@ This plugin follows the [llmstxt.org](https://llmstxt.org/) standard, which defi
 
 If you like this project, consider supporting it by starring ⭐ it on GitHub, sharing it with your friends, or [buying me a coffee ☕](https://github.com/okineadev/vitepress-plugin-llms?sponsor=1)
 
+## 🤝 Contributing
+
+You can read the instructions for contributing here - [CONTRIBUTING.md](./CONTRIBUTING.md)
+
 ## 📜 License
 
 [MIT License](./LICENSE) © 2025-present [Yurii Bogdan](https://github.com/okineadev)
