@@ -30,7 +30,7 @@ After cloning the repository, install the required packages:
 bun install
 ```
 
-## Building
+### Building
 
 ```bash
 bun run build
