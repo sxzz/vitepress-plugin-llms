@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"type": "module",
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
 	"repository": {
 		"type": "git",

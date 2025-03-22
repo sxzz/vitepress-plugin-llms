@@ -1,6 +1,6 @@
 <div align="center">
 
-  [![Banner](https://raw.githubusercontent.com/okineadev/vitepress-plugin-llms/refs/heads/main/assets/banner.png)](https://npmjs.com/package/vitepress-plugin-llms)
+  [![Banner](assets/hero.png)](https://npmjs.com/package/vitepress-plugin-llms)
 
 # 📜 vitepress-plugin-llms
 
