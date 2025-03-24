@@ -7,18 +7,19 @@ on:
         description: 'Version to release (e.g. 1.2.3)'
         required: false
 
-permissions:
-  id-token: write
-  contents: write
-  attestations: write
-
 jobs:
   test:
+    permissions: {}
     uses: ./.github/workflows/tests.yml
 
   release:
     needs: test
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
 
     steps:
       - name: 📥 Checkout
