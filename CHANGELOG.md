@@ -1,6 +1,57 @@
 # Changelog
 
 
+## v0.0.9
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.8...v0.0.9)
+
+### 🚀 Enhancements
+
+- Add new  `customTemplateVariables` option ([bd9476b](https://github.com/okineadev/vitepress-plugin-llms/commit/bd9476b))
+
+### 🔥 Performance
+
+- **ci:** ⚡ try to speed up Windows tests by downgrading runner version to `windows-2019` ([d0054ab](https://github.com/okineadev/vitepress-plugin-llms/commit/d0054ab))
+- **ci:** ⚡ try to speed up Windows tests (again) ([2a0f1bd](https://github.com/okineadev/vitepress-plugin-llms/commit/2a0f1bd))
+- **ci:** ⚡ try to speed up Windows tests ([94b2b5d](https://github.com/okineadev/vitepress-plugin-llms/commit/94b2b5d))
+
+### 🩹 Fixes
+
+- **ci:** Fix `tests.yml` ([621afde](https://github.com/okineadev/vitepress-plugin-llms/commit/621afde))
+- **ci:** Fix `WINDOWS_USERPROFILE` env variable in `tests.yml` ([812be07](https://github.com/okineadev/vitepress-plugin-llms/commit/812be07))
+- **ci:** Fix `tests.yml` ([e7e1e91](https://github.com/okineadev/vitepress-plugin-llms/commit/e7e1e91))
+
+### 💅 Refactors
+
+- **ci:** ♻️ refactor `tests.yml` ([b5364a6](https://github.com/okineadev/vitepress-plugin-llms/commit/b5364a6))
+- Refactor types ([61b6ef3](https://github.com/okineadev/vitepress-plugin-llms/commit/61b6ef3))
+
+### 📖 Documentation
+
+- Fix badge links 🙈 ([982b1b6](https://github.com/okineadev/vitepress-plugin-llms/commit/982b1b6))
+- Add contributing guidelines ([7517047](https://github.com/okineadev/vitepress-plugin-llms/commit/7517047))
+- Fix heading in `CONTRIBUTING.md` ([5717e5a](https://github.com/okineadev/vitepress-plugin-llms/commit/5717e5a))
+- Add a light version of the banner ([69589c1](https://github.com/okineadev/vitepress-plugin-llms/commit/69589c1))
+- Add example configuration in the readme ([2c09116](https://github.com/okineadev/vitepress-plugin-llms/commit/2c09116))
+
+### 🏡 Chore
+
+- 🗑️ remove unused folders ([72e76a6](https://github.com/okineadev/vitepress-plugin-llms/commit/72e76a6))
+- 🍱 rename `assets/banner.png` to `assets/hero.png` ([65e06a9](https://github.com/okineadev/vitepress-plugin-llms/commit/65e06a9))
+- **assets:** Fix `assets/hero-light.png` background color ([ebef9dc](https://github.com/okineadev/vitepress-plugin-llms/commit/ebef9dc))
+- Use `>` before description in `llms.txt` ([ef1335f](https://github.com/okineadev/vitepress-plugin-llms/commit/ef1335f))
+
+### 🤖 CI
+
+- 🛡️ improve workflows security ([2b92609](https://github.com/okineadev/vitepress-plugin-llms/commit/2b92609))
+- 🍎 setup `macos` tests ([c1adebb](https://github.com/okineadev/vitepress-plugin-llms/commit/c1adebb))
+- Enhance concurrency for auto-cancellation of outdated tests ([1438361](https://github.com/okineadev/vitepress-plugin-llms/commit/1438361))
+- Make shorter `pkg.pr.new` package link ([f6001d4](https://github.com/okineadev/vitepress-plugin-llms/commit/f6001d4))
+
+### ❤️ Contributors
+
+- Okinea Dev <hi@okinea.dev>
+
 ## v0.0.8
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.7...v0.0.8)
