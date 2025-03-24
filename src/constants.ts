@@ -2,7 +2,7 @@
 export const defaultLLMsTxtTemplate = `\
 # {title}
 
-{description}
+> {description}
 
 ## Table of Contents
 
