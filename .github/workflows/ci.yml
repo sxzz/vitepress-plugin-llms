@@ -30,6 +30,10 @@ on:
 
   workflow_dispatch:
 
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     permissions: {}
