@@ -10,13 +10,13 @@ jobs:
       matrix:
         # Use older `windows-2019` for greater speed
         # See https://github.com/actions/runner-images/issues/5166
-        os: [ubuntu-latest, windows-2019]
+        os: [ubuntu-latest, macos-latest, windows-2019]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       # https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/?utm_source=chatgpt.com#moving-temp-to-the-d-drive
-      - name: Set temp dir
+      - name: Setup environment for Windows
         if: runner.os == 'Windows'
         run: |
           mkdir "D:\\Temp"
