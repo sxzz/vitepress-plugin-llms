@@ -21,12 +21,14 @@ jobs:
       # https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/#moving-temp-to-the-d-drive
       - name: 🗂️ Set temp dir on Windows
         if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          TEMP_DIR="$WINDOWS_USERPROFILE\Temp"
+          $TEMP_DIR = "$env:WINDOWS_USERPROFILE\Temp"
+          # Create temp dir
+          New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
 
-          mkdir "$TEMP_DIR"
-          echo "TEMP=$TEMP_DIR"  >> $env:GITHUB_ENV
-          echo "TMP=$TEMP_DIR"   >> $env:GITHUB_ENV
+          "TEMP=$TEMP_DIR"  >> $env:GITHUB_ENV
+          "TMP=$TEMP_DIR"   >> $env:GITHUB_ENV
 
       - name: 🔓 Disable Windows Defender
         if: runner.os == 'Windows'
