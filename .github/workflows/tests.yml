@@ -46,6 +46,8 @@ jobs:
 
       - name: 🔧 Setup Bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
+        env:
+          HOME: 'D:'
         with:
           bun-version: latest
 
@@ -53,8 +55,10 @@ jobs:
         # Run only on Windows because on Linux there are no problems with slow package installation
         if: runner.os == 'Windows'
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        env:
+          HOME: 'D:'
         with:
-          path: D:\.bun
+          path: '${{ env.HOME }}\.bun'
           key: ${{ matrix.os }}-bun-${{ hashFiles('**/bun.lock') }}
 
       - name: 📦 Install dependencies
