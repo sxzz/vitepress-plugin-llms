@@ -3,7 +3,7 @@ on: [workflow_call]
 permissions: {}
 
 env:
-  WINDOWS_USERPROFILE: D:\\
+  WINDOWS_USERPROFILE: 'D:'
 
 jobs:
   test:
