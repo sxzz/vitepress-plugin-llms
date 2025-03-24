@@ -1,4 +1,5 @@
-import type { UserConfig } from 'vite'
+import type { SiteConfig } from 'vitepress'
+import type { ResolvedConfig } from 'vite'
 
 export interface LlmstxtSettings {
 	/**
@@ -87,15 +88,6 @@ export type PreparedFile = {
 	path: string
 }
 
-/**
- * Configuration interface for VitePress, extending the UserConfig from Vite.
- */
-interface VitePressConfig extends UserConfig {
-	/** The configuration settings specific to **VitePress**. */
-	vitepress: {
-		/** The source directory for the documentation files. */
-		srcDir: string
-		/** The directory where the generated output files will be stored. */
-		outDir: string
-	}
+interface VitePressConfig extends ResolvedConfig {
+	vitepress: SiteConfig
 }

@@ -1,4 +1,5 @@
-import type { ViteDevServer, Plugin } from 'vite'
+import type { Plugin } from 'vitepress'
+import type { ViteDevServer } from 'vite'
 
 import fs from 'node:fs'
 import path from 'node:path'
@@ -54,7 +55,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 		/** Resolves the Vite configuration and sets up the working directory. */
 		configResolved(resolvedConfig) {
-			config = resolvedConfig as unknown as VitePressConfig
+			config = resolvedConfig as VitePressConfig
 			if (settings.workDir) {
 				settings.workDir = path.resolve(
 					config.vitepress.srcDir,
