@@ -17,11 +17,29 @@ export interface LlmstxtSettings {
 	generateLLMsTxt?: boolean
 
 	/**
+	 * The directory from which files will be processed.
+	 *
+	 * This is useful for configuring the plugin to generate documentation for LLMs in a specific language.
+	 *
+	 * @example
+	 * ```typescript
+	 * llmstxt({
+	 *     // Generate documentation for LLMs from English documentation only
+	 *     workDir: 'en'
+	 * })
+	 * ```
+	 *
+	 * @default vitepress.srcDir
+	 */
+	workDir?: string
+
+	/**
 	 * An array of file path patterns to be ignored during processing.
 	 *
 	 * This is useful for excluding certain files from LLMs, such as those not related to documentation (e.g., sponsors, team, etc.).
 	 *
 	 * @example
+	 * ```typescript
 	 * llmstxt({
 	 *     ignoreFiles: [
 	 *         'about/team/*',
@@ -29,6 +47,7 @@ export interface LlmstxtSettings {
 	 *         // ...
 	 *     ]
 	 * })
+	 * ```
 	 *
 	 * @default []
 	 */
@@ -43,30 +62,76 @@ export interface LlmstxtSettings {
 	 * - `{description}`: The description.
 	 * - `{toc}`: An automatically generated **T**able **O**f **C**ontents.
 	 *
-	 * @default
-	 * `# {title}
+	 * You can also add custom variables using the {@link LlmstxtSettings.customTemplateVariables | `customTemplateVariables`} parameter
 	 *
-	 * {description}
+	 * @default
+	 * ```markdown
+	 * # {title}
+	 *
+	 * > {description}
 	 *
 	 * ## Table of Contents
 	 *
-	 * {toc}`
+	 * {toc}
+	 * ```
 	 */
 	customLLMsTxtTemplate?: string
 
 	/**
-	 * The directory from which files will be processed.
+	 * Custom variables for {@link LlmstxtSettings.customLLMsTxtTemplate | `customLLMsTxtTemplate`}.
 	 *
-	 * This is useful for configuring the plugin to generate documentation for LLMs in a specific language.
+	 * With this option you can edit or add variables to the template.
+	 *
+	 * You can change the title in `llms.txt` without having to change the template:
 	 *
 	 * @example
+	 * ```typescript
 	 * llmstxt({
-	 *     // Generate documentation for LLMs from English documentation only
-	 *     workDir: 'en'
+	 *     customTemplateVariables: {
+	 *         title: 'Very custom title',
+	 *     }
 	 * })
-	 * @default vitepress.srcDir
+	 * ```
+	 *
+	 * You can also combine this with a custom template:
+	 *
+	 * @example
+	 * ```typescript
+	 * llmstxt({
+	 *     customLLMsTxtTemplate: '# {title}\n\n{foo}',
+	 *     customTemplateVariables: {
+	 *         foo: 'Very custom title',
+	 *     }
+	 * })
+	 * ```
 	 */
-	workDir?: string
+	customTemplateVariables?: {
+		/**
+		 * The title extracted from the frontmatter or the first h1 heading in the main document (`index.md`).
+		 *
+		 * @example 'Awesome tool'
+		 */
+		title?: string
+		/**
+		 * The description.
+		 *
+		 * @example 'Blazing fast build tool'
+		 */
+		description?: string
+		/**
+		 * An automatically generated **T**able **O**f **C**ontents.
+		 *
+		 * @example
+		 * ```markdown
+		 * - [My Title](/index.md)
+		 * - [My Title 2](/guide.md)
+		 * ```
+		 */
+		toc?: string
+		/** Any custom variable */
+		// biome-ignore lint/suspicious/noExplicitAny: Let there be any types
+		[key: string]: any
+	}
 }
 
 /**

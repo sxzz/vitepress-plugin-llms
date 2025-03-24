@@ -125,7 +125,6 @@ describe('llmstxt plugin', () => {
 
 			// Verify that files were written
 			expect(writeFileSync).toHaveBeenCalledTimes(2)
-			console.log(path.resolve(mockConfig.vitepress.outDir, 'docs', 'test.md'))
 			expect(writeFileSync).nthCalledWith(
 				1,
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),

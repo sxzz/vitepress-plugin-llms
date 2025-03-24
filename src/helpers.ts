@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import type { PreparedFile, VitePressConfig } from './types'
+import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 import matter from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
@@ -86,7 +86,8 @@ export function generateTOC(
  *
  * @param preparedFiles - An array of prepared files.
  * @param indexMd - Path to the main documentation file `index.md`.
- * @param llmsTxtTemplate - Template to use for generating `llms.txt`.
+ * @param customLLMsTxtTemplate - Template to use for generating `llms.txt`.
+ * @param customTemplateVariables - Custom variables for `customLLMsTxtTemplate`.
  * @returns A string representing the content of the `llms.txt` file.
  *
  * @see https://llmstxt.org
@@ -95,26 +96,44 @@ export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
 	indexMd: string,
 	srcDir: VitePressConfig['vitepress']['srcDir'],
-	llmsTxtTemplate: string = defaultLLMsTxtTemplate,
+	customLLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
+	customTemplateVariables: LlmstxtSettings['customTemplateVariables'] = {},
 ) {
 	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
-	let llmsTxtContent = llmsTxtTemplate
+	let llmsTxtContent = customLLMsTxtTemplate
 
-	llmsTxtContent = llmsTxtContent.replace(
-		/{title}/gi,
-		extractTitle(indexMdFile.orig.toString()) || 'LLMs Documentation',
-	)
-	llmsTxtContent = llmsTxtContent.replace(
-		/{description}/gi,
-		indexMdFile.data?.hero?.tagline ||
-			indexMdFile.data?.titleTemplate ||
-			'This file contains links to all documentation sections.',
-	)
+	for (const [key, value] of Object.entries(customTemplateVariables)) {
+		llmsTxtContent = llmsTxtContent.replace(
+			new RegExp(`{${key}}`, 'gi'),
+			value || '',
+		)
+	}
 
-	llmsTxtContent = llmsTxtContent.replace(
-		/{toc}/gi,
-		generateTOC(preparedFiles, srcDir),
-	)
+	if (!customTemplateVariables.title && llmsTxtContent.match(/{title}/gi)) {
+		llmsTxtContent = llmsTxtContent.replace(
+			/{title}/gi,
+			extractTitle(indexMdFile.orig.toString()) || 'LLMs Documentation',
+		)
+	}
+
+	if (
+		!customTemplateVariables.description &&
+		llmsTxtContent.match(/{description}/gi)
+	) {
+		llmsTxtContent = llmsTxtContent.replace(
+			/{description}/gi,
+			indexMdFile.data?.hero?.tagline ||
+				indexMdFile.data?.titleTemplate ||
+				'This file contains links to all documentation sections.',
+		)
+	}
+
+	if (!customTemplateVariables.toc && llmsTxtContent.match(/{toc}/gi)) {
+		llmsTxtContent = llmsTxtContent.replace(
+			/{toc}/gi,
+			generateTOC(preparedFiles, srcDir),
+		)
+	}
 
 	return llmsTxtContent
 }

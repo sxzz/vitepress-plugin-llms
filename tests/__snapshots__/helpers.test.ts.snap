@@ -3,7 +3,7 @@
 exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
 "# My Site
 
-This file contains links to all documentation sections.
+> This file contains links to all documentation sections.
 
 ## Table of Contents
 
@@ -22,6 +22,24 @@ exports[`generateLLMsTxt works correctly with a custom template 1`] = `
 - [My Title](/index.md)
 - [My Title 2](/test/test.md)
 "
+`;
+
+exports[`generateLLMsTxt works correctly with a custom template variables 1`] = `
+"# foo
+
+> bar
+
+## Table of Contents
+
+zoo"
+`;
+
+exports[`generateLLMsTxt works correctly with a custom template and variables 1`] = `
+"# {foo}
+
+**{bar}**
+
+{zoo}"
 `;
 
 exports[`generateLLMsFullTxt generates a \`llms-full.txt\` file 1`] = `

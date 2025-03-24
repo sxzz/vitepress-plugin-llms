@@ -63,9 +63,32 @@ describe('generateLLMsTxt', () => {
 		expect(
 			generateLLMsTxt(
 				preparedFilesSample,
-				'index.md',
+				`${srcDir}/index.md`,
 				srcDir,
 				fakeCustomLlmsTxtTemplate,
+			),
+		).toMatchSnapshot()
+	})
+	it('works correctly with a custom template variables', () => {
+		expect(
+			generateLLMsTxt(
+				preparedFilesSample,
+				`${srcDir}/index.md`,
+				srcDir,
+				defaultLLMsTxtTemplate,
+				{ title: 'foo', description: 'bar', toc: 'zoo' },
+			),
+		).toMatchSnapshot()
+	})
+
+	it('works correctly with a custom template and variables', () => {
+		expect(
+			generateLLMsTxt(
+				preparedFilesSample,
+				`${srcDir}/index.md`,
+				srcDir,
+				'# {foo}\n\n**{bar}**\n\n{zoo}',
+				{ title: 'foo', description: 'bar', toc: 'zoo' },
 			),
 		).toMatchSnapshot()
 	})
