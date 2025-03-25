@@ -69,6 +69,7 @@ export default defineConfig({
 ```
 
 This configuration does the following:
+
 - `generateLLMsFullTxt: false`: Disables the generation of the `llms-full.txt` file.
 - `ignoreFiles: ["blog/*"]`: Ignores all files in the `blog` directory.
 - `customLLMsTxtTemplate`: Uses a custom template for the `llms.txt` file.
@@ -110,3 +111,9 @@ You can read the instructions for contributing here - [CONTRIBUTING.md](./CONTRI
 ## 📜 License
 
 [MIT License](./LICENSE) © 2025-present [Yurii Bogdan](https://github.com/okineadev)
+
+## 👨‍🏭 Contributors
+
+Thank you to everyone who helped with the project!
+
+![Contributors](https://contributors-table.vercel.app/image?repo=okineadev/vitepress-plugin-llms&width=50&columns=10)
