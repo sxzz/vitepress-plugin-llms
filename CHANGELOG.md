@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.10
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.9...v0.0.10)
+
+### 🩹 Fixes
+
+- Fix error with incorrect reading of frontmatter if `index.md` is not included in `ignoreFiles` ([7ce7194](https://github.com/okineadev/vitepress-plugin-llms/commit/7ce7194))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.9
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.8...v0.0.9)
