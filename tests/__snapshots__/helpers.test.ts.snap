@@ -3,7 +3,7 @@
 exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
 "# My Site
 
-> This file contains links to all documentation sections.
+> A cool site
 
 ## Table of Contents
 

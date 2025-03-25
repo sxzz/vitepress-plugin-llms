@@ -99,6 +99,8 @@ export function generateLLMsTxt(
 	customLLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
 	customTemplateVariables: LlmstxtSettings['customTemplateVariables'] = {},
 ) {
+	// @ts-expect-error
+	matter.clearCache()
 	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
 	let llmsTxtContent = customLLMsTxtTemplate
 
@@ -123,6 +125,7 @@ export function generateLLMsTxt(
 		llmsTxtContent = llmsTxtContent.replace(
 			/{description}/gi,
 			indexMdFile.data?.hero?.tagline ||
+				indexMdFile.data?.description ||
 				indexMdFile.data?.titleTemplate ||
 				'This file contains links to all documentation sections.',
 		)

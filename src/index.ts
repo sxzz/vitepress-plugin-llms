@@ -217,7 +217,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					preparedFiles,
 					path.resolve(settings.workDir as string, 'index.md'),
 					settings.workDir as string,
-					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
+					settings.customLLMsTxtTemplate,
+					settings.customTemplateVariables,
 				)
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')
