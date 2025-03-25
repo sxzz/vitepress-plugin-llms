@@ -77,7 +77,7 @@ LLMs (Large Language Models) are great at processing text, but traditional docum
 
 The file structure in `.vitepress/dist` folder will be as follows:
 
-```typescript
+```plaintext
 📂 .vitepress/dist
 ├── ...
 ├── llms-full.txt            // A file where all the website documentation is compiled into one file
