@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.12
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.11...v0.0.12)
+
+### 🏡 Chore
+
+- Ship both `esm` and `cjs` ([d567004](https://github.com/okineadev/vitepress-plugin-llms/commit/d567004))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.11
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.10...v0.0.11)
