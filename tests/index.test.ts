@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test'
-import type { PluginOption, ViteDevServer } from 'vite'
+import type { Plugin } from 'vitepress'
+import type { ViteDevServer } from 'vite'
 import { fakeMarkdownDocument } from './resources'
 
 // Mock the fs module before it's imported by the module under test
@@ -36,7 +37,7 @@ import type { VitePressConfig } from '../src/types'
 import path from 'node:path'
 
 describe('llmstxt plugin', () => {
-	let plugin: PluginOption
+	let plugin: Plugin
 	let mockConfig: VitePressConfig
 	let mockServer: ViteDevServer
 

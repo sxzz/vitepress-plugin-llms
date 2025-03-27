@@ -49,13 +49,13 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 	// Flag to identify which build we're in
 	let isSsrBuild = false
 
-	return {
+	return <Plugin>{
 		name: PLUGIN_NAME,
 		enforce: 'post', // Run after other plugins
 
 		/** Resolves the Vite configuration and sets up the working directory. */
 		configResolved(resolvedConfig) {
-			config = resolvedConfig as VitePressConfig
+			config = resolvedConfig as unknown as VitePressConfig
 			if (settings.workDir) {
 				settings.workDir = path.resolve(
 					config.vitepress.srcDir,
