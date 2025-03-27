@@ -55,9 +55,9 @@ export function extractTitle(
 ): string {
 	return (
 		file.data?.title ||
-		vitepressConfig.vitepress.userConfig.title ||
+		vitepressConfig?.vitepress?.userConfig?.title ||
 		file.data?.titleTemplate ||
-		vitepressConfig.vitepress.userConfig.titleTemplate ||
+		vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
 		markdownTitle(
 			stripHtml(file.content, { stripTogetherWithTheirContents: ['*'] }).result,
 		)
@@ -207,7 +207,7 @@ export function generateLLMsTxt(
 	if (!customTemplateVariables.description) {
 		defaults.description =
 			indexMdFile.data?.hero?.text ||
-			vitepressConfig.vitepress.userConfig.description ||
+			vitepressConfig?.vitepress?.userConfig?.description ||
 			indexMdFile?.data?.description ||
 			indexMdFile.data?.titleTemplate ||
 			'This file contains links to all documentation sections.'

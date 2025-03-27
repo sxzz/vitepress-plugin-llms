@@ -49,7 +49,7 @@
 	},
 	"trustedDependencies": ["@biomejs/biome", "esbuild"],
 	"lint-staged": {
-		"{src,tests}/**/*.ts": "bun test",
+		"{src,tests}/**/*.ts": "bun run test",
 		"*": "bun run format --no-errors-on-unmatched"
 	}
 }
