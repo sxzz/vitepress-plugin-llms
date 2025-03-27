@@ -1,14 +1,15 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
-"# My Site
+"# Some cool tool
 
-> A cool site
+> Blazing fast frontend tool
 
 ## Table of Contents
 
-- [My Title](/index.md)
-- [My Title 2](/test/test.md)
+- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool
+- [Quickstart](/test/quickstart.md): Instructions for quick project initialization
+- [Some other section](/test/other.md)
 "
 `;
 
@@ -19,8 +20,9 @@ exports[`generateLLMsTxt works correctly with a custom template 1`] = `
 
 ## TOC
 
-- [My Title](/index.md)
-- [My Title 2](/test/test.md)
+- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool
+- [Quickstart](/test/quickstart.md): Instructions for quick project initialization
+- [Some other section](/test/other.md)
 "
 `;
 
@@ -44,17 +46,29 @@ exports[`generateLLMsTxt works correctly with a custom template and variables 1`
 
 exports[`generateLLMsFullTxt generates a \`llms-full.txt\` file 1`] = `
 "---
-url: /index.md
+url: /test/getting-started.md
+description: Instructions on how to get started with the tool
 ---
 
-# Welcome
+# Installation
 
-Content goes here
+blah blah blah...
+
+---
+
+---
+url: /test/quickstart.md
+description: Instructions for quick project initialization
+---
+
+# Project initialization
+
+blah blah blah...
 
 ---
 
 ---
-url: /test/test.md
+url: /test/other.md
 ---
 # Some cool stuff
 "

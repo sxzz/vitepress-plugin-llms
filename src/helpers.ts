@@ -82,7 +82,7 @@ export function generateTOC(
 
 	for (const file of preparedFiles) {
 		const relativePath = path.relative(srcDir, file.path)
-		tableOfContent += `- [${file.title}](/${stripExtPosix(relativePath)}.md)\n`
+		tableOfContent += `- [${file.title}](/${stripExtPosix(relativePath)}.md)${file.file.data.description ? `: ${file.file.data.description}` : ''}\n`
 	}
 
 	return tableOfContent
@@ -240,14 +240,18 @@ export function generateLLMsFullTxt(
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 ) {
 	const llmsFullTxtContent = preparedFiles
-		.map((file) => {
-			const relativePath = path.relative(srcDir, file.path)
+		.map((preparedFile) => {
+			const relativePath = path.relative(srcDir, preparedFile.path)
+			const description = preparedFile.file.data.description
 
-			file.file.data = {
-				url: `/${stripExtPosix(relativePath)}.md`,
+			preparedFile.file.data = {}
+			preparedFile.file.data.url = `/${stripExtPosix(relativePath)}.md`
+
+			if (description) {
+				preparedFile.file.data.description = description
 			}
 
-			return matter.stringify(file.file.content, file.file.data)
+			return matter.stringify(preparedFile.file.content, preparedFile.file.data)
 		})
 		.join('\n---\n\n')
 

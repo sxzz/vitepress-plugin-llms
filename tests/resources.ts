@@ -1,12 +1,30 @@
+const blah = 'blah blah blah...'
+
 export const fakeIndexMd = `\
 ---
-title: My Site
-description: A cool site
+title: Some cool tool
+description: Blazing fast frontend tool
+---`
+
+export const fakeGettingStartedMd = `\
+---
+title: Getting started
+description: Instructions on how to get started with the tool
 ---
 
-# Welcome
+# Installation
 
-Content goes here`
+${blah}`
+
+export const fakeQuickstartMd = `\
+---
+title: Quickstart
+description: Instructions for quick project initialization
+---
+
+# Project initialization
+
+${blah}`
 
 export const fakeMarkdownDocument = '# Some cool stuff'
 export const fakeCustomLlmsTxtTemplate =

@@ -3,6 +3,8 @@ import matter from 'gray-matter'
 import {
 	fakeCustomLlmsTxtTemplate,
 	fakeIndexMd,
+	fakeGettingStartedMd,
+	fakeQuickstartMd,
 	fakeMarkdownDocument,
 } from './resources'
 
@@ -32,13 +34,23 @@ import { defaultLLMsTxtTemplate } from '../src/constants'
 
 const preparedFilesSample: PreparedFile[] = [
 	{
-		title: 'My Title',
+		title: 'Some cool tool',
 		path: `${srcDir}/index.md`,
 		file: matter(fakeIndexMd),
 	},
 	{
-		title: 'My Title 2',
-		path: `${srcDir}/test/test.md`,
+		title: 'Getting started',
+		path: `${srcDir}/test/getting-started.md`,
+		file: matter(fakeGettingStartedMd),
+	},
+	{
+		title: 'Quickstart',
+		path: `${srcDir}/test/quickstart.md`,
+		file: matter(fakeQuickstartMd),
+	},
+	{
+		title: 'Some other section',
+		path: `${srcDir}/test/other.md`,
 		file: matter(fakeMarkdownDocument),
 	},
 ]
@@ -83,8 +95,8 @@ describe('expandTemplate', () => {
 
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
-		expect(generateTOC(preparedFilesSample, srcDir)).toBe(
-			'- [My Title](/index.md)\n- [My Title 2](/test/test.md)\n',
+		expect(generateTOC(preparedFilesSample.slice(1), srcDir)).toBe(
+			'- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool\n- [Quickstart](/test/quickstart.md): Instructions for quick project initialization\n- [Some other section](/test/other.md)\n',
 		)
 	})
 })
@@ -93,7 +105,7 @@ describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', () => {
 		expect(
 			generateLLMsTxt(
-				preparedFilesSample,
+				preparedFilesSample.slice(1),
 				`${srcDir}/index.md`,
 				{} as VitePressConfig,
 				srcDir,
@@ -104,7 +116,7 @@ describe('generateLLMsTxt', () => {
 	it('works correctly with a custom template', () => {
 		expect(
 			generateLLMsTxt(
-				preparedFilesSample,
+				preparedFilesSample.slice(1),
 				`${srcDir}/index.md`,
 				{} as VitePressConfig,
 				srcDir,
@@ -141,6 +153,8 @@ describe('generateLLMsTxt', () => {
 
 describe('generateLLMsFullTxt', () => {
 	it('generates a `llms-full.txt` file', () => {
-		expect(generateLLMsFullTxt(preparedFilesSample, srcDir)).toMatchSnapshot()
+		expect(
+			generateLLMsFullTxt(preparedFilesSample.slice(1), srcDir),
+		).toMatchSnapshot()
 	})
 })
