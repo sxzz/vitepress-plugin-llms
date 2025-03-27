@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.13
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.12...v0.0.13)
+
+### 🚀 Enhancements
+
+- Trim HTML by default for cleaner documentation ([bdfff78](https://github.com/okineadev/vitepress-plugin-llms/commit/bdfff78))
+
+### 📖 Documentation
+
+- Add a links for reporting a bug or requesting a feature ([6b5a289](https://github.com/okineadev/vitepress-plugin-llms/commit/6b5a289))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.12
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.11...v0.0.12)
