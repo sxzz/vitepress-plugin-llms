@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig({
 	entry: ['src/index.ts'],
-	format: ['esm'],
+	format: ['esm', 'cjs'],
 	tsconfig: './tsconfig.node.json',
 	// Generate declaration file (.d.ts)
 	dts: {
@@ -10,7 +10,6 @@ export default defineConfig({
 		compilerOptions: { composite: false },
 	},
 	minify: true,
-	sourcemap: true,
 	banner: { js: '// Built with tsup' },
 	clean: true,
 })
