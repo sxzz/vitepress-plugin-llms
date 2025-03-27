@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.14
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.13...v0.0.14)
+
+### 🩹 Fixes
+
+- Fix reading user config ([7223cb3](https://github.com/okineadev/vitepress-plugin-llms/commit/7223cb3))
+- Temporarily remove html stripping ([ce8c1c1](https://github.com/okineadev/vitepress-plugin-llms/commit/ce8c1c1))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.13
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.12...v0.0.13)
