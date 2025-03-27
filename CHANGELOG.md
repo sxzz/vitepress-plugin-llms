@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.0.15
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.14...v0.0.15)
+
+### 🚀 Enhancements
+
+- Add support for link details in `llms.txt` ([2524b6b](https://github.com/okineadev/vitepress-plugin-llms/commit/2524b6b))
+
+### 🏡 Chore
+
+- Improve types ([b7845e0](https://github.com/okineadev/vitepress-plugin-llms/commit/b7845e0))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.14
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.13...v0.0.14)
