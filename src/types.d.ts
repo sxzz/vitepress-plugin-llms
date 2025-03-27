@@ -60,6 +60,7 @@ export interface LlmstxtSettings {
 	 *
 	 * - `{title}`: The title extracted from the frontmatter or the first h1 heading in the main document (`index.md`).
 	 * - `{description}`: The description.
+	 * - `{details}`: The details.
 	 * - `{toc}`: An automatically generated **T**able **O**f **C**ontents.
 	 *
 	 * You can also add custom variables using the {@link LlmstxtSettings.customTemplateVariables | `customTemplateVariables`} parameter
@@ -69,6 +70,8 @@ export interface LlmstxtSettings {
 	 * # {title}
 	 *
 	 * > {description}
+	 *
+	 * {details}
 	 *
 	 * ## Table of Contents
 	 *
@@ -119,6 +122,12 @@ export interface LlmstxtSettings {
 		 */
 		description?: string
 		/**
+		 * The details.
+		 *
+		 * @example 'A multi-user version of the notebook designed for companies, classrooms and research labs'
+		 */
+		details?: string
+		/**
 		 * An automatically generated **T**able **O**f **C**ontents.
 		 *
 		 * @example
@@ -129,8 +138,7 @@ export interface LlmstxtSettings {
 		 */
 		toc?: string
 		/** Any custom variable */
-		// biome-ignore lint/suspicious/noExplicitAny: Let there be any types
-		[key: string]: any
+		[key: string]: string | undefined
 	}
 }
 

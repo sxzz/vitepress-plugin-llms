@@ -87,6 +87,75 @@ export function generateTOC(
 }
 
 /**
+ * Creates a regular expression to match a specific template variable in the format `{key}`.
+ *
+ * @param key - The name of the template variable to match.
+ * @returns A case-insensitive regular expression that detects `{key}` occurrences in a string.
+ *
+ * @example
+ * ```ts
+ * const regex = templateVariable('NAME');
+ * console.log(regex.test('Hello {NAME}')); // true
+ * ```
+ */
+const templateVariable = (key: string) =>
+	new RegExp(`(\n\s*\n)?\{${key}\}`, 'gi')
+
+/**
+ * Replaces occurrences of a template variable `{variable}` in a given content string with a provided value.
+ * If the value is empty or undefined, it falls back to a specified fallback value.
+ *
+ * @param content - The template string containing placeholders.
+ * @param variable - The template variable name to replace.
+ * @param value - The value to replace the variable with.
+ * @param fallback - An optional fallback value if `value` is empty.
+ * @returns A new string with the template variable replaced.
+ *
+ * @example
+ * ```ts
+ * const template = 'Hello {name}!';
+ * const result = replaceTemplateVariable(template, 'name', 'Alice', 'User');
+ * console.log(result); // 'Hello Alice!'
+ * ```
+ */
+export function replaceTemplateVariable(
+	content: string,
+	variable: string,
+	value: string,
+	fallback?: string,
+) {
+	return content.replace(templateVariable(variable), (_, prefix) => {
+		const val = value?.length ? value : fallback?.length ? fallback : ''
+		return val ? `${prefix ? '\n\n' : ''}${val}` : ''
+	})
+}
+
+/**
+ * Expands a template string by replacing multiple template variables with their corresponding values.
+ *
+ * @param template - The template string containing placeholders.
+ * @param values - An object mapping variable names to their respective values.
+ * @returns A string with all template variables replaced.
+ *
+ * @example
+ * ```ts
+ * const template = 'Hello {name}, welcome to {place}!';
+ * const values = { name: 'Alice', place: 'Wonderland' };
+ * const result = expandTemplate(template, values);
+ * console.log(result); // 'Hello Alice, welcome to Wonderland!'
+ * ```
+ */
+export function expandTemplate(
+	template: string,
+	values: { [key: string]: string },
+): string {
+	return Object.entries(values).reduce(
+		(result, [key, value]) => replaceTemplateVariable(result, key, value),
+		template,
+	)
+}
+
+/**
  * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
  *
  * @param preparedFiles - An array of prepared files.
@@ -109,46 +178,39 @@ export function generateLLMsTxt(
 	// @ts-expect-error
 	matter.clearCache()
 	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
-	let llmsTxtContent = customLLMsTxtTemplate
 
-	for (const [key, value] of Object.entries(customTemplateVariables)) {
-		llmsTxtContent = llmsTxtContent.replace(
-			new RegExp(`{${key}}`, 'gi'),
-			value || '',
-		)
-	}
+	// biome-ignore lint/suspicious/noExplicitAny:
+	const defaults: Record<string, any> = {}
 
-	if (!customTemplateVariables.title && llmsTxtContent.match(/{title}/gi)) {
-		llmsTxtContent = llmsTxtContent.replace(
-			/{title}/gi,
+	if (!customTemplateVariables.title) {
+		defaults.title =
 			indexMdFile.data?.hero?.name ||
-				extractTitle(indexMdFile.orig.toString(), vitepressConfig) ||
-				'LLMs Documentation',
-		)
+			extractTitle(indexMdFile.orig.toString(), vitepressConfig) ||
+			'LLMs Documentation'
 	}
 
-	if (
-		!customTemplateVariables.description &&
-		llmsTxtContent.match(/{description}/gi)
-	) {
-		llmsTxtContent = llmsTxtContent.replace(
-			/{description}/gi,
+	if (!customTemplateVariables.description) {
+		defaults.description =
 			indexMdFile.data?.hero?.text ||
-				vitepressConfig.description ||
-				indexMdFile?.data?.description ||
-				indexMdFile.data?.titleTemplate ||
-				'This file contains links to all documentation sections.',
-		)
+			vitepressConfig.description ||
+			indexMdFile?.data?.description ||
+			indexMdFile.data?.titleTemplate ||
+			'This file contains links to all documentation sections.'
 	}
 
-	if (!customTemplateVariables.toc && llmsTxtContent.match(/{toc}/gi)) {
-		llmsTxtContent = llmsTxtContent.replace(
-			/{toc}/gi,
-			generateTOC(preparedFiles, srcDir),
-		)
+	if (!customTemplateVariables.details) {
+		defaults.details =
+			indexMdFile.data?.hero?.tagline || indexMdFile.data?.tagline
 	}
 
-	return llmsTxtContent
+	if (!customTemplateVariables.toc) {
+		defaults.toc = generateTOC(preparedFiles, srcDir)
+	}
+
+	return expandTemplate(customLLMsTxtTemplate, {
+		...defaults,
+		...customTemplateVariables,
+	})
 }
 
 /**

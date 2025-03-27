@@ -4,6 +4,8 @@ export const defaultLLMsTxtTemplate = `\
 
 > {description}
 
+{details}
+
 ## Table of Contents
 
 {toc}`

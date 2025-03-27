@@ -17,6 +17,8 @@ mock.module('node:fs', () => ({
 }))
 
 import {
+	replaceTemplateVariable,
+	expandTemplate,
 	generateLLMsFullTxt,
 	generateLLMsTxt,
 	generateTOC,
@@ -37,6 +39,44 @@ const preparedFilesSample: PreparedFile[] = [
 		path: `${srcDir}/test/test.md`,
 	},
 ]
+
+describe('replaceTemplateVariable', () => {
+	it('replaces a single template variable', () => {
+		const result = replaceTemplateVariable('Hello {name}!', 'name', 'Alice')
+		expect(result).toBe('Hello Alice!')
+	})
+
+	it('uses fallback value when main value is empty', () => {
+		const result = replaceTemplateVariable('Hello {name}!', 'name', '', 'User')
+		expect(result).toBe('Hello User!')
+	})
+
+	it('removes variable if both value and fallback are empty', () => {
+		const result = replaceTemplateVariable('Hello {name}!', 'name', '', '')
+		expect(result).toBe('Hello !')
+	})
+
+	it('preserves extra new lines before variable', () => {
+		const result = replaceTemplateVariable('Hello\n\n{name}!', 'name', 'Alice')
+		expect(result).toBe('Hello\n\nAlice!')
+	})
+})
+
+describe('expandTemplate', () => {
+	it('replaces multiple template variables', () => {
+		const template = 'Hello {name}, welcome to {place}!'
+		const values = { name: 'Alice', place: 'Wonderland' }
+		const result = expandTemplate(template, values)
+		expect(result).toBe('Hello Alice, welcome to Wonderland!')
+	})
+
+	it('does not touch unused template variables', () => {
+		const template = 'Hello {name}, welcome to {place}!'
+		const values = { name: 'Alice' }
+		const result = expandTemplate(template, values)
+		expect(result).toBe('Hello Alice, welcome to {place}!')
+	})
+})
 
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
