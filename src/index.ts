@@ -73,6 +73,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
+		// @ts-ignore
 		configureServer(server: ViteDevServer) {
 			log.info('Development server configured to serve markdown files')
 			server.middlewares.use((req, res, next) => {
@@ -179,7 +180,9 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				try {
 					const mdFile = matter(
-						stripHtml(fs.readFileSync(file, 'utf-8')).result,
+						stripHtml(fs.readFileSync(file, 'utf-8'), {
+							stripRecognisedHTMLOnly: true,
+						}).result,
 					)
 					const title = extractTitle(mdFile, config) || 'Untitled'
 
