@@ -16,7 +16,6 @@ import {
 import log from './logger'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 import matter from 'gray-matter'
-import { stripHtml } from 'string-strip-html'
 import { defaultLLMsTxtTemplate } from './constants'
 import { name as packageName } from '../package.json'
 
@@ -179,11 +178,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const targetPath = path.resolve(outDir, relativePath)
 
 				try {
-					const mdFile = matter(
-						stripHtml(fs.readFileSync(file, 'utf-8'), {
-							stripRecognisedHTMLOnly: true,
-						}).result,
-					)
+					const mdFile = matter(fs.readFileSync(file, 'utf-8'))
 					const title = extractTitle(mdFile, config) || 'Untitled'
 
 					preparedFiles.push({ path: file, title, file: mdFile })
