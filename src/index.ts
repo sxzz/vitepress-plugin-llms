@@ -178,7 +178,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				try {
 					const fileContent = matter(fs.readFileSync(file, 'utf-8'))
-					const title = extractTitle(fileContent.orig.toString()) || 'Untitled'
+					const title =
+						extractTitle(fileContent.orig.toString(), config) || 'Untitled'
 
 					preparedFiles.push({ title, path: file })
 
@@ -216,6 +217,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
 					path.resolve(settings.workDir as string, 'index.md'),
+					config,
 					settings.workDir as string,
 					settings.customLLMsTxtTemplate,
 					settings.customTemplateVariables,

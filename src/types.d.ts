@@ -1,4 +1,4 @@
-import type { SiteConfig } from 'vitepress'
+import type { SiteConfig, UserConfig } from 'vitepress'
 import type { ResolvedConfig } from 'vite'
 
 export interface LlmstxtSettings {
@@ -153,6 +153,8 @@ export type PreparedFile = {
 	path: string
 }
 
-interface VitePressConfig extends ResolvedConfig {
+interface VitePressConfig
+	extends Omit<UserConfig, keyof ResolvedConfig>,
+		ResolvedConfig {
 	vitepress: SiteConfig
 }

@@ -45,14 +45,19 @@ export const stripExtPosix = (filepath: string) => {
  * Extracts the title from a markdown file.
  *
  * @param content - The content of the markdown file.
+ * @param vitepressConfig - The VitePress configuration.
  * @returns The title of the markdown file, or a default title if none is found.
  */
-export function extractTitle(content: string): string {
+export function extractTitle(
+	content: string,
+	vitepressConfig: VitePressConfig,
+): string {
 	const contentData = matter(content)
 	return (
-		contentData.data?.titleTemplate ||
 		contentData.data?.title ||
-		contentData.data?.hero?.name ||
+		vitepressConfig?.title ||
+		contentData.data?.titleTemplate ||
+		vitepressConfig?.titleTemplate ||
 		markdownTitle(content)
 	)
 }
@@ -86,6 +91,7 @@ export function generateTOC(
  *
  * @param preparedFiles - An array of prepared files.
  * @param indexMd - Path to the main documentation file `index.md`.
+ * @param vitepressConfig - The VitePress configuration.
  * @param customLLMsTxtTemplate - Template to use for generating `llms.txt`.
  * @param customTemplateVariables - Custom variables for `customLLMsTxtTemplate`.
  * @returns A string representing the content of the `llms.txt` file.
@@ -95,6 +101,7 @@ export function generateTOC(
 export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
 	indexMd: string,
+	vitepressConfig: VitePressConfig,
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	customLLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
 	customTemplateVariables: LlmstxtSettings['customTemplateVariables'] = {},
@@ -114,7 +121,9 @@ export function generateLLMsTxt(
 	if (!customTemplateVariables.title && llmsTxtContent.match(/{title}/gi)) {
 		llmsTxtContent = llmsTxtContent.replace(
 			/{title}/gi,
-			extractTitle(indexMdFile.orig.toString()) || 'LLMs Documentation',
+			indexMdFile.data?.hero?.name ||
+				extractTitle(indexMdFile.orig.toString(), vitepressConfig) ||
+				'LLMs Documentation',
 		)
 	}
 
@@ -124,8 +133,9 @@ export function generateLLMsTxt(
 	) {
 		llmsTxtContent = llmsTxtContent.replace(
 			/{description}/gi,
-			indexMdFile.data?.hero?.tagline ||
-				indexMdFile.data?.description ||
+			indexMdFile.data?.hero?.text ||
+				vitepressConfig.description ||
+				indexMdFile?.data?.description ||
 				indexMdFile.data?.titleTemplate ||
 				'This file contains links to all documentation sections.',
 		)

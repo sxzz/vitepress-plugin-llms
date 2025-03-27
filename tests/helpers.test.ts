@@ -12,9 +12,7 @@ const readFileSync = mock((path) =>
 )
 
 mock.module('node:fs', () => ({
-	default: {
-		readFileSync,
-	},
+	default: { readFileSync },
 	readFileSync,
 }))
 
@@ -25,7 +23,7 @@ import {
 	// @ts-ignore
 } from '../src/helpers'
 
-import type { PreparedFile } from '../src/types'
+import type { PreparedFile, VitePressConfig } from '../src/types'
 // @ts-ignore
 import { defaultLLMsTxtTemplate } from '../src/constants'
 
@@ -54,6 +52,7 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
+				{} as VitePressConfig,
 				srcDir,
 				defaultLLMsTxtTemplate,
 			),
@@ -64,6 +63,7 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
+				{} as VitePressConfig,
 				srcDir,
 				fakeCustomLlmsTxtTemplate,
 			),
@@ -74,6 +74,7 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
+				{} as VitePressConfig,
 				srcDir,
 				defaultLLMsTxtTemplate,
 				{ title: 'foo', description: 'bar', toc: 'zoo' },
@@ -86,6 +87,7 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
+				{} as VitePressConfig,
 				srcDir,
 				'# {foo}\n\n**{bar}**\n\n{zoo}',
 				{ title: 'foo', description: 'bar', toc: 'zoo' },
