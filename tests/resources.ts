@@ -3,7 +3,9 @@ export const fakeIndexMd = `\
 title: My Site
 description: A cool site
 ---
+
 # Welcome
+
 Content goes here`
 
 export const fakeMarkdownDocument = '# Some cool stuff'

@@ -1,4 +1,5 @@
 import { describe, expect, it, mock, test } from 'bun:test'
+import matter from 'gray-matter'
 import {
 	fakeCustomLlmsTxtTemplate,
 	fakeIndexMd,
@@ -33,10 +34,12 @@ const preparedFilesSample: PreparedFile[] = [
 	{
 		title: 'My Title',
 		path: `${srcDir}/index.md`,
+		file: matter(fakeIndexMd),
 	},
 	{
 		title: 'My Title 2',
 		path: `${srcDir}/test/test.md`,
+		file: matter(fakeMarkdownDocument),
 	},
 ]
 

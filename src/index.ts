@@ -16,6 +16,7 @@ import {
 import log from './logger'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 import matter from 'gray-matter'
+import { stripHtml } from 'string-strip-html'
 import { defaultLLMsTxtTemplate } from './constants'
 import { name as packageName } from '../package.json'
 
@@ -177,28 +178,29 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const targetPath = path.resolve(outDir, relativePath)
 
 				try {
-					const fileContent = matter(fs.readFileSync(file, 'utf-8'))
-					const title =
-						extractTitle(fileContent.orig.toString(), config) || 'Untitled'
+					const mdFile = matter(
+						stripHtml(fs.readFileSync(file, 'utf-8')).result,
+					)
+					const title = extractTitle(mdFile, config) || 'Untitled'
 
-					preparedFiles.push({ title, path: file })
+					preparedFiles.push({ path: file, title, file: mdFile })
 
 					// Ensure target directory exists
 					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
 
-					fileContent.data = {
+					mdFile.data = {
 						url: `/${stripExtPosix(relativePath)}.md`,
 					}
 
-					if (fileContent.data?.description?.length) {
+					if (mdFile.data?.description?.length) {
 						// biome-ignore lint/correctness/noSelfAssign: <explanation>
-						fileContent.data.description = fileContent.data?.description
+						mdFile.data.description = mdFile.data?.description
 					}
 
 					// Copy file to output directory
 					fs.writeFileSync(
 						targetPath,
-						matter.stringify(fileContent.content, fileContent.data),
+						matter.stringify(mdFile.content, mdFile.data),
 					)
 					log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
 				} catch (error) {

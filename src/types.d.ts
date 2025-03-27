@@ -1,5 +1,6 @@
 import type { SiteConfig, UserConfig } from 'vitepress'
 import type { ResolvedConfig } from 'vite'
+import type { GrayMatterFile, Input } from 'gray-matter'
 
 export interface LlmstxtSettings {
 	/**
@@ -159,6 +160,21 @@ export type PreparedFile = {
 	 * @example 'guide/getting-started.md'
 	 */
 	path: string
+
+	/**
+	 * The prepared file itself.
+	 *
+	 * @example
+	 * ```typescript
+	 * {
+	 *   data: {
+	 *      title: 'Guide'
+	 *   },
+	 *   content: 'Content goes here'
+	 *   orig: '---\ntitle: Guide\n---\n\nContent goes here'
+	 * }
+	 */
+	file: GrayMatterFile<Input>
 }
 
 interface VitePressConfig

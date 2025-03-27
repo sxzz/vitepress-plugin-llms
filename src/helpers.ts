@@ -1,9 +1,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
-import matter from 'gray-matter'
+import matter, { type GrayMatterFile, type Input } from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
+import { stripHtml } from 'string-strip-html'
 import { defaultLLMsTxtTemplate } from './constants'
 
 /**
@@ -49,16 +50,17 @@ export const stripExtPosix = (filepath: string) => {
  * @returns The title of the markdown file, or a default title if none is found.
  */
 export function extractTitle(
-	content: string,
+	file: GrayMatterFile<Input>,
 	vitepressConfig: VitePressConfig,
 ): string {
-	const contentData = matter(content)
 	return (
-		contentData.data?.title ||
+		file.data?.title ||
 		vitepressConfig?.title ||
-		contentData.data?.titleTemplate ||
+		file.data?.titleTemplate ||
 		vitepressConfig?.titleTemplate ||
-		markdownTitle(content)
+		markdownTitle(
+			stripHtml(file.content, { stripTogetherWithTheirContents: ['*'] }).result,
+		)
 	)
 }
 
@@ -165,7 +167,20 @@ export function expandTemplate(
  * @param customTemplateVariables - Custom variables for `customLLMsTxtTemplate`.
  * @returns A string representing the content of the `llms.txt` file.
  *
- * @see https://llmstxt.org
+ * @example
+ * ```markdown
+ * # Shadcn for Vue
+ *
+ * > Beautifully designed components built with Radix Vue and Tailwind CSS.
+ *
+ * ## Table of Contents
+ *
+ * - [Getting started](/docs/getting-started.md)
+ * - [About](/docs/about.md)
+ * - ...
+ * ```
+ *
+ * @see https://llmstxt.org/#format
  */
 export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
@@ -185,7 +200,7 @@ export function generateLLMsTxt(
 	if (!customTemplateVariables.title) {
 		defaults.title =
 			indexMdFile.data?.hero?.name ||
-			extractTitle(indexMdFile.orig.toString(), vitepressConfig) ||
+			extractTitle(indexMdFile, vitepressConfig) ||
 			'LLMs Documentation'
 	}
 
@@ -227,11 +242,12 @@ export function generateLLMsFullTxt(
 	const llmsFullTxtContent = preparedFiles
 		.map((file) => {
 			const relativePath = path.relative(srcDir, file.path)
-			const fileContent = matter(fs.readFileSync(file.path, 'utf-8'))
 
-			return matter.stringify(fileContent.content, {
+			file.file.data = {
 				url: `/${stripExtPosix(relativePath)}.md`,
-			})
+			}
+
+			return matter.stringify(file.file.content, file.file.data)
 		})
 		.join('\n---\n\n')
 

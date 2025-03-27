@@ -2,21 +2,22 @@ import { describe, expect, it } from 'bun:test'
 // @ts-ignore
 import { extractTitle } from '../src/helpers'
 import type { VitePressConfig } from '../src/types'
+import matter from 'gray-matter'
 
-const fakeIndexMd = `\
+const fakeIndexMd = matter(`\
 ---
 title: My Awesome Title
 ---
 # Some Heading
-Content goes here`
+Content goes here`)
 
-const fakeIndexMdWithoutTitle = `\
+const fakeIndexMdWithoutTitle = matter(`\
 ---
 description: Some description
 author: John Doe
 ---
 # Title From Heading
-Content goes here`
+Content goes here`)
 
 describe('extractTitle', () => {
 	it('extracts title from frontmatter', () => {
@@ -26,7 +27,7 @@ describe('extractTitle', () => {
 	})
 
 	it('extracts title from markdown heading when no frontmatter exists', () => {
-		const markdown = '# My Markdown Title\nSome content here'
+		const markdown = matter('# My Markdown Title\nSome content here')
 		expect(extractTitle(markdown, {} as VitePressConfig)).toBe(
 			'My Markdown Title',
 		)
@@ -39,7 +40,7 @@ describe('extractTitle', () => {
 	})
 
 	it('returns `undefined` when no frontmatter or markdown title exists', () => {
-		const markdown = 'Some content without any headings or frontmatter'
+		const markdown = matter('Some content without any headings or frontmatter')
 		expect(extractTitle(markdown, {} as VitePressConfig)).toBeUndefined()
 	})
 })

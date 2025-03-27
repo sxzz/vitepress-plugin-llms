@@ -46,7 +46,9 @@ exports[`generateLLMsFullTxt generates a \`llms-full.txt\` file 1`] = `
 "---
 url: /index.md
 ---
+
 # Welcome
+
 Content goes here
 
 ---
