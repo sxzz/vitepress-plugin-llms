@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v0.0.11
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.10...v0.0.11)
+
+### 🚀 Enhancements
+
+- Improve extracting headers from files ([3facf27](https://github.com/okineadev/vitepress-plugin-llms/commit/3facf27))
+- Add support for optional details section and improve variable replacement functionality in the template ([b6b8888](https://github.com/okineadev/vitepress-plugin-llms/commit/b6b8888))
+
+### 📖 Documentation
+
+- Add "Contributors" sections in the readme ([aa93bb4](https://github.com/okineadev/vitepress-plugin-llms/commit/aa93bb4))
+- Improve readme ([0546c31](https://github.com/okineadev/vitepress-plugin-llms/commit/0546c31))
+- Fix file tree syntax highlighting ([f24a427](https://github.com/okineadev/vitepress-plugin-llms/commit/f24a427))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.10
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.9...v0.0.10)
