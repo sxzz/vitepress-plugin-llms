@@ -2,7 +2,43 @@ import type { SiteConfig, UserConfig } from 'vitepress'
 import type { ResolvedConfig } from 'vite'
 import type { GrayMatterFile, Input } from 'gray-matter'
 
-export interface LlmstxtSettings {
+interface TemplateVariables {
+	/**
+	 * The title extracted from the frontmatter or the first h1 heading in the main document (`index.md`).
+	 *
+	 * @example 'Awesome tool'
+	 */
+	title?: string
+	/**
+	 * The description.
+	 *
+	 * @example 'Blazing fast build tool'
+	 */
+	description?: string
+	/**
+	 * The details.
+	 *
+	 * @example 'A multi-user version of the notebook designed for companies, classrooms and research labs'
+	 */
+	details?: string
+	/**
+	 * An automatically generated **T**able **O**f **C**ontents.
+	 *
+	 * @example
+	 * ```markdown
+	 * - [My Title](/index.md)
+	 * - [My Title 2](/guide.md)
+	 * ```
+	 */
+	toc?: string
+}
+
+interface CustomTemplateVariables extends TemplateVariables {
+	/** Any custom variable */
+	[key: string]: string | undefined
+}
+
+export interface LlmstxtSettings extends TemplateVariables {
 	/**
 	 * Determines whether to generate the `llms-full.txt` which contains all the documentation in one file
 	 *
@@ -109,38 +145,7 @@ export interface LlmstxtSettings {
 	 * })
 	 * ```
 	 */
-	customTemplateVariables?: {
-		/**
-		 * The title extracted from the frontmatter or the first h1 heading in the main document (`index.md`).
-		 *
-		 * @example 'Awesome tool'
-		 */
-		title?: string
-		/**
-		 * The description.
-		 *
-		 * @example 'Blazing fast build tool'
-		 */
-		description?: string
-		/**
-		 * The details.
-		 *
-		 * @example 'A multi-user version of the notebook designed for companies, classrooms and research labs'
-		 */
-		details?: string
-		/**
-		 * An automatically generated **T**able **O**f **C**ontents.
-		 *
-		 * @example
-		 * ```markdown
-		 * - [My Title](/index.md)
-		 * - [My Title 2](/guide.md)
-		 * ```
-		 */
-		toc?: string
-		/** Any custom variable */
-		[key: string]: string | undefined
-	}
+	customTemplateVariables?: CustomTemplateVariables
 }
 
 /**

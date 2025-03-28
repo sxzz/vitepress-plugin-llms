@@ -161,8 +161,8 @@ export function expandTemplate(
  * @param preparedFiles - An array of prepared files.
  * @param indexMd - Path to the main documentation file `index.md`.
  * @param vitepressConfig - The VitePress configuration.
- * @param customLLMsTxtTemplate - Template to use for generating `llms.txt`.
- * @param customTemplateVariables - Custom variables for `customLLMsTxtTemplate`.
+ * @param LLMsTxtTemplate - Template to use for generating `llms.txt`.
+ * @param templateVariables - Template variables for `customLLMsTxtTemplate`.
  * @returns A string representing the content of the `llms.txt` file.
  *
  * @example
@@ -185,8 +185,8 @@ export function generateLLMsTxt(
 	indexMd: string,
 	vitepressConfig: VitePressConfig,
 	srcDir: VitePressConfig['vitepress']['srcDir'],
-	customLLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
-	customTemplateVariables: LlmstxtSettings['customTemplateVariables'] = {},
+	LLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
+	templateVariables: LlmstxtSettings['customTemplateVariables'] = {},
 ) {
 	// @ts-expect-error
 	matter.clearCache()
@@ -195,7 +195,7 @@ export function generateLLMsTxt(
 	// biome-ignore lint/suspicious/noExplicitAny:
 	const defaults: Record<string, any> = {}
 
-	if (!customTemplateVariables.title) {
+	if (!templateVariables.title) {
 		defaults.title =
 			indexMdFile.data?.hero?.name ||
 			vitepressConfig?.vitepress?.userConfig?.title ||
@@ -204,7 +204,7 @@ export function generateLLMsTxt(
 			'LLMs Documentation'
 	}
 
-	if (!customTemplateVariables.description) {
+	if (!templateVariables.description) {
 		defaults.description =
 			indexMdFile.data?.hero?.text ||
 			vitepressConfig?.vitepress?.userConfig?.description ||
@@ -213,18 +213,18 @@ export function generateLLMsTxt(
 			'This file contains links to all documentation sections.'
 	}
 
-	if (!customTemplateVariables.details) {
+	if (!templateVariables.details) {
 		defaults.details =
 			indexMdFile.data?.hero?.tagline || indexMdFile.data?.tagline
 	}
 
-	if (!customTemplateVariables.toc) {
+	if (!templateVariables.toc) {
 		defaults.toc = generateTOC(preparedFiles, srcDir)
 	}
 
-	return expandTemplate(customLLMsTxtTemplate, {
+	return expandTemplate(LLMsTxtTemplate, {
 		...defaults,
-		...customTemplateVariables,
+		...templateVariables,
 	})
 }
 

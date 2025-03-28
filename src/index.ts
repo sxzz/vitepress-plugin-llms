@@ -14,7 +14,12 @@ import {
 	stripExtPosix,
 } from './helpers'
 import log from './logger'
-import type { LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
+import type {
+	CustomTemplateVariables,
+	LlmstxtSettings,
+	PreparedFile,
+	VitePressConfig,
+} from './types'
 import matter from 'gray-matter'
 import { defaultLLMsTxtTemplate } from './constants'
 import { name as packageName } from '../package.json'
@@ -36,7 +41,6 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		generateLLMsFullTxt: true,
 		generateLLMsTxt: true,
 		ignoreFiles: [],
-		customLLMsTxtTemplate: defaultLLMsTxtTemplate,
 		...userSettings,
 	}
 
@@ -213,14 +217,21 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			// Generate llms.txt - table of contents with links
 			if (settings.generateLLMsTxt) {
 				const llmsTxtPath = path.resolve(outDir, 'llms.txt')
+				const templateVariables: CustomTemplateVariables = {
+					title: settings.title,
+					description: settings.description,
+					details: settings.details,
+					toc: settings.toc,
+					...settings.customTemplateVariables,
+				}
 
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
 					path.resolve(settings.workDir as string, 'index.md'),
 					config,
 					settings.workDir as string,
-					settings.customLLMsTxtTemplate,
-					settings.customTemplateVariables,
+					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
+					templateVariables,
 				)
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')

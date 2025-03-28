@@ -78,8 +78,12 @@ export default defineConfig({
     plugins: [
       llmstxt({
         generateLLMsFullTxt: false,
-        ignoreFiles: ['blog/*'],
-        customLLMsTxtTemplate: `# {title}\n\n{description}\n\n## Custom TOC\n\n{toc}`
+        ignoreFiles: ['sponsors/*'],
+        customLLMsTxtTemplate: `# {title}\n\n{foo}`,
+        title: 'Awesome tool',
+        customTemplateVariables: {
+          foo: 'bar'
+        }
       })
     ]
   }
@@ -89,8 +93,10 @@ export default defineConfig({
 This configuration does the following:
 
 - `generateLLMsFullTxt: false`: Disables the generation of the `llms-full.txt` file.
-- `ignoreFiles: ['blog/*']`: Ignores all files in the `blog` directory.
+- `ignoreFiles: ['sponsors/*']`: Ignores all files in the `sponsors` directory.
 - `customLLMsTxtTemplate`: Uses a custom template for the `llms.txt` file.
+- `title`: Sets a custom header in `llms.txt`, for your custom variables use `customTemplateVariables`.
+- `customTemplateVariables`: Sets custom variables for the template, replaces `{foo}` with `bar`.
 
 ## 🚀 Why `vitepress-plugin-llms`?
 
@@ -110,6 +116,7 @@ The file structure in `.vitepress/dist` folder will be as follows:
 ### ✅ Key Features
 
 - ⚡️ Easy integration with VitePress
+- ✅ Zero config required, everything works out of the box
 - ⚙️ Customizable
 - 🤖 An LLM-friendly version is generated for each page
 - 📝 Generates `llms.txt` with section links
