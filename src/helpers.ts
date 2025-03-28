@@ -99,7 +99,7 @@ export function generateTOC(
  * ```
  */
 const templateVariable = (key: string) =>
-	new RegExp(`(\n\s*\n)?\{${key}\}`, 'gi')
+	new RegExp(`(\\n\\s*\\n)?\\{${key}\\}`, 'gi')
 
 /**
  * Replaces occurrences of a template variable `{variable}` in a given content string with a provided value.
