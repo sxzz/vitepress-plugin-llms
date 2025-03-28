@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.0.16
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.15...v0.0.16)
+
+### 🩹 Fixes
+
+- Fix parsing of titles for TOC in `llms.txt` ([df3b580](https://github.com/okineadev/vitepress-plugin-llms/commit/df3b580))
+- Fix `templateVariable` regexp ([00e2ea5](https://github.com/okineadev/vitepress-plugin-llms/commit/00e2ea5))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.15
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.14...v0.0.15)
