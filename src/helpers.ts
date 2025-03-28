@@ -46,22 +46,20 @@ export const stripExtPosix = (filepath: string) => {
  * Extracts the title from a markdown file.
  *
  * @param content - The content of the markdown file.
- * @param vitepressConfig - The VitePress configuration.
  * @returns The title of the markdown file, or a default title if none is found.
  */
-export function extractTitle(
-	file: GrayMatterFile<Input>,
-	vitepressConfig: VitePressConfig,
-): string {
-	return (
-		file.data?.title ||
-		vitepressConfig?.vitepress?.userConfig?.title ||
-		file.data?.titleTemplate ||
-		vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
-		markdownTitle(
-			stripHtml(file.content, { stripTogetherWithTheirContents: ['*'] }).result,
-		)
-	)
+export function extractTitle(file: GrayMatterFile<Input>): string {
+	const titleFromFrontmatter = file.data?.title || file.data?.titleTemplate
+	let titleFromMarkdown: string | undefined
+
+	if (!titleFromFrontmatter) {
+		titleFromMarkdown = markdownTitle(file.content)
+
+		if (titleFromMarkdown) {
+			titleFromMarkdown = stripHtml(titleFromMarkdown).result
+		}
+	}
+	return titleFromFrontmatter || titleFromMarkdown
 }
 
 /**
@@ -200,7 +198,9 @@ export function generateLLMsTxt(
 	if (!customTemplateVariables.title) {
 		defaults.title =
 			indexMdFile.data?.hero?.name ||
-			extractTitle(indexMdFile, vitepressConfig) ||
+			vitepressConfig?.vitepress?.userConfig?.title ||
+			vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
+			extractTitle(indexMdFile) ||
 			'LLMs Documentation'
 	}
 

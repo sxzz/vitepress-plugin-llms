@@ -179,7 +179,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				try {
 					const mdFile = matter(fs.readFileSync(file, 'utf-8'))
-					const title = extractTitle(mdFile, config) || 'Untitled'
+					const title = extractTitle(mdFile) || 'Untitled'
 
 					preparedFiles.push({ path: file, title, file: mdFile })
 
