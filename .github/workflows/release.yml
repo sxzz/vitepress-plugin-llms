@@ -8,12 +8,49 @@ on:
         required: false
 
 jobs:
+  check-previous-workflow:
+    name: 🔍 Check if tests have already been passed
+    runs-on: ubuntu-latest
+    steps:
+      - id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ci_workflow_path = '.github/workflows/ci.yml'
+            const current_commit_sha = context.sha;
+            console.log(`Checking workflows for commit: ${current_commit_sha}`);
+
+            const workflows = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              status: 'success'
+            });
+
+            // Check if CI workflow has already run successfully on this commit
+            const ciRun = workflows.data.workflow_runs.find(run =>
+              run.path === ci_workflow_path &&
+              run.head_sha === current_commit_sha &&
+              run.conclusion === 'success'
+            );
+
+            if (ciRun) {
+              console.log(`CI workflow has already run successfully on commit ${current_commit_sha}`);
+              return core.setOutput('should-run-tests', 'false');
+            } else {
+              console.log(`No successful CI run found for commit ${current_commit_sha}, will run tests`);
+              return core.setOutput('should-run-tests', 'true');
+            }
+
   test:
+    needs: check-previous-workflow
+    if: needs.check-previous-workflow.outputs.should-run-tests == 'true'
     permissions: {}
     uses: ./.github/workflows/tests.yml
 
   release:
-    needs: test
+    name: 🚀 Release
+    needs: [check-previous-workflow, test]
+    if: always() && (needs.test.result == 'success' || needs.test.result == 'skipped')
     runs-on: ubuntu-latest
 
     permissions:
