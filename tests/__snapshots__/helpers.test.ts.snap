@@ -1,5 +1,20 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generateTOC organizes TOC based on sidebar configuration 1`] = `
+"### Test Section
+
+- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool
+
+### Quickstart Section
+
+- [Quickstart](/test/quickstart.md): Instructions for quick project initialization
+
+### Other
+
+- [Some other section](/test/other.md)
+"
+`;
+
 exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
 "# Some cool tool
 

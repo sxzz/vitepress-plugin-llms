@@ -30,3 +30,14 @@ ${blah}`
 export const fakeMarkdownDocument = '# Some cool stuff'
 export const fakeCustomLlmsTxtTemplate =
 	'# Custom title\n\n> Custom description\n\n## TOC\n\n{toc}'
+
+export const sampleVitePressSidebar = [
+	{
+		text: 'Test Section',
+		items: [{ text: 'Getting Started', link: '/test/getting-started' }],
+	},
+	{
+		text: 'Quickstart Section',
+		items: [{ text: 'Quickstart', link: '/test/quickstart' }],
+	},
+]

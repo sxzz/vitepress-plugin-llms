@@ -1,4 +1,4 @@
-import { describe, expect, it, mock, test } from 'bun:test'
+import { describe, expect, it, mock } from 'bun:test'
 import matter from 'gray-matter'
 import {
 	sampleDomain,
@@ -7,6 +7,7 @@ import {
 	fakeGettingStartedMd,
 	fakeQuickstartMd,
 	fakeMarkdownDocument,
+	sampleVitePressSidebar,
 } from './resources'
 
 const srcDir = 'docs'
@@ -115,6 +116,23 @@ describe('generateTOC', () => {
 		expect(generateTOC(preparedFilesSample.slice(1), srcDir)).toBe(
 			'- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool\n- [Quickstart](/test/quickstart.md): Instructions for quick project initialization\n- [Some other section](/test/other.md)\n',
 		)
+	})
+
+	it('organizes TOC based on sidebar configuration', () => {
+		const mockVitePressConfig = {
+			vitepress: {
+				userConfig: {
+					themeConfig: {
+						sidebar: sampleVitePressSidebar,
+					},
+				},
+			},
+		} as VitePressConfig
+
+		const files = preparedFilesSample.slice(1)
+		const toc = generateTOC(files, srcDir, undefined, mockVitePressConfig)
+
+		expect(toc).toMatchSnapshot()
 	})
 })
 
