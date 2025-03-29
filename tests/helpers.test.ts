@@ -1,6 +1,7 @@
 import { describe, expect, it, mock, test } from 'bun:test'
 import matter from 'gray-matter'
 import {
+	sampleDomain,
 	fakeCustomLlmsTxtTemplate,
 	fakeIndexMd,
 	fakeGettingStartedMd,
@@ -31,6 +32,12 @@ import {
 import type { PreparedFile, VitePressConfig } from '../src/types'
 // @ts-ignore
 import { defaultLLMsTxtTemplate } from '../src/constants'
+
+const fooMdSample = {
+	title: 'Title',
+	path: `${srcDir}/foo.md`,
+	file: matter(''),
+}
 
 const preparedFilesSample: PreparedFile[] = [
 	{
@@ -95,6 +102,16 @@ describe('expandTemplate', () => {
 
 describe('generateTOC', () => {
 	it('generates a table of contents', () => {
+		expect(generateTOC([fooMdSample], srcDir)).toBe('- [Title](/foo.md)\n')
+	})
+
+	it('correctly attaches the domain', () => {
+		expect(generateTOC([fooMdSample], srcDir, sampleDomain)).toBe(
+			`- [Title](${sampleDomain}/foo.md)\n`,
+		)
+	})
+
+	it('correctly generates TOC with link descriptions', () => {
 		expect(generateTOC(preparedFilesSample.slice(1), srcDir)).toBe(
 			'- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool\n- [Quickstart](/test/quickstart.md): Instructions for quick project initialization\n- [Some other section](/test/other.md)\n',
 		)
@@ -107,9 +124,10 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample.slice(1),
 				`${srcDir}/index.md`,
-				{} as VitePressConfig,
 				srcDir,
 				defaultLLMsTxtTemplate,
+				{},
+				{} as VitePressConfig,
 			),
 		).toMatchSnapshot()
 	})
@@ -118,9 +136,10 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample.slice(1),
 				`${srcDir}/index.md`,
-				{} as VitePressConfig,
 				srcDir,
 				fakeCustomLlmsTxtTemplate,
+				{},
+				{} as VitePressConfig,
 			),
 		).toMatchSnapshot()
 	})
@@ -129,10 +148,10 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
-				{} as VitePressConfig,
 				srcDir,
 				defaultLLMsTxtTemplate,
 				{ title: 'foo', description: 'bar', toc: 'zoo' },
+				{} as VitePressConfig,
 			),
 		).toMatchSnapshot()
 	})
@@ -142,10 +161,10 @@ describe('generateLLMsTxt', () => {
 			generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
-				{} as VitePressConfig,
 				srcDir,
 				'# {foo}\n\n**{bar}**\n\n{zoo}',
 				{ title: 'foo', description: 'bar', toc: 'zoo' },
+				{} as VitePressConfig,
 			),
 		).toMatchSnapshot()
 	})
@@ -155,6 +174,12 @@ describe('generateLLMsFullTxt', () => {
 	it('generates a `llms-full.txt` file', () => {
 		expect(
 			generateLLMsFullTxt(preparedFilesSample.slice(1), srcDir),
+		).toMatchSnapshot()
+	})
+
+	it('correctly attaches the domain to URLs in context', () => {
+		expect(
+			generateLLMsFullTxt(preparedFilesSample.slice(1), srcDir, sampleDomain),
 		).toMatchSnapshot()
 	})
 })

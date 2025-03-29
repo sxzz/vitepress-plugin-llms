@@ -1,4 +1,5 @@
 const blah = 'blah blah blah...'
+export const sampleDomain = 'https://example.com'
 
 export const fakeIndexMd = `\
 ---

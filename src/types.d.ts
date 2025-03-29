@@ -26,8 +26,8 @@ interface TemplateVariables {
 	 *
 	 * @example
 	 * ```markdown
-	 * - [My Title](/index.md)
-	 * - [My Title 2](/guide.md)
+	 * - [Title](/foo.md): Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	 * - [Title 2](/bar/baz.md): Cras vel nibh id ipsum pharetra efficitur.
 	 * ```
 	 */
 	toc?: string
@@ -39,6 +39,27 @@ interface CustomTemplateVariables extends TemplateVariables {
 }
 
 export interface LlmstxtSettings extends TemplateVariables {
+	/**
+	 * The domain that will be appended to the beginning of URLs in `llms.txt` and in the context of other files
+	 *
+	 * Domain attachment is not yet agreed upon (since it depends on the AI ​​whether it can resolve the relative paths that are currently there), but if you want you can add it
+	 *
+	 * Without a {@link LlmstxtSettings.domain | `domain`}:
+	 * ```markdown
+	 * - [Title](/foo/bar.md)
+	 * ```
+	 *
+	 * With a {@link LlmstxtSettings.domain | `domain`}:
+	 * ```markdown
+	 * - [Title](https://example.com/foo/bar.md)
+	 * ```
+	 *
+	 * @example
+	 * ```typescript
+	 * llmstxt({ domain: 'https://example.com' })
+	 * ```
+	 */
+	domain?: string
 	/**
 	 * Determines whether to generate the `llms-full.txt` which contains all the documentation in one file
 	 *

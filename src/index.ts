@@ -191,7 +191,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
 
 					mdFile.data = {
-						url: `/${stripExtPosix(relativePath)}.md`,
+						url: `${settings.domain || ''}/${stripExtPosix(relativePath)}.md`,
 					}
 
 					if (mdFile.data?.description?.length) {
@@ -228,10 +228,11 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
 					path.resolve(settings.workDir as string, 'index.md'),
-					config,
 					settings.workDir as string,
 					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 					templateVariables,
+					config,
+					settings.domain,
 				)
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')
@@ -249,6 +250,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const llmsFullTxt = generateLLMsFullTxt(
 					preparedFiles,
 					settings.workDir as string,
+					settings.domain,
 				)
 
 				// Write content to llms-full.txt

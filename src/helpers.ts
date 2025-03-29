@@ -75,12 +75,13 @@ export function extractTitle(file: GrayMatterFile<Input>): string {
 export function generateTOC(
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],
+	domain?: LlmstxtSettings['domain'],
 ) {
 	let tableOfContent = ''
 
 	for (const file of preparedFiles) {
 		const relativePath = path.relative(srcDir, file.path)
-		tableOfContent += `- [${file.title}](/${stripExtPosix(relativePath)}.md)${file.file.data.description ? `: ${file.file.data.description}` : ''}\n`
+		tableOfContent += `- [${file.title}](${domain || ''}/${stripExtPosix(relativePath)}.md)${file.file.data.description ? `: ${file.file.data.description}` : ''}\n`
 	}
 
 	return tableOfContent
@@ -183,10 +184,11 @@ export function expandTemplate(
 export function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
 	indexMd: string,
-	vitepressConfig: VitePressConfig,
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	LLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
 	templateVariables: LlmstxtSettings['customTemplateVariables'] = {},
+	vitepressConfig?: VitePressConfig,
+	domain?: LlmstxtSettings['domain'],
 ) {
 	// @ts-expect-error
 	matter.clearCache()
@@ -219,7 +221,7 @@ export function generateLLMsTxt(
 	}
 
 	if (!templateVariables.toc) {
-		defaults.toc = generateTOC(preparedFiles, srcDir)
+		defaults.toc = generateTOC(preparedFiles, srcDir, domain)
 	}
 
 	return expandTemplate(LLMsTxtTemplate, {
@@ -238,6 +240,7 @@ export function generateLLMsTxt(
 export function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],
+	domain?: LlmstxtSettings['domain'],
 ) {
 	const llmsFullTxtContent = preparedFiles
 		.map((preparedFile) => {
@@ -245,7 +248,7 @@ export function generateLLMsFullTxt(
 			const description = preparedFile.file.data.description
 
 			preparedFile.file.data = {}
-			preparedFile.file.data.url = `/${stripExtPosix(relativePath)}.md`
+			preparedFile.file.data.url = `${domain || ''}/${stripExtPosix(relativePath)}.md`
 
 			if (description) {
 				preparedFile.file.data.description = description

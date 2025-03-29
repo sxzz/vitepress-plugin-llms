@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test'
 import type { Plugin } from 'vitepress'
 import type { ViteDevServer } from 'vite'
-import { fakeMarkdownDocument } from './resources'
+import { sampleDomain, fakeMarkdownDocument } from './resources'
 
 // Mock the fs module before it's imported by the module under test
 const existsSync = mock(() => true)
@@ -135,6 +135,35 @@ describe('llmstxt plugin', () => {
 				2,
 				path.resolve(mockConfig.vitepress.outDir, 'test', 'test.md'),
 				'---\nurl: /test/test.md\n---\n# Some cool stuff\n',
+			)
+		})
+
+		it('correctly attaches the domain to URLs in context', () => {
+			plugin = llmstxt({
+				domain: sampleDomain,
+				generateLLMsFullTxt: false,
+				generateLLMsTxt: false,
+			})
+			// @ts-ignore
+			plugin.configResolved(mockConfig)
+			// @ts-ignore
+			plugin.transform(0, 'docs/test.md')
+			// @ts-ignore
+			plugin.transform(0, 'docs/test/test.md')
+			// @ts-ignore
+			plugin.generateBundle()
+
+			// Verify that files were written
+			expect(writeFileSync).toHaveBeenCalledTimes(2)
+			expect(writeFileSync).nthCalledWith(
+				1,
+				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
+				`---\nurl: '${sampleDomain}/test.md'\n---\n# Some cool stuff\n`,
+			)
+			expect(writeFileSync).nthCalledWith(
+				2,
+				path.resolve(mockConfig.vitepress.outDir, 'test', 'test.md'),
+				`---\nurl: '${sampleDomain}/test/test.md'\n---\n# Some cool stuff\n`,
 			)
 		})
 
