@@ -43,6 +43,7 @@ jobs:
     name: ⚡ pkg.pr.new
     needs: test
     runs-on: ubuntu-latest
+    if: github.event.repository.full_name == 'okineadev/vitepress-plugin-llms'
 
     permissions: {}
 
