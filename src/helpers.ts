@@ -122,7 +122,7 @@ const templateVariable = (key: string) =>
 export function replaceTemplateVariable(
 	content: string,
 	variable: string,
-	value: string,
+	value: string | undefined,
 	fallback?: string,
 ) {
 	return content.replace(templateVariable(variable), (_, prefix) => {
@@ -148,7 +148,7 @@ export function replaceTemplateVariable(
  */
 export function expandTemplate(
 	template: string,
-	values: { [key: string]: string },
+	values: { [key: string]: string | undefined },
 ): string {
 	return Object.entries(values).reduce(
 		(result, [key, value]) => replaceTemplateVariable(result, key, value),
@@ -194,40 +194,26 @@ export function generateLLMsTxt(
 	matter.clearCache()
 	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
 
-	// biome-ignore lint/suspicious/noExplicitAny:
-	const defaults: Record<string, any> = {}
+	templateVariables.title ??=
+		indexMdFile.data?.hero?.name ||
+		vitepressConfig?.vitepress?.userConfig?.title ||
+		vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
+		extractTitle(indexMdFile) ||
+		'LLMs Documentation'
 
-	if (!templateVariables.title) {
-		defaults.title =
-			indexMdFile.data?.hero?.name ||
-			vitepressConfig?.vitepress?.userConfig?.title ||
-			vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
-			extractTitle(indexMdFile) ||
-			'LLMs Documentation'
-	}
+	templateVariables.description ??=
+		indexMdFile.data?.hero?.text ||
+		vitepressConfig?.vitepress?.userConfig?.description ||
+		indexMdFile?.data?.description ||
+		indexMdFile.data?.titleTemplate ||
+		'This file contains links to all documentation sections.'
 
-	if (!templateVariables.description) {
-		defaults.description =
-			indexMdFile.data?.hero?.text ||
-			vitepressConfig?.vitepress?.userConfig?.description ||
-			indexMdFile?.data?.description ||
-			indexMdFile.data?.titleTemplate ||
-			'This file contains links to all documentation sections.'
-	}
+	templateVariables.details ??=
+		indexMdFile.data?.hero?.tagline || indexMdFile.data?.tagline
 
-	if (!templateVariables.details) {
-		defaults.details =
-			indexMdFile.data?.hero?.tagline || indexMdFile.data?.tagline
-	}
+	templateVariables.toc ??= generateTOC(preparedFiles, srcDir, domain)
 
-	if (!templateVariables.toc) {
-		defaults.toc = generateTOC(preparedFiles, srcDir, domain)
-	}
-
-	return expandTemplate(LLMsTxtTemplate, {
-		...defaults,
-		...templateVariables,
-	})
+	return expandTemplate(LLMsTxtTemplate, templateVariables)
 }
 
 /**
