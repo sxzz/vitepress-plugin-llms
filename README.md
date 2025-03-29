@@ -126,6 +126,13 @@ The file structure in `.vitepress/dist` folder will be as follows:
 
 This plugin follows the [llmstxt.org](https://llmstxt.org/) standard, which defines the best practices for LLM-friendly documentation.
 
+## ✨ Projects where this plugin is used
+
+- [**Elysia**](https://elysiajs.com/) - **11.9**k+ ⭐ - [llms.txt](https://elysiajs.com/llms.txt) | [llms-full.txt](https://elysiajs.com/llms-full.txt)
+- [**shadcn/vue**](https://shadcn-vue.com/) - **6.7**k+ ⭐ - [llms.txt](https://shadcn-vue.com/llms.txt) | [llms-full.txt](https://shadcn-vue.com/llms-full.txt)
+- [**Vue Macros**](https://vue-macros.dev/) - **1.8**k+ ⭐ - [llms.txt](https://vue-macros.dev/llms.txt) | [llms-full.txt](https://vue-macros.dev/llms-full.txt)
+- [**GramIO**](https://gramio.dev/) - **101**+ ⭐ - [llms.txt](https://gramio.dev/llms.txt) | [llms-full.txt](https://gramio.dev/llms-full.txt)
+
 ## ❤️ Support
 
 If you like this project, consider supporting it by starring ⭐ it on GitHub, sharing it with your friends, or [buying me a coffee ☕](https://github.com/okineadev/vitepress-plugin-llms?sponsor=1)
