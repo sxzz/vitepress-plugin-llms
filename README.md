@@ -128,6 +128,7 @@ This plugin follows the [llmstxt.org](https://llmstxt.org/) standard, which defi
 
 ## ✨ Projects where this plugin is used
 
+- [**Slidev**](https://sli.dev/) - **35.7**k+ ⭐ - [llms.txt](https://sli.dev/llms.txt) | [llms-full.txt](https://sli.dev/llms-full.txt)
 - [**Elysia**](https://elysiajs.com/) - **11.9**k+ ⭐ - [llms.txt](https://elysiajs.com/llms.txt) | [llms-full.txt](https://elysiajs.com/llms-full.txt)
 - [**shadcn/vue**](https://shadcn-vue.com/) - **6.7**k+ ⭐ - [llms.txt](https://shadcn-vue.com/llms.txt) | [llms-full.txt](https://shadcn-vue.com/llms-full.txt)
 - [**Vue Macros**](https://vue-macros.dev/) - **1.8**k+ ⭐ - [llms.txt](https://vue-macros.dev/llms.txt) | [llms-full.txt](https://vue-macros.dev/llms-full.txt)
