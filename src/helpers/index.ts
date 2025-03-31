@@ -57,11 +57,13 @@ export function generateLLMsTxt(
 		indexMdFile.data?.hero?.text ||
 		vitepressConfig?.vitepress?.userConfig?.description ||
 		indexMdFile?.data?.description ||
-		indexMdFile.data?.titleTemplate ||
-		'This file contains links to all documentation sections.'
+		indexMdFile.data?.titleTemplate
 
 	templateVariables.details ??=
-		indexMdFile.data?.hero?.tagline || indexMdFile.data?.tagline
+		indexMdFile.data?.hero?.tagline ||
+		indexMdFile.data?.tagline ||
+		(!templateVariables.description &&
+			'This file contains links to all documentation sections.')
 
 	templateVariables.toc ??= generateTOC(
 		preparedFiles,
