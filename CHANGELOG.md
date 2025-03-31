@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.0.21
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.20...v0.0.21)
+
+### 🩹 Fixes
+
+- Fix bug when vitepress `sidebar` is an object and section headers in `llms.txt` are not generated ([98bd967](https://github.com/okineadev/vitepress-plugin-llms/commit/98bd967))
+
+### 💅 Refactors
+
+- **ci:** Move the script for checking tests in `release.yml` to a separate file ([d534260](https://github.com/okineadev/vitepress-plugin-llms/commit/d534260))
+
+### 🤖 CI
+
+- Configure `release.yml` authentication to allow pushing to the `main` branch ([247fac2](https://github.com/okineadev/vitepress-plugin-llms/commit/247fac2))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.20
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.16...v0.0.20)
