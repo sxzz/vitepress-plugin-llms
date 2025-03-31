@@ -18,16 +18,17 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: false
-          sparse-checkout: .github/workflows/scripts/check-if-tests-passed.mts
+          sparse-checkout: |
+            .github/workflows/scripts/check-if-tests-passed.mts
+            package.json
 
       - id: check
-        uses: kf6kjg/github-script@f27b40e6b7c7d0e475b6cbfe8c5bacd9349b782c
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
           CI_WORKFLOW_PATH: '.github/workflows/ci.yml'
         with:
-          language: mts
           script: |
-            const { default: checkIfTestsPassed } = await import('${{ github.workspace }}/.github/workflows/scripts/check-if-tests-passed.mts')
+            const { default: checkIfTestsPassed } = await import('${{ github.workspace }}/.github/workflows/scripts/check-if-tests-passed.mjs')
             await checkIfTestsPassed()
 
   test:

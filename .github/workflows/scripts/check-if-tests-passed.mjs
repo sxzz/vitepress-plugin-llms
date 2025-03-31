@@ -1,10 +1,10 @@
-import type { AsyncFunctionArguments } from '@actions/github-script'
-
 /**
  * This function checks if CI workflow has already run on the current commit.
  * If not, it signals that tests should be run.
+ *
+ * @param {import('@actions/github-script').AsyncFunctionArguments} AsyncFunctionArguments
  */
-export default async ({ context, github, core }: AsyncFunctionArguments) => {
+export default async ({ context, github, core }) => {
 	// Get current commit SHA
 	const current_commit_sha = context.sha
 	console.log(
