@@ -85,7 +85,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 							`${stripExt(req.url)}.md`,
 						)
 						const content = fs.readFileSync(filePath, 'utf-8')
-						res.setHeader('Content-Type', 'text/markdown')
+						res.setHeader('Content-Type', 'text/plain; charset=utf-8')
 						res.end(content)
 						return
 					} catch (e) {
