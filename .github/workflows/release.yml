@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            .github/workflows/scripts/check-if-tests-passed.mts
+            .github/workflows/scripts/
             package.json
 
       - id: check
