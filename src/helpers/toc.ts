@@ -70,8 +70,16 @@ function processSidebarSection(
 
 	// Process items in this section
 	if (section.items && Array.isArray(section.items)) {
-		// Find files that match paths in this section's items
-		const sectionPaths = collectPathsFromSidebarItems(section.items)
+		// Separate items with links and items with nested subsections
+		const linksItems = section.items.filter(
+			(item) => item.link && (!item.items || item.items.length === 0),
+		)
+		const nestedItems = section.items.filter(
+			(item) => item.items && item.items.length > 0,
+		)
+
+		// Find files that match direct links in this section (excluding those in subsections)
+		const sectionPaths = collectPathsFromSidebarItems(linksItems)
 
 		const sectionFiles = preparedFiles.filter((file) => {
 			const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
@@ -83,25 +91,25 @@ function processSidebarSection(
 			)
 		})
 
-		// Add links to files in this section
+		// Add links to files in this section (only those that are direct children)
 		for (const file of sectionFiles) {
 			const relativePath = path.relative(srcDir, file.path)
 			sectionTOC += generateTOCLink(file, domain, relativePath)
 		}
 
-		sectionTOC += '\n'
+		if (sectionFiles.length > 0) {
+			sectionTOC += '\n'
+		}
 
 		// Process subsections recursively (for nested sidebar structures)
-		for (const item of section.items) {
-			if (item.items && Array.isArray(item.items) && item.items.length > 0) {
-				sectionTOC += processSidebarSection(
-					item,
-					preparedFiles,
-					srcDir,
-					domain,
-					depth + 1,
-				)
-			}
+		for (const item of nestedItems) {
+			sectionTOC += processSidebarSection(
+				item,
+				preparedFiles,
+				srcDir,
+				domain,
+				depth + 1,
+			)
 		}
 	}
 
