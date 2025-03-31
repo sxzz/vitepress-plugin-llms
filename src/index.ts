@@ -1,28 +1,25 @@
-import type { Plugin } from 'vitepress'
 import type { ViteDevServer } from 'vite'
+import type { Plugin } from 'vitepress'
 
 import fs from 'node:fs'
 import path from 'node:path'
 
-import pc from 'picocolors'
+import matter from 'gray-matter'
 import { minimatch } from 'minimatch'
-import {
-	extractTitle,
-	generateLLMsFullTxt,
-	generateLLMsTxt,
-	stripExt,
-	stripExtPosix,
-} from './helpers'
-import log from './logger'
+import pc from 'picocolors'
+
+import { name as packageName } from '../package.json'
+
+import { defaultLLMsTxtTemplate } from './constants'
+import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
+import log from './helpers/logger'
+import { extractTitle, stripExt, stripExtPosix } from './helpers/utils'
 import type {
 	CustomTemplateVariables,
 	LlmstxtSettings,
 	PreparedFile,
 	VitePressConfig,
 } from './types'
-import matter from 'gray-matter'
-import { defaultLLMsTxtTemplate } from './constants'
-import { name as packageName } from '../package.json'
 
 const PLUGIN_NAME = packageName
 

@@ -1,14 +1,14 @@
 import { describe, expect, it, mock } from 'bun:test'
 import matter from 'gray-matter'
 import {
-	sampleDomain,
 	fakeCustomLlmsTxtTemplate,
-	fakeIndexMd,
 	fakeGettingStartedMd,
-	fakeQuickstartMd,
+	fakeIndexMd,
 	fakeMarkdownDocument,
-	sampleVitePressSidebar,
+	fakeQuickstartMd,
+	sampleDomain,
 	sampleObjectVitePressSidebar,
+	sampleVitePressSidebar,
 } from './resources'
 
 const srcDir = 'docs'
@@ -23,17 +23,17 @@ mock.module('node:fs', () => ({
 }))
 
 import {
-	replaceTemplateVariable,
-	expandTemplate,
 	generateLLMsFullTxt,
 	generateLLMsTxt,
-	generateTOC,
 	// @ts-ignore
 } from '../src/helpers'
 
-import type { PreparedFile, VitePressConfig } from '../src/types'
+import { generateTOC } from '../src/helpers/toc'
+import { expandTemplate, replaceTemplateVariable } from '../src/helpers/utils'
+
 // @ts-ignore
 import { defaultLLMsTxtTemplate } from '../src/constants'
+import type { PreparedFile, VitePressConfig } from '../src/types'
 
 const fooMdSample = {
 	title: 'Title',

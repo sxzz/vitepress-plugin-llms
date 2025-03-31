@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test'
-import type { Plugin } from 'vitepress'
+import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
-import { sampleDomain, fakeMarkdownDocument } from './resources'
+import type { Plugin } from 'vitepress'
+import { fakeMarkdownDocument, sampleDomain } from './resources'
 
 // Mock the fs module before it's imported by the module under test
 const existsSync = mock(() => true)
@@ -21,7 +21,7 @@ mock.module('node:fs', () => ({
 }))
 
 // Mock the logger to prevent output
-mock.module('../src/logger', () => ({
+mock.module('../src/helpers/logger', () => ({
 	default: {
 		info: mock(),
 		success: mock(),
@@ -30,11 +30,11 @@ mock.module('../src/logger', () => ({
 	},
 }))
 
+import path from 'node:path'
 // Import the module under test AFTER mocking its dependencies
 // @ts-ignore
 import llmstxt from '../src/index'
 import type { VitePressConfig } from '../src/types'
-import path from 'node:path'
 
 describe('llmstxt plugin', () => {
 	let plugin: Plugin

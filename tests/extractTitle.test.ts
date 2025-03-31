@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-// @ts-ignore
-import { extractTitle } from '../src/helpers'
 import matter from 'gray-matter'
+// @ts-ignore
+import { extractTitle } from '../src/helpers/utils'
 
 const fakeIndexMd = matter(`\
 ---
