@@ -13,7 +13,7 @@ import { name as packageName } from '../package.json'
 import { defaultLLMsTxtTemplate } from './constants'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
-import { extractTitle, stripExt, stripExtPosix } from './helpers/utils'
+import { extractTitle, generateMetadata, stripExt } from './helpers/utils'
 import type {
 	CustomTemplateVariables,
 	LlmstxtSettings,
@@ -187,19 +187,13 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					// Ensure target directory exists
 					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
 
-					mdFile.data = {
-						url: `${settings.domain || ''}/${stripExtPosix(relativePath)}.md`,
-					}
-
-					if (mdFile.data?.description?.length) {
-						// biome-ignore lint/correctness/noSelfAssign: <explanation>
-						mdFile.data.description = mdFile.data?.description
-					}
-
 					// Copy file to output directory
 					fs.writeFileSync(
 						targetPath,
-						matter.stringify(mdFile.content, mdFile.data),
+						matter.stringify(
+							mdFile.content,
+							generateMetadata(mdFile, settings.domain, relativePath),
+						),
 					)
 					log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
 				} catch (error) {

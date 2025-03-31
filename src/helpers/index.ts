@@ -6,7 +6,7 @@ import matter from 'gray-matter'
 import { defaultLLMsTxtTemplate } from '../constants'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
 import { generateTOC } from './toc'
-import { expandTemplate, extractTitle, stripExtPosix } from './utils'
+import { expandTemplate, extractTitle, generateMetadata } from './utils'
 
 /**
  * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
@@ -90,16 +90,11 @@ export function generateLLMsFullTxt(
 	const llmsFullTxtContent = preparedFiles
 		.map((preparedFile) => {
 			const relativePath = path.relative(srcDir, preparedFile.path)
-			const description = preparedFile.file.data.description
 
-			preparedFile.file.data = {}
-			preparedFile.file.data.url = `${domain || ''}/${stripExtPosix(relativePath)}.md`
-
-			if (description) {
-				preparedFile.file.data.description = description
-			}
-
-			return matter.stringify(preparedFile.file.content, preparedFile.file.data)
+			return matter.stringify(
+				preparedFile.file.content,
+				generateMetadata(preparedFile.file, domain, relativePath),
+			)
 		})
 		.join('\n---\n\n')
 

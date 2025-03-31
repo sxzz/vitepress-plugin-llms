@@ -29,7 +29,11 @@ import {
 } from '../src/helpers'
 
 import { generateTOC } from '../src/helpers/toc'
-import { expandTemplate, replaceTemplateVariable } from '../src/helpers/utils'
+import {
+	expandTemplate,
+	generateMetadata,
+	replaceTemplateVariable,
+} from '../src/helpers/utils'
 
 // @ts-ignore
 import { defaultLLMsTxtTemplate } from '../src/constants'
@@ -151,6 +155,63 @@ describe('generateTOC', () => {
 		const toc = generateTOC(files, srcDir, undefined, mockVitePressConfig)
 
 		expect(toc).toMatchSnapshot()
+	})
+})
+
+describe('generateMetadata', () => {
+	const dummyMatter = matter('')
+	it('should generate URL with domain when provided', () => {
+		const result = generateMetadata(
+			dummyMatter,
+			'https://example.com',
+			'docs/guide',
+		)
+
+		expect(result.url).toBe('https://example.com/docs/guide.md')
+	})
+
+	it('should generate URL without domain when domain is undefined', () => {
+		const result = generateMetadata(dummyMatter, undefined, 'docs/guide')
+
+		expect(result.url).toBe('/docs/guide.md')
+	})
+
+	it('should include description from frontmatter when available', () => {
+		const result = generateMetadata(
+			{
+				...dummyMatter,
+				data: {
+					description: 'A comprehensive guide',
+				},
+			},
+			'https://example.com',
+			'docs/guide',
+		)
+
+		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.description).toBe('A comprehensive guide')
+	})
+
+	it('should not include description when frontmatter description is empty', () => {
+		const result = generateMetadata(
+			dummyMatter,
+			'https://example.com',
+			'docs/guide',
+		)
+
+		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.description).toBeUndefined()
+	})
+
+	it('should not include description when frontmatter has no description', () => {
+		const result = generateMetadata(
+			dummyMatter,
+			'https://example.com',
+			'docs/guide',
+		)
+
+		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.description).toBeUndefined()
 	})
 })
 
