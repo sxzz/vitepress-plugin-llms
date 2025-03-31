@@ -169,6 +169,29 @@ function processSidebarSection(
 }
 
 /**
+ * Flattens the sidebar configuration when it's an object with path keys
+ *
+ * @param sidebarConfig - The sidebar configuration from VitePress
+ * @returns An array of sidebar items
+ */
+function flattenSidebarConfig(
+	sidebarConfig: DefaultTheme.Sidebar,
+): DefaultTheme.SidebarItem[] {
+	// If it's already an array, return as is
+	if (Array.isArray(sidebarConfig)) {
+		return sidebarConfig
+	}
+
+	// If it's an object with path keys, flatten it
+	if (typeof sidebarConfig === 'object') {
+		return Object.values(sidebarConfig).flat()
+	}
+
+	// If it's neither, return an empty array
+	return []
+}
+
+/**
  * Generates a Table of Contents (TOC) for the provided prepared files.
  *
  * Each entry in the TOC is formatted as a markdown link to the corresponding
@@ -192,38 +215,47 @@ export function generateTOC(
 	const sidebarConfig =
 		vitepressConfig?.vitepress?.userConfig?.themeConfig?.sidebar
 
-	// If sidebar configuration exists and is an array with elements
-	if (
-		sidebarConfig &&
-		Array.isArray(sidebarConfig) &&
-		sidebarConfig.length > 0
-	) {
-		// Process each top-level section in the sidebar
-		for (const section of sidebarConfig) {
-			tableOfContent += processSidebarSection(
-				section,
-				preparedFiles,
-				srcDir,
-				domain,
-			)
-		}
+	// If sidebar configuration exists
+	if (sidebarConfig) {
+		// Flatten sidebar config if it's an object with path keys
+		const flattenedSidebarConfig = flattenSidebarConfig(sidebarConfig)
 
-		// Find files that didn't match any section
-		const allSidebarPaths = collectPathsFromSidebarItems(sidebarConfig)
-		const unsortedFiles = preparedFiles.filter((file) => {
-			const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
-			return !allSidebarPaths.some(
-				(sidebarPath) =>
-					relativePath === sidebarPath ||
-					relativePath === `${sidebarPath}.md` ||
-					`${relativePath}.md` === sidebarPath,
-			)
-		})
+		// Process each top-level section in the flattened sidebar
+		if (flattenedSidebarConfig.length > 0) {
+			for (const section of flattenedSidebarConfig) {
+				tableOfContent += processSidebarSection(
+					section,
+					preparedFiles,
+					srcDir,
+					domain,
+				)
+			}
 
-		// Add files that didn't match any section
-		if (unsortedFiles.length > 0) {
-			tableOfContent += '### Other\n\n'
-			for (const file of unsortedFiles) {
+			// Find files that didn't match any section
+			const allSidebarPaths = collectPathsFromSidebarItems(
+				flattenedSidebarConfig,
+			)
+			const unsortedFiles = preparedFiles.filter((file) => {
+				const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
+				return !allSidebarPaths.some(
+					(sidebarPath) =>
+						relativePath === sidebarPath ||
+						relativePath === `${sidebarPath}.md` ||
+						`${relativePath}.md` === sidebarPath,
+				)
+			})
+
+			// Add files that didn't match any section
+			if (unsortedFiles.length > 0) {
+				tableOfContent += '### Other\n\n'
+				for (const file of unsortedFiles) {
+					const relativePath = path.relative(srcDir, file.path)
+					tableOfContent += generateTOCLink(file, domain, relativePath)
+				}
+			}
+		} else {
+			// If there's an empty sidebar configuration, just add all files
+			for (const file of preparedFiles) {
 				const relativePath = path.relative(srcDir, file.path)
 				tableOfContent += generateTOCLink(file, domain, relativePath)
 			}

@@ -118,3 +118,18 @@ url: 'https://example.com/test/other.md'
 # Some cool stuff
 "
 `;
+
+exports[`generateTOC handles object-based sidebar configuration correctly 1`] = `
+"### Getting Started
+
+- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool
+
+### API Reference
+
+- [Quickstart](/test/quickstart.md): Instructions for quick project initialization
+
+### Other
+
+- [Some other section](/test/other.md)
+"
+`;

@@ -8,6 +8,7 @@ import {
 	fakeQuickstartMd,
 	fakeMarkdownDocument,
 	sampleVitePressSidebar,
+	sampleObjectVitePressSidebar,
 } from './resources'
 
 const srcDir = 'docs'
@@ -124,6 +125,23 @@ describe('generateTOC', () => {
 				userConfig: {
 					themeConfig: {
 						sidebar: sampleVitePressSidebar,
+					},
+				},
+			},
+		} as VitePressConfig
+
+		const files = preparedFilesSample.slice(1)
+		const toc = generateTOC(files, srcDir, undefined, mockVitePressConfig)
+
+		expect(toc).toMatchSnapshot()
+	})
+
+	it('handles object-based sidebar configuration correctly', () => {
+		const mockVitePressConfig = {
+			vitepress: {
+				userConfig: {
+					themeConfig: {
+						sidebar: sampleObjectVitePressSidebar,
 					},
 				},
 			},

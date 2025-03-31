@@ -41,3 +41,18 @@ export const sampleVitePressSidebar = [
 		items: [{ text: 'Quickstart', link: '/test/quickstart' }],
 	},
 ]
+
+export const sampleObjectVitePressSidebar = {
+	'/': [
+		{
+			text: 'Getting Started',
+			items: [{ text: 'Introduction', link: '/test/getting-started' }],
+		},
+	],
+	'/api/': [
+		{
+			text: 'API Reference',
+			items: [{ text: 'Quickstart', link: '/test/quickstart' }],
+		},
+	],
+}
