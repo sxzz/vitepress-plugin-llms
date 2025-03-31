@@ -1,6 +1,34 @@
 # Changelog
 
 
+## v0.0.22
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.21...v0.0.22)
+
+### 🩹 Fixes
+
+- **ci:** Rewrite the script for checking the tests of the current commit that runs `release.yml` in JS ([fb67209](https://github.com/okineadev/vitepress-plugin-llms/commit/fb67209))
+- Fix a bug where all child links in the root section were duplicated ([17e73ba](https://github.com/okineadev/vitepress-plugin-llms/commit/17e73ba))
+- Fix a bug where even if you specify a file description in frontmatter, the link in `llms.txt` still doesn't have a description ([2732122](https://github.com/okineadev/vitepress-plugin-llms/commit/2732122))
+
+### 💅 Refactors
+
+- ♻️ refactor project structure ([f486dac](https://github.com/okineadev/vitepress-plugin-llms/commit/f486dac))
+- Insert `llms.txt` default description in `{details}` instead of `{description}` ([0352080](https://github.com/okineadev/vitepress-plugin-llms/commit/0352080))
+
+### 📖 Documentation
+
+- Add https://github.com/slidevjs/slidev to the list of projects that use this plugin ([2f6056f](https://github.com/okineadev/vitepress-plugin-llms/commit/2f6056f))
+
+### 🏡 Chore
+
+- Add `.editorconfig` ([b2886c8](https://github.com/okineadev/vitepress-plugin-llms/commit/b2886c8))
+- Update MIME type for documentation for LLMs in dev server and add encoding ([1bb23bb](https://github.com/okineadev/vitepress-plugin-llms/commit/1bb23bb))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.21
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.20...v0.0.21)
