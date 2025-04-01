@@ -14,7 +14,7 @@
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
 		"emitDeclarationOnly": true,
-        "esModuleInterop": true,
+		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 
 		"types": ["@types/node"]
