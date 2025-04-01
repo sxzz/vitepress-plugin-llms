@@ -48,6 +48,7 @@ export function generateLLMsTxt(
 
 	templateVariables.title ??=
 		indexMdFile.data?.hero?.name ||
+		indexMdFile.data?.title ||
 		vitepressConfig?.vitepress?.userConfig?.title ||
 		vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
 		extractTitle(indexMdFile) ||
