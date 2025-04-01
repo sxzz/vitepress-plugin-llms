@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
-import { fakeMarkdownDocument, sampleDomain } from './resources'
+import { fakeMarkdownDocument } from './resources'
 
 // Mock the fs module before it's imported by the module under test
 const existsSync = mock(() => true)

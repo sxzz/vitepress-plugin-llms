@@ -161,13 +161,9 @@ describe('generateTOC', () => {
 describe('generateMetadata', () => {
 	const dummyMatter = matter('')
 	it('should generate URL with domain when provided', () => {
-		const result = generateMetadata(
-			dummyMatter,
-			'https://example.com',
-			'docs/guide',
-		)
+		const result = generateMetadata(dummyMatter, sampleDomain, 'docs/guide')
 
-		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.url).toBe(`${sampleDomain}/docs/guide.md`)
 	})
 
 	it('should generate URL without domain when domain is undefined', () => {
@@ -184,33 +180,25 @@ describe('generateMetadata', () => {
 					description: 'A comprehensive guide',
 				},
 			},
-			'https://example.com',
+			sampleDomain,
 			'docs/guide',
 		)
 
-		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.url).toBe(`${sampleDomain}/docs/guide.md`)
 		expect(result.description).toBe('A comprehensive guide')
 	})
 
 	it('should not include description when frontmatter description is empty', () => {
-		const result = generateMetadata(
-			dummyMatter,
-			'https://example.com',
-			'docs/guide',
-		)
+		const result = generateMetadata(dummyMatter, sampleDomain, 'docs/guide')
 
-		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.url).toBe(`${sampleDomain}/docs/guide.md`)
 		expect(result.description).toBeUndefined()
 	})
 
 	it('should not include description when frontmatter has no description', () => {
-		const result = generateMetadata(
-			dummyMatter,
-			'https://example.com',
-			'docs/guide',
-		)
+		const result = generateMetadata(dummyMatter, sampleDomain, 'docs/guide')
 
-		expect(result.url).toBe('https://example.com/docs/guide.md')
+		expect(result.url).toBe(`${sampleDomain}/docs/guide.md`)
 		expect(result.description).toBeUndefined()
 	})
 })

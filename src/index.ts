@@ -51,7 +51,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 	// Flag to identify which build we're in
 	let isSsrBuild = false
 
-	return <Plugin>{
+	return {
 		name: PLUGIN_NAME,
 		enforce: 'post', // Run after other plugins
 
