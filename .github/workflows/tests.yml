@@ -4,7 +4,7 @@ permissions: {}
 
 env:
   WINDOWS_USERPROFILE: 'D:'
-  BUN_CACHE_PATH: D:\.bun\install\cache
+  WINDOWS_BUN_CACHE_DIR: 'D:\.bun\install\cache'
 
 jobs:
   test:
@@ -61,14 +61,16 @@ jobs:
       - name: 📥 Cache Bun dependencies (Windows)
         if: runner.os == 'Windows'
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        env:
+          BUN_INSTALL_CACHE_DIR: ${{ runner.os == 'Windows' && env.WINDOWS_BUN_CACHE_DIR || '' }}
         with:
-          path: ${{ env.BUN_CACHE_PATH }}
+          path: ${{ env.BUN_INSTALL_CACHE_DIR }}
           key: ${{ matrix.os }}-bun-${{ hashFiles('**/bun.lock') }}
           restore-keys: ${{ matrix.os }}-bun-
 
-        # The main bottleneck is here, `bun install` takes too long on Windows
-        # @oven-sh Please fix this 🙏
       - name: 📦 Install dependencies
+        env:
+          BUN_INSTALL_CACHE_DIR: ${{ runner.os == 'Windows' && env.WINDOWS_BUN_CACHE_DIR || '' }}
         run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: 🧪 Run tests
