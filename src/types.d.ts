@@ -1,6 +1,6 @@
-import type { SiteConfig, UserConfig } from 'vitepress'
-import type { ResolvedConfig } from 'vite'
 import type { GrayMatterFile, Input } from 'gray-matter'
+import type { ResolvedConfig } from 'vite'
+import type { SiteConfig, UserConfig } from 'vitepress'
 
 interface TemplateVariables {
 	/**
@@ -62,12 +62,6 @@ export interface LlmstxtSettings extends TemplateVariables {
 	 * ```
 	 */
 	domain?: string
-	/**
-	 * Determines whether to generate the `llms-full.txt` which contains all the documentation in one file
-	 *
-	 * @default true
-	 */
-	generateLLMsFullTxt?: boolean
 
 	/**
 	 * Indicates whether to generate the `llms.txt` file, which contains a list of sections with corresponding links.
@@ -75,6 +69,20 @@ export interface LlmstxtSettings extends TemplateVariables {
 	 * @default true
 	 */
 	generateLLMsTxt?: boolean
+
+	/**
+	 * Determines whether to generate the `llms-full.txt` which contains all the documentation in one file.
+	 *
+	 * @default true
+	 */
+	generateLLMsFullTxt?: boolean
+
+	/**
+	 * Determines whether to generate an LLM-friendly version of the documentation for each page on the website.
+	 *
+	 * @default true
+	 */
+	generateLLMFriendlyDocsForEachPage?: boolean
 
 	/**
 	 * The directory from which files will be processed.

@@ -35,8 +35,9 @@ const PLUGIN_NAME = packageName
 export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 	// Create a settings object with defaults explicitly merged
 	const settings: LlmstxtSettings = {
-		generateLLMsFullTxt: true,
 		generateLLMsTxt: true,
+		generateLLMsFullTxt: true,
+		generateLLMFriendlyDocsForEachPage: true,
 		ignoreFiles: [],
 		...userSettings,
 	}
@@ -178,27 +179,31 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const relativePath = path.relative(settings.workDir as string, file)
 				const targetPath = path.resolve(outDir, relativePath)
 
-				try {
-					const mdFile = matter(fs.readFileSync(file, 'utf-8'))
-					const title = extractTitle(mdFile) || 'Untitled'
+				const mdFile = matter(fs.readFileSync(file, 'utf-8'))
+				const title = extractTitle(mdFile) || 'Untitled'
 
-					preparedFiles.push({ path: file, title, file: mdFile })
+				preparedFiles.push({ path: file, title, file: mdFile })
 
+				if (settings.generateLLMFriendlyDocsForEachPage) {
 					// Ensure target directory exists
 					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
 
-					// Copy file to output directory
-					fs.writeFileSync(
-						targetPath,
-						matter.stringify(
-							mdFile.content,
-							generateMetadata(mdFile, settings.domain, relativePath),
-						),
-					)
-					log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
-				} catch (error) {
-					// @ts-ignore
-					log.error(`Failed to copy ${pc.cyan(relativePath)}: ${error.message}`)
+					try {
+						// Copy file to output directory
+						fs.writeFileSync(
+							targetPath,
+							matter.stringify(
+								mdFile.content,
+								generateMetadata(mdFile, settings.domain, relativePath),
+							),
+						)
+						log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
+					} catch (error) {
+						log.error(
+							// @ts-ignore
+							`Failed to copy ${pc.cyan(relativePath)}: ${error.message}`,
+						)
+					}
 				}
 			}
 
