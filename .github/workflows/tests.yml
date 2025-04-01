@@ -4,6 +4,7 @@ permissions: {}
 
 env:
   WINDOWS_USERPROFILE: 'D:'
+  BUN_CACHE_PATH: D:\.bun\install\cache
 
 jobs:
   test:
@@ -17,7 +18,7 @@ jobs:
 
     steps:
       # https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/#moving-temp-to-the-d-drive
-      - name: 🗂️ Set temp dir on Windows
+      - name: 🗂️ Configure Temp Directory (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
@@ -28,7 +29,7 @@ jobs:
           "TEMP=$TEMP_DIR"  >> $env:GITHUB_ENV
           "TMP=$TEMP_DIR"   >> $env:GITHUB_ENV
 
-      - name: 🔓 Disable Windows Defender
+      - name: 🔓 Disable Windows Defender (Windows)
         if: runner.os == 'Windows'
         shell: powershell
         run: Set-MpPreference -DisableRealtimeMonitoring $true
@@ -56,18 +57,17 @@ jobs:
         with:
           bun-version: latest
 
-      - name: 📥 Cache Bun dependencies
         # Run only on Windows because on Linux there are no problems with slow package installation
+      - name: 📥 Cache Bun dependencies (Windows)
         if: runner.os == 'Windows'
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
-        env:
-          USERPROFILE: ${{ env.WINDOWS_USERPROFILE }}
         with:
-          path: '${{ env.USERPROFILE }}\.bun'
+          path: ${{ env.BUN_CACHE_PATH }}
           key: ${{ matrix.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: ${{ matrix.os }}-bun-
 
-      # The main bottleneck is here, `bun install` takes too long on Windows
-      # @oven-sh Please fix this 🙏
+        # The main bottleneck is here, `bun install` takes too long on Windows
+        # @oven-sh Please fix this 🙏
       - name: 📦 Install dependencies
         run: bun install --frozen-lockfile
 
