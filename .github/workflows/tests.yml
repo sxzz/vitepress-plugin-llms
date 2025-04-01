@@ -31,7 +31,12 @@ jobs:
       - name: 🔓 Disable Windows Defender
         if: runner.os == 'Windows'
         shell: powershell
-        run: Set-MpPreference -DisableRealtimeMonitoring $true
+        run: |
+          Set-MpPreference -DisableRealtimeMonitoring $true
+          # Exclude Bun directories from scanning
+          Add-MpPreference -ExclusionPath "$env:WINDOWS_USERPROFILE\.bun"
+          Add-MpPreference -ExclusionPath "$env:RUNNER_TEMP"
+          Add-MpPreference -ExclusionPath "$env:GITHUB_WORKSPACE"
 
       - name: 🛜 Network tweaks for Windows
         if: runner.os == 'Windows'
@@ -42,6 +47,17 @@ jobs:
 
           # Disable IPv6 (https://github.com/oven-sh/bun/issues/4938#issuecomment-1720172113)
           Get-NetAdapterBinding -ComponentID ms_tcpip6 | ForEach-Object { Disable-NetAdapterBinding -InterfaceAlias $_.Name -ComponentID ms_tcpip6 }
+
+          # Optimize TCP settings
+          netsh int tcp set global autotuninglevel=normal
+          netsh int tcp set global chimney=enabled
+          netsh int tcp set global rss=enabled
+          netsh int tcp set global netdma=enabled
+          netsh int tcp set global ecncapability=enabled
+
+          # Increase concurrent TCP connections
+          Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "MaxUserPort" -Value 65534 -Type DWord
+          Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "TcpTimedWaitDelay" -Value 30 -Type DWord
 
       - name: 📥 Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
