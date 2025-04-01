@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import matter from 'gray-matter'
 
+import type { DefaultTheme } from 'vitepress'
 import { defaultLLMsTxtTemplate } from '../constants'
 import type { LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
 import { generateTOC } from './toc'
@@ -39,8 +40,9 @@ export function generateLLMsTxt(
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	LLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
 	templateVariables: LlmstxtSettings['customTemplateVariables'] = {},
-	vitepressConfig?: VitePressConfig,
+	vitepressConfig?: VitePressConfig['vitepress']['userConfig'],
 	domain?: LlmstxtSettings['domain'],
+	sidebar?: DefaultTheme.Sidebar,
 ): string {
 	// @ts-expect-error
 	matter.clearCache()
@@ -49,14 +51,14 @@ export function generateLLMsTxt(
 	templateVariables.title ??=
 		indexMdFile.data?.hero?.name ||
 		indexMdFile.data?.title ||
-		vitepressConfig?.vitepress?.userConfig?.title ||
-		vitepressConfig?.vitepress?.userConfig?.titleTemplate ||
+		vitepressConfig?.title ||
+		vitepressConfig?.titleTemplate ||
 		extractTitle(indexMdFile) ||
 		'LLMs Documentation'
 
 	templateVariables.description ??=
 		indexMdFile.data?.hero?.text ||
-		vitepressConfig?.vitepress?.userConfig?.description ||
+		vitepressConfig?.description ||
 		indexMdFile?.data?.description ||
 		indexMdFile.data?.titleTemplate
 
@@ -70,7 +72,7 @@ export function generateLLMsTxt(
 		preparedFiles,
 		srcDir,
 		domain,
-		vitepressConfig,
+		sidebar || vitepressConfig?.themeConfig?.sidebar,
 	)
 
 	return expandTemplate(LLMsTxtTemplate, templateVariables)

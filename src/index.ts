@@ -227,8 +227,9 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					settings.workDir as string,
 					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 					templateVariables,
-					config,
+					config?.vitepress?.userConfig,
 					settings.domain,
+					settings.sidebar,
 				)
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')

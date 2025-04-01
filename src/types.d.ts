@@ -1,6 +1,6 @@
 import type { GrayMatterFile, Input } from 'gray-matter'
 import type { ResolvedConfig } from 'vite'
-import type { SiteConfig, UserConfig } from 'vitepress'
+import type { DefaultTheme, SiteConfig, UserConfig } from 'vitepress'
 
 interface TemplateVariables {
 	/**
@@ -177,6 +177,15 @@ export interface LlmstxtSettings extends TemplateVariables {
 	 * ```
 	 */
 	customTemplateVariables?: CustomTemplateVariables
+
+	/**
+	 * VitePress {@link DefaultTheme.Sidebar | Sidebar}
+	 *
+	 * Here you can insert your {@link DefaultTheme.Sidebar | `sidebar`} if it is not in the VitePress configuration
+	 *
+	 * Usually this parameter is used in rare cases
+	 */
+	sidebar?: DefaultTheme.Sidebar
 }
 
 /**

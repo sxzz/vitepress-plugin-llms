@@ -1,3 +1,5 @@
+import type { DefaultTheme } from 'vitepress'
+
 const blah = 'blah blah blah...'
 export const sampleDomain = 'https://example.com'
 
@@ -31,7 +33,7 @@ export const fakeMarkdownDocument = '# Some cool stuff'
 export const fakeCustomLlmsTxtTemplate =
 	'# Custom title\n\n> Custom description\n\n## TOC\n\n{toc}'
 
-export const sampleVitePressSidebar = [
+export const sampleVitePressSidebar: DefaultTheme.Sidebar = [
 	{
 		text: 'Test Section',
 		items: [{ text: 'Getting Started', link: '/test/getting-started' }],
@@ -42,7 +44,7 @@ export const sampleVitePressSidebar = [
 	},
 ]
 
-export const sampleObjectVitePressSidebar = {
+export const sampleObjectVitePressSidebar: DefaultTheme.Sidebar = {
 	'/': [
 		{
 			text: 'Getting Started',

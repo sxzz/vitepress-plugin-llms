@@ -157,11 +157,9 @@ export function generateTOC(
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	domain?: LlmstxtSettings['domain'],
-	vitepressConfig?: VitePressConfig,
+	sidebarConfig?: DefaultTheme.Sidebar,
 ): string {
 	let tableOfContent = ''
-	const sidebarConfig =
-		vitepressConfig?.vitepress?.userConfig?.themeConfig?.sidebar
 
 	// If sidebar configuration exists
 	if (sidebarConfig) {

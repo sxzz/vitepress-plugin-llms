@@ -124,35 +124,20 @@ describe('generateTOC', () => {
 	})
 
 	it('organizes TOC based on sidebar configuration', () => {
-		const mockVitePressConfig = {
-			vitepress: {
-				userConfig: {
-					themeConfig: {
-						sidebar: sampleVitePressSidebar,
-					},
-				},
-			},
-		} as VitePressConfig
-
 		const files = preparedFilesSample.slice(1)
-		const toc = generateTOC(files, srcDir, undefined, mockVitePressConfig)
+		const toc = generateTOC(files, srcDir, undefined, sampleVitePressSidebar)
 
 		expect(toc).toMatchSnapshot()
 	})
 
 	it('handles object-based sidebar configuration correctly', () => {
-		const mockVitePressConfig = {
-			vitepress: {
-				userConfig: {
-					themeConfig: {
-						sidebar: sampleObjectVitePressSidebar,
-					},
-				},
-			},
-		} as VitePressConfig
-
 		const files = preparedFilesSample.slice(1)
-		const toc = generateTOC(files, srcDir, undefined, mockVitePressConfig)
+		const toc = generateTOC(
+			files,
+			srcDir,
+			undefined,
+			sampleObjectVitePressSidebar,
+		)
 
 		expect(toc).toMatchSnapshot()
 	})
