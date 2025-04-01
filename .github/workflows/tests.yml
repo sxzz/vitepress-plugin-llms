@@ -69,7 +69,7 @@ jobs:
         # The main bottleneck is here, `bun install` takes too long on Windows
         # @oven-sh Please fix this 🙏
       - name: 📦 Install dependencies
-        run: bun install --production --frozen-lockfile --prefer-offline
+        run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: 🧪 Run tests
         run: bun run test
