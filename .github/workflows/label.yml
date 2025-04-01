@@ -3,7 +3,7 @@
 
 name: 🔖 Labeler
 
-on: [pull_request_target]
+on: [pull_request_target] # zizmor: ignore[dangerous-triggers]
 
 permissions:
   contents: read
