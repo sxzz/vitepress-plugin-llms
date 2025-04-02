@@ -15,8 +15,10 @@ export const generateTOCLink = (
 	file: PreparedFile,
 	domain: LlmstxtSettings['domain'],
 	relativePath: string,
-) =>
-	`- [${file.title}](${domain || ''}/${stripExtPosix(relativePath)}.md)${file.file.data.description ? `: ${file.file.data.description}` : ''}\n`
+) => {
+	const description: string = file.file.data.description
+	return `- [${file.title}](${domain || ''}/${stripExtPosix(relativePath)}.md)${description ? `: ${description.trim()}` : ''}\n`
+}
 
 /**
  * Recursively collects all paths from sidebar items
