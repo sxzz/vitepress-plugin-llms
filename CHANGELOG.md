@@ -1,6 +1,45 @@
 # Changelog
 
 
+## v1.0.0
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.22...v1.0.0)
+
+### 🚀 Enhancements
+
+- Add option `generateLLMFriendlyDocsForEachPage` which determines whether to generate LLM-friendly version of documentation for each page ([f63d926](https://github.com/okineadev/vitepress-plugin-llms/commit/f63d926))
+- Add `sidebar` option for manual sidebar setting ([308bb78](https://github.com/okineadev/vitepress-plugin-llms/commit/308bb78))
+
+### 🔥 Performance
+
+- **ci:** Speed up bun package loading speed in `tests.yml` ([62281fe](https://github.com/okineadev/vitepress-plugin-llms/commit/62281fe))
+
+### 🩹 Fixes
+
+- **ci:** Fix the path of the script that needs to be loaded in `release.yml` ([0c56c94](https://github.com/okineadev/vitepress-plugin-llms/commit/0c56c94))
+- Fix title parsing ([06a8c2d](https://github.com/okineadev/vitepress-plugin-llms/commit/06a8c2d))
+- **ci:** Add `--ignore-scripts` flag for `bun install` ([b120281](https://github.com/okineadev/vitepress-plugin-llms/commit/b120281))
+- Process `sidebar` according to its original structure ([e59d6f5](https://github.com/okineadev/vitepress-plugin-llms/commit/e59d6f5))
+
+### 💅 Refactors
+
+- **tests:** Refactor tests by the DRY principle ([e401465](https://github.com/okineadev/vitepress-plugin-llms/commit/e401465))
+- **ci:** Refactor actions a bit ([58dbb41](https://github.com/okineadev/vitepress-plugin-llms/commit/58dbb41))
+
+### 🏡 Chore
+
+- Update `bun.lock` ([238766a](https://github.com/okineadev/vitepress-plugin-llms/commit/238766a))
+
+### 🤖 CI
+
+- Add network tweaks for Windows to `tests.yml` ([f2a0dab](https://github.com/okineadev/vitepress-plugin-llms/commit/f2a0dab))
+- More network tweaks for Windows tests ([e23e2f7](https://github.com/okineadev/vitepress-plugin-llms/commit/e23e2f7))
+- Skip CI if commit message have [skip-ci] tag ([e774e79](https://github.com/okineadev/vitepress-plugin-llms/commit/e774e79))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v0.0.22
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.21...v0.0.22)
