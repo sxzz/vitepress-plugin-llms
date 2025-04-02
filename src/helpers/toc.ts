@@ -45,7 +45,7 @@ function collectPathsFromSidebarItems(
 }
 
 /**
- * Processes sidebar items and generates TOC entries
+ * Processes sidebar items and generates TOC entries in the exact order they appear in sidebar config
  *
  * @param section - A sidebar section
  * @param preparedFiles - An array of prepared files
@@ -63,53 +63,54 @@ function processSidebarSection(
 ): string {
 	let sectionTOC = ''
 
-	// Add section header
+	// Add section header only if it has text and is not just a link container
 	if (section.text) {
 		sectionTOC += `${'#'.repeat(depth)} ${section.text}\n\n`
 	}
 
 	// Process items in this section
 	if (section.items && Array.isArray(section.items)) {
-		// Separate items with links and items with nested subsections
-		const linksItems = section.items.filter(
-			(item) => item.link && (!item.items || item.items.length === 0),
-		)
-		const nestedItems = section.items.filter(
-			(item) => item.items && item.items.length > 0,
-		)
+		const linkItems: string[] = []
+		const nestedSections: string[] = []
 
-		// Find files that match direct links in this section (excluding those in subsections)
-		const sectionPaths = collectPathsFromSidebarItems(linksItems)
+		// First pass: separate link items and nested sections
+		for (const item of section.items) {
+			// Process nested sections
+			if (item.items && item.items.length > 0) {
+				nestedSections.push(
+					processSidebarSection(item, preparedFiles, srcDir, domain, depth + 1),
+				)
+			}
+			// Process link items
+			else if (item.link) {
+				const normalizedLink = item.link.endsWith('.md')
+					? item.link
+					: `${item.link}.md`
+				const matchingFile = preparedFiles.find((file) => {
+					const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}.md`
+					return relativePath === normalizedLink
+				})
 
-		const sectionFiles = preparedFiles.filter((file) => {
-			const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
-			return sectionPaths.some(
-				(sectionPath) =>
-					relativePath === sectionPath ||
-					relativePath === `${sectionPath}.md` ||
-					`${relativePath}.md` === sectionPath,
-			)
-		})
-
-		// Add links to files in this section (only those that are direct children)
-		for (const file of sectionFiles) {
-			const relativePath = path.relative(srcDir, file.path)
-			sectionTOC += generateTOCLink(file, domain, relativePath)
+				if (matchingFile) {
+					const relativePath = path.relative(srcDir, matchingFile.path)
+					linkItems.push(generateTOCLink(matchingFile, domain, relativePath))
+				}
+			}
 		}
 
-		if (sectionFiles.length > 0) {
+		// Add link items if any
+		if (linkItems.length > 0) {
+			sectionTOC += linkItems.join('')
+		}
+
+		// Add a blank line before nested sections if we have link items
+		if (linkItems.length > 0 && nestedSections.length > 0) {
 			sectionTOC += '\n'
 		}
 
-		// Process subsections recursively (for nested sidebar structures)
-		for (const item of nestedItems) {
-			sectionTOC += processSidebarSection(
-				item,
-				preparedFiles,
-				srcDir,
-				domain,
-				depth + 1,
-			)
+		// Add nested sections with appropriate spacing
+		if (nestedSections.length > 0) {
+			sectionTOC += nestedSections.join('\n')
 		}
 	}
 
@@ -175,6 +176,9 @@ export function generateTOC(
 					srcDir,
 					domain,
 				)
+
+				// tableOfContent = `${tableOfContent.trimEnd()}\n\n`
+				tableOfContent += '\n'
 			}
 
 			// Find files that didn't match any section
@@ -199,13 +203,13 @@ export function generateTOC(
 					tableOfContent += generateTOCLink(file, domain, relativePath)
 				}
 			}
-		} else {
-			// If there's an empty sidebar configuration, just add all files
+		}
+		// If there's an empty sidebar configuration, just add all files
+		else
 			for (const file of preparedFiles) {
 				const relativePath = path.relative(srcDir, file.path)
 				tableOfContent += generateTOCLink(file, domain, relativePath)
 			}
-		}
 	} else {
 		// If there's no sidebar configuration, just add all files
 		for (const file of preparedFiles) {
