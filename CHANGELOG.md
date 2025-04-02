@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.0.1
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.0...v1.0.1)
+
+### 🩹 Fixes
+
+- **ci:** Fix `check-previous-workflow` step in `release.yml` ([546aee1](https://github.com/okineadev/vitepress-plugin-llms/commit/546aee1))
+- Trim title description in links ([16ead9a](https://github.com/okineadev/vitepress-plugin-llms/commit/16ead9a))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.0.0
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v0.0.22...v1.0.0)
