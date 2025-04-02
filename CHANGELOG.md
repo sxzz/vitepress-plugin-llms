@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.0.2
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.1...v1.0.2)
+
+### 🩹 Fixes
+
+- Correctly match sidebar paths and file paths ([551610c](https://github.com/okineadev/vitepress-plugin-llms/commit/551610c))
+- Fix `check-previous-workflow` step in `release.yml` ([1d39493](https://github.com/okineadev/vitepress-plugin-llms/commit/1d39493))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.0.1
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.0...v1.0.1)
