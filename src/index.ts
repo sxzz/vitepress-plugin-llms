@@ -180,7 +180,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				const targetPath = path.resolve(outDir, relativePath)
 
 				const mdFile = matter(fs.readFileSync(file, 'utf-8'))
-				const title = extractTitle(mdFile).trim() || 'Untitled'
+				const title = extractTitle(mdFile)?.trim() || 'Untitled'
 
 				preparedFiles.push({ path: file, title, file: mdFile })
 

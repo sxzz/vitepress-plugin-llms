@@ -47,6 +47,39 @@ function collectPathsFromSidebarItems(
 }
 
 /**
+ * Normalizes link path for comparison, handling both index.md and directory paths
+ *
+ * @param link - The link path to normalize
+ * @returns Normalized link path for consistent comparison
+ */
+function normalizeLinkPath(link: string): string {
+	const normalizedPath = stripExtPosix(link)
+
+	if (path.basename(normalizedPath) === 'index') {
+		return path.dirname(normalizedPath)
+	}
+
+	return normalizedPath
+}
+
+/**
+ * Checks if a file path matches a sidebar path, handling various path formats
+ *
+ * @param filePath - The file path to check
+ * @param sidebarPath - The sidebar path to compare against
+ * @returns True if paths match, false otherwise
+ */
+function isPathMatch(filePath: string, sidebarPath: string): boolean {
+	const normalizedFilePath = normalizeLinkPath(filePath)
+	const normalizedSidebarPath = normalizeLinkPath(sidebarPath)
+
+	return (
+		normalizedFilePath === normalizedSidebarPath ||
+		normalizedFilePath === `${normalizedSidebarPath}.md`
+	)
+}
+
+/**
  * Processes sidebar items and generates TOC entries in the exact order they appear in sidebar config
  *
  * @param section - A sidebar section
@@ -85,12 +118,12 @@ function processSidebarSection(
 			}
 			// Process link items
 			else if (item.link) {
-				const normalizedLink = item.link.endsWith('.md')
-					? item.link
-					: `${item.link}.md`
+				// Normalize the link for matching
+				const normalizedItemLink = normalizeLinkPath(item.link)
+
 				const matchingFile = preparedFiles.find((file) => {
-					const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}.md`
-					return relativePath === normalizedLink
+					const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
+					return isPathMatch(relativePath, normalizedItemLink)
 				})
 
 				if (matchingFile) {
@@ -189,11 +222,8 @@ export function generateTOC(
 			)
 			const unsortedFiles = preparedFiles.filter((file) => {
 				const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
-				return !allSidebarPaths.some(
-					(sidebarPath) =>
-						relativePath === sidebarPath ||
-						relativePath === `${sidebarPath}.md` ||
-						`${relativePath}.md` === sidebarPath,
+				return !allSidebarPaths.some((sidebarPath) =>
+					isPathMatch(relativePath, sidebarPath),
 				)
 			})
 
