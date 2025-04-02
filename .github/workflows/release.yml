@@ -31,7 +31,7 @@ jobs:
         with:
           script: |
             const { default: checkIfTestsPassed } = await import('${{ github.workspace }}/.github/workflows/scripts/check-if-tests-passed.mjs')
-            await checkIfTestsPassed()
+            await checkIfTestsPassed({ context, github, core })
 
   test:
     needs: check-previous-workflow
