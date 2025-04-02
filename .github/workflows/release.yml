@@ -12,6 +12,8 @@ jobs:
     name: 🔍 Check if tests have already been passed
     runs-on: ubuntu-latest
     permissions: {}
+    outputs:
+      should-run-tests: ${{ steps.check-previous-workflow.outputs.should-run-tests }}
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
