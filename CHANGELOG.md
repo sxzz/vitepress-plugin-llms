@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v1.0.3
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.2...v1.0.3)
+
+### 🩹 Fixes
+
+- Fix lockfile ([5da3ed2](https://github.com/okineadev/vitepress-plugin-llms/commit/5da3ed2))
+
+### 💅 Refactors
+
+- 📰 improve logging and display approximate token size and size of `llms.txt` and `llms-full.txt` files ([5e639b5](https://github.com/okineadev/vitepress-plugin-llms/commit/5e639b5))
+
+### 🤖 CI
+
+- Omit optional bun dependencies in `tests.yml` ([686293e](https://github.com/okineadev/vitepress-plugin-llms/commit/686293e))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.0.2
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.1...v1.0.2)
