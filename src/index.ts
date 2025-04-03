@@ -10,10 +10,18 @@ import pc from 'picocolors'
 
 import { name as packageName } from '../package.json'
 
+import { millify } from 'millify'
+import { approximateTokenSize } from 'tokenx'
 import { defaultLLMsTxtTemplate } from './constants'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
-import { extractTitle, generateMetadata, stripExt } from './helpers/utils'
+import {
+	expandTemplate,
+	extractTitle,
+	generateMetadata,
+	getHumanReadableSizeOf,
+	stripExt,
+} from './helpers/utils'
 import type {
 	CustomTemplateVariables,
 	LlmstxtSettings,
@@ -57,7 +65,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 		/** Resolves the Vite configuration and sets up the working directory. */
 		configResolved(resolvedConfig) {
-			config = resolvedConfig as unknown as VitePressConfig
+			config = resolvedConfig as VitePressConfig
 			if (settings.workDir) {
 				settings.workDir = path.resolve(
 					config.vitepress.srcDir,
@@ -69,14 +77,14 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			// Detect if this is the SSR build
 			isSsrBuild = !!resolvedConfig.build?.ssr
 			log.info(
-				`Plugin initialized ${isSsrBuild ? pc.dim('(SSR build)') : pc.dim('(client build)')}`,
+				`${pc.bold(PLUGIN_NAME)} initialized ${isSsrBuild ? pc.dim('(SSR build)') : pc.dim('(client build)')} with workDir: ${pc.cyan(settings.workDir as string)}`,
 			)
 		},
 
 		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
 		// @ts-ignore
 		configureServer(server: ViteDevServer) {
-			log.info('Development server configured to serve markdown files')
+			log.info('Dev server configured for serving plain text docs for LLMs')
 			server.middlewares.use((req, res, next) => {
 				if (req.url?.endsWith('.md') || req.url?.endsWith('.txt')) {
 					try {
@@ -91,6 +99,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 						return
 					} catch (e) {
 						// If file doesn't exist or can't be read, continue to next middleware
+						log.warn(`Failed to return ${pc.cyan(req.url)}: File not found`)
 						next()
 					}
 				}
@@ -149,7 +158,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		generateBundle() {
 			// Skip processing during SSR build
 			if (isSsrBuild) {
-				log.info('Skipping file generation in SSR build')
+				log.info('Skipping LLMs docs generation in SSR build')
 				return
 			}
 
@@ -166,11 +175,15 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 			// Skip if no files found
 			if (fileCount === 0) {
-				log.warn('No markdown files found to process')
+				log.warn(
+					`No markdown files found to process. Check your \`${pc.bold('workDir')}\` and \`${pc.bold('ignoreFiles')}\` settings.`,
+				)
 				return
 			}
 
-			log.info(`Processing ${pc.bold(fileCount.toString())} markdown files...`)
+			log.info(
+				`Processing ${pc.bold(fileCount.toString())} markdown files from ${pc.cyan(settings.workDir)}`,
+			)
 
 			const preparedFiles: PreparedFile[] = []
 
@@ -197,11 +210,11 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 								generateMetadata(mdFile, settings.domain, relativePath),
 							),
 						)
-						log.success(`Copied ${pc.cyan(relativePath)} to output directory`)
+						log.success(`Processed ${pc.cyan(relativePath)}`)
 					} catch (error) {
 						log.error(
 							// @ts-ignore
-							`Failed to copy ${pc.cyan(relativePath)}: ${error.message}`,
+							`Failed to process ${pc.cyan(relativePath)}: ${error.message}`,
 						)
 					}
 				}
@@ -221,6 +234,8 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					...settings.customTemplateVariables,
 				}
 
+				log.info(`Generating ${pc.cyan('llms.txt')}...`)
+
 				const llmsTxt = generateLLMsTxt(
 					preparedFiles,
 					path.resolve(settings.workDir as string, 'index.md'),
@@ -234,7 +249,15 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')
 				log.success(
-					`Generated ${pc.cyan('llms.txt')} with ${pc.bold(fileCount.toString())} documentation sections`,
+					expandTemplate(
+						'Generated {file} (~{tokens} tokens, {size}) with {fileCount} documentation links',
+						{
+							file: pc.cyan('llms.txt'),
+							tokens: pc.bold(millify(approximateTokenSize(llmsTxt))),
+							size: pc.bold(getHumanReadableSizeOf(llmsTxt)),
+							fileCount: pc.bold(fileCount.toString()),
+						},
+					),
 				)
 			}
 
@@ -242,7 +265,9 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			if (settings.generateLLMsFullTxt) {
 				const llmsFullTxtPath = path.resolve(outDir, 'llms-full.txt')
 
-				log.info(`Generating ${pc.cyan('llms-full.txt')}...`)
+				log.info(
+					`Generating full documentation bundle (${pc.cyan('llms-full.txt')})...`,
+				)
 
 				const llmsFullTxt = generateLLMsFullTxt(
 					preparedFiles,
@@ -253,7 +278,15 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				// Write content to llms-full.txt
 				fs.writeFileSync(llmsFullTxtPath, llmsFullTxt, 'utf-8')
 				log.success(
-					`Generated ${pc.cyan('llms-full.txt')} with ${pc.bold(fileCount.toString())} markdown files`,
+					expandTemplate(
+						'Generated {file} (~{tokens} tokens, {size}) with {fileCount} markdown files',
+						{
+							file: pc.cyan('llms-full.txt'),
+							tokens: pc.bold(millify(approximateTokenSize(llmsFullTxt))),
+							size: pc.bold(getHumanReadableSizeOf(llmsFullTxt)),
+							fileCount: pc.bold(fileCount.toString()),
+						},
+					),
 				)
 			}
 		},

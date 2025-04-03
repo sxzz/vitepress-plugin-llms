@@ -31,15 +31,18 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
+		"byte-size": "^9.0.1",
 		"gray-matter": "^4.0.3",
 		"markdown-title": "^1.0.2",
+		"millify": "^6.1.0",
 		"minimatch": "^10.0.1",
 		"picocolors": "^1.1.1",
-		"string-strip-html": "^13.4.12"
+		"string-strip-html": "^13.4.12",
+		"tokenx": "^0.4.1"
 	},
 	"devDependencies": {
-		"@actions/github-script": "github:actions/github-script",
 		"@biomejs/biome": "1.9.4",
+		"@types/byte-size": "^8.1.2",
 		"@types/node": "^22.13.10",
 		"bun-types": "^1.2.5",
 		"husky": "^9.1.7",
@@ -52,5 +55,8 @@
 	"lint-staged": {
 		"{src,tests}/**/*.ts": "bun run test",
 		"*": "bun run format --no-errors-on-unmatched"
+	},
+	"optionalDependencies": {
+		"@actions/github-script": "github:actions/github-script"
 	}
 }
