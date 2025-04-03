@@ -1,8 +1,5 @@
 [run]
 bun = true
 
-[install]
-optional = false
-
 # [test]
 # coverage = true
