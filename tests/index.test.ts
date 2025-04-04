@@ -122,10 +122,12 @@ describe('llmstxt plugin', () => {
 			// @ts-ignore
 			plugin.transform(0, 'docs/test/test.md')
 			// @ts-ignore
+			plugin.transform(0, 'docs/guide/index.md')
+			// @ts-ignore
 			plugin.generateBundle()
 
 			// Verify that files were written
-			expect(writeFileSync).toHaveBeenCalledTimes(2)
+			expect(writeFileSync).toHaveBeenCalledTimes(3)
 			expect(writeFileSync).nthCalledWith(
 				1,
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
@@ -135,6 +137,11 @@ describe('llmstxt plugin', () => {
 				2,
 				path.resolve(mockConfig.vitepress.outDir, 'test', 'test.md'),
 				'---\nurl: /test/test.md\n---\n# Some cool stuff\n',
+			)
+			expect(writeFileSync).nthCalledWith(
+				3,
+				path.resolve(mockConfig.vitepress.outDir, 'guide.md'),
+				'---\nurl: /guide.md\n---\n# Some cool stuff\n',
 			)
 		})
 

@@ -42,11 +42,12 @@ const PLUGIN_NAME = packageName
  */
 export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 	// Create a settings object with defaults explicitly merged
-	const settings: LlmstxtSettings = {
+	const settings: Omit<LlmstxtSettings, 'workDir'> & { workDir: string } = {
 		generateLLMsTxt: true,
 		generateLLMsFullTxt: true,
 		generateLLMFriendlyDocsForEachPage: true,
 		ignoreFiles: [],
+		workDir: undefined as unknown as string,
 		...userSettings,
 	}
 
@@ -61,7 +62,6 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 	return {
 		name: PLUGIN_NAME,
-		enforce: 'post', // Run after other plugins
 
 		/** Resolves the Vite configuration and sets up the working directory. */
 		configResolved(resolvedConfig) {
@@ -189,19 +189,28 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 			// Copy all markdown files to output directory
 			for (const file of mdFilesList) {
-				const relativePath = path.relative(settings.workDir as string, file)
-				const targetPath = path.resolve(outDir, relativePath)
-
 				const mdFile = matter(fs.readFileSync(file, 'utf-8'))
 				const title = extractTitle(mdFile)?.trim() || 'Untitled'
 
-				preparedFiles.push({ path: file, title, file: mdFile })
+				const filePath =
+					path.basename(file) === 'index.md' &&
+					path.dirname(file) !== settings.workDir
+						? `${path.dirname(file)}.md`
+						: file
 
-				if (settings.generateLLMFriendlyDocsForEachPage) {
-					// Ensure target directory exists
-					fs.mkdirSync(path.dirname(targetPath), { recursive: true })
+				preparedFiles.push({ path: filePath, title, file: mdFile })
+			}
 
+			if (settings.generateLLMFriendlyDocsForEachPage) {
+				for (const file of preparedFiles) {
 					try {
+						const mdFile = file.file
+						const relativePath = path.relative(settings.workDir, file.path)
+						const targetPath = path.resolve(outDir, relativePath)
+
+						// Ensure target directory exists
+						fs.mkdirSync(path.dirname(targetPath), { recursive: true })
+
 						// Copy file to output directory
 						fs.writeFileSync(
 							targetPath,
