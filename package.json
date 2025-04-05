@@ -21,7 +21,15 @@
 		"email": "hi@okinea.dev",
 		"url": "https://github.com/okineadev"
 	},
-	"keywords": ["vitepress", "plugin", "llms", "documentation", "ai"],
+	"keywords": [
+		"vitepress",
+		"plugin",
+		"vite-plugin",
+		"vitepress-plugin",
+		"llms",
+		"documentation",
+		"ai"
+	],
 	"scripts": {
 		"lint": "biome check --fix",
 		"format": "biome format --write",
