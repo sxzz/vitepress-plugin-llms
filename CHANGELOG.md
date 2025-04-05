@@ -1,6 +1,31 @@
 # Changelog
 
 
+## v1.0.4
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.3...v1.0.4)
+
+### 🔥 Performance
+
+- ⚡speed up file processing with asynchronous processing ([20b7298](https://github.com/okineadev/vitepress-plugin-llms/commit/20b7298))
+
+### 🩹 Fixes
+
+- Do not output files to `/guide/index.md`, instead output to `/guide.md` ([40c7e7a](https://github.com/okineadev/vitepress-plugin-llms/commit/40c7e7a))
+
+### 🏡 Chore
+
+- Add additional keywords to `package.json` ([6c98059](https://github.com/okineadev/vitepress-plugin-llms/commit/6c98059))
+
+### 🤖 CI
+
+- Create `codeql.yml` ([9357ddb](https://github.com/okineadev/vitepress-plugin-llms/commit/9357ddb))
+- Fix `pr-title.yml` and `pr-closed.yml` triggers ([46617e6](https://github.com/okineadev/vitepress-plugin-llms/commit/46617e6))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.0.3
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.2...v1.0.3)
