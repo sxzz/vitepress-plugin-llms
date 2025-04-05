@@ -21,10 +21,10 @@ export const generateTOCLink = (
 }
 
 /**
- * Recursively collects all paths from sidebar items
+ * Recursively collects all paths from sidebar items.
  *
- * @param items - Array of sidebar items to process
- * @returns Array of paths collected from the sidebar items
+ * @param items - Array of sidebar items to process.
+ * @returns Array of paths collected from the sidebar items.
  */
 function collectPathsFromSidebarItems(
 	items: DefaultTheme.SidebarItem[],
@@ -47,10 +47,10 @@ function collectPathsFromSidebarItems(
 }
 
 /**
- * Normalizes link path for comparison, handling both index.md and directory paths
+ * Normalizes link path for comparison, handling both index.md and directory paths.
  *
- * @param link - The link path to normalize
- * @returns Normalized link path for consistent comparison
+ * @param link - The link path to normalize.
+ * @returns Normalized link path for consistent comparison.
  */
 function normalizeLinkPath(link: string): string {
 	const normalizedPath = stripExtPosix(link)
@@ -63,10 +63,10 @@ function normalizeLinkPath(link: string): string {
 }
 
 /**
- * Checks if a file path matches a sidebar path, handling various path formats
+ * Checks if a file path matches a sidebar path, handling various path formats.
  *
- * @param filePath - The file path to check
- * @param sidebarPath - The sidebar path to compare against
+ * @param filePath - The file path to check.
+ * @param sidebarPath - The sidebar path to compare against.
  * @returns True if paths match, false otherwise
  */
 function isPathMatch(filePath: string, sidebarPath: string): boolean {
@@ -89,13 +89,13 @@ function isPathMatch(filePath: string, sidebarPath: string): boolean {
  * @param depth - Current depth level for headings
  * @returns A string representing the formatted section of the TOC
  */
-function processSidebarSection(
+async function processSidebarSection(
 	section: DefaultTheme.SidebarItem,
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	domain?: LlmstxtSettings['domain'],
 	depth = 3,
-): string {
+): Promise<string> {
 	let sectionTOC = ''
 
 	// Add section header only if it has text and is not just a link container
@@ -109,29 +109,36 @@ function processSidebarSection(
 		const nestedSections: string[] = []
 
 		// First pass: separate link items and nested sections
-		for (const item of section.items) {
-			// Process nested sections
-			if (item.items && item.items.length > 0) {
-				nestedSections.push(
-					processSidebarSection(item, preparedFiles, srcDir, domain, depth + 1),
-				)
-			}
-			// Process link items
-			else if (item.link) {
-				// Normalize the link for matching
-				const normalizedItemLink = normalizeLinkPath(item.link)
-
-				const matchingFile = preparedFiles.find((file) => {
-					const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
-					return isPathMatch(relativePath, normalizedItemLink)
-				})
-
-				if (matchingFile) {
-					const relativePath = path.relative(srcDir, matchingFile.path)
-					linkItems.push(generateTOCLink(matchingFile, domain, relativePath))
+		await Promise.all(
+			section.items.map(async (item) => {
+				// Process nested sections
+				if (item.items && item.items.length > 0) {
+					const processedSection = await processSidebarSection(
+						item,
+						preparedFiles,
+						srcDir,
+						domain,
+						depth + 1,
+					)
+					nestedSections.push(processedSection)
 				}
-			}
-		}
+				// Process link items
+				else if (item.link) {
+					// Normalize the link for matching
+					const normalizedItemLink = normalizeLinkPath(item.link)
+
+					const matchingFile = preparedFiles.find((file) => {
+						const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
+						return isPathMatch(relativePath, normalizedItemLink)
+					})
+
+					if (matchingFile) {
+						const relativePath = path.relative(srcDir, matchingFile.path)
+						linkItems.push(generateTOCLink(matchingFile, domain, relativePath))
+					}
+				}
+			}),
+		)
 
 		// Add link items if any
 		if (linkItems.length > 0) {
@@ -153,10 +160,10 @@ function processSidebarSection(
 }
 
 /**
- * Flattens the sidebar configuration when it's an object with path keys
+ * Flattens the sidebar configuration when it's an object with path keys.
  *
- * @param sidebarConfig - The sidebar configuration from VitePress
- * @returns An array of sidebar items
+ * @param sidebarConfig - The sidebar configuration from VitePress.
+ * @returns An array of sidebar items.
  */
 function flattenSidebarConfig(
 	sidebarConfig: DefaultTheme.Sidebar,
@@ -186,15 +193,15 @@ function flattenSidebarConfig(
  * @param preparedFiles - An array of prepared files.
  * @param srcDir - The VitePress source directory.
  * @param domain - Optional domain to prefix URLs with.
- * @param vitepressConfig - Optional VitePress configuration.
+ * @param sidebarConfig - Optional VitePress configuration.
  * @returns A string representing the formatted Table of Contents.
  */
-export function generateTOC(
+export async function generateTOC(
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	domain?: LlmstxtSettings['domain'],
 	sidebarConfig?: DefaultTheme.Sidebar,
-): string {
+): Promise<string> {
 	let tableOfContent = ''
 
 	let filesToProcess = preparedFiles
@@ -207,7 +214,7 @@ export function generateTOC(
 		// Process each top-level section in the flattened sidebar
 		if (flattenedSidebarConfig.length > 0) {
 			for (const section of flattenedSidebarConfig) {
-				tableOfContent += processSidebarSection(
+				tableOfContent += await processSidebarSection(
 					section,
 					filesToProcess,
 					srcDir,
@@ -237,10 +244,16 @@ export function generateTOC(
 		}
 	}
 
-	for (const file of filesToProcess) {
-		const relativePath = path.relative(srcDir, file.path)
-		tableOfContent += generateTOCLink(file, domain, relativePath)
-	}
+	const tocEntries: string[] = []
+
+	await Promise.all(
+		filesToProcess.map(async (file) => {
+			const relativePath = path.relative(srcDir, file.path)
+			tocEntries.push(generateTOCLink(file, domain, relativePath))
+		}),
+	)
+
+	tableOfContent += tocEntries.join('')
 
 	return tableOfContent
 }

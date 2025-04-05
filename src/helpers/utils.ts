@@ -42,10 +42,10 @@ export const stripExtPosix = (filepath: string) => {
 }
 
 /**
- * Extracts the title from a markdown file.
+ * Extracts the title from a markdown file's frontmatter or first heading.
  *
- * @param content - The content of the markdown file.
- * @returns The title of the markdown file, or a default title if none is found.
+ * @param file - The markdown file to extract the title from.
+ * @returns The extracted title, or `undefined` if no title is found.
  */
 export function extractTitle(file: GrayMatterFile<Input>): string {
 	const titleFromFrontmatter = file.data?.title || file.data?.titleTemplate
@@ -120,11 +120,11 @@ export function replaceTemplateVariable(
  * console.log(result); // 'Hello Alice, welcome to Wonderland!'
  * ```
  */
-export function expandTemplate(
+export const expandTemplate = (
 	template: string,
-	values: { [key: string]: string | undefined },
-): string {
-	return Object.entries(values).reduce(
+	variables: Record<string, string | undefined>,
+) => {
+	return Object.entries(variables).reduce(
 		(result, [key, value]) => replaceTemplateVariable(result, key, value),
 		template,
 	)

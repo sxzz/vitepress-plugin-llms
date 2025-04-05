@@ -9,18 +9,21 @@ interface TemplateVariables {
 	 * @example 'Awesome tool'
 	 */
 	title?: string
+
 	/**
 	 * The description.
 	 *
 	 * @example 'Blazing fast build tool'
 	 */
 	description?: string
+
 	/**
 	 * The details.
 	 *
 	 * @example 'A multi-user version of the notebook designed for companies, classrooms and research labs'
 	 */
 	details?: string
+
 	/**
 	 * An automatically generated **T**able **O**f **C**ontents.
 	 *
@@ -218,6 +221,7 @@ export type PreparedFile = {
 	 *   content: 'Content goes here'
 	 *   orig: '---\ntitle: Guide\n---\n\nContent goes here'
 	 * }
+	 * ```
 	 */
 	file: GrayMatterFile<Input>
 }

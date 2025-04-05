@@ -1,7 +1,7 @@
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
 
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import matter from 'gray-matter'
@@ -82,10 +82,9 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
-		// @ts-ignore
-		configureServer(server: ViteDevServer) {
+		async configureServer(server: ViteDevServer) {
 			log.info('Dev server configured for serving plain text docs for LLMs')
-			server.middlewares.use((req, res, next) => {
+			server.middlewares.use(async (req, res, next) => {
 				if (req.url?.endsWith('.md') || req.url?.endsWith('.txt')) {
 					try {
 						// Try to read and serve the markdown file
@@ -93,7 +92,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 							config.vitepress?.outDir ?? 'dist',
 							`${stripExt(req.url)}.md`,
 						)
-						const content = fs.readFileSync(filePath, 'utf-8')
+						const content = await fs.readFile(filePath, 'utf-8')
 						res.setHeader('Content-Type', 'text/plain; charset=utf-8')
 						res.end(content)
 						return
@@ -120,11 +119,12 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 		/**
 		 * Processes each file that Vite transforms and collects markdown files.
+		 *
 		 * @param _ - The file content (not used).
 		 * @param id - The file identifier (path).
 		 * @returns null if the file is processed, otherwise returns the original content.
 		 */
-		transform(_, id: string) {
+		async transform(_, id: string) {
 			if (!id.endsWith('.md')) {
 				return null
 			}
@@ -135,13 +135,22 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			}
 
 			if (settings.ignoreFiles?.length) {
-				for (const pattern of settings.ignoreFiles) {
-					if (
-						typeof pattern === 'string' &&
-						minimatch(path.relative(settings.workDir as string, id), pattern)
-					) {
-						return null
-					}
+				const shouldIgnore = await Promise.all(
+					settings.ignoreFiles.map(async (pattern) => {
+						if (typeof pattern === 'string') {
+							return await Promise.resolve(
+								minimatch(
+									path.relative(settings.workDir as string, id),
+									pattern,
+								),
+							)
+						}
+						return false
+					}),
+				)
+
+				if (shouldIgnore.some((result) => result === true)) {
+					return null
 				}
 			}
 
@@ -155,7 +164,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		 * Runs only in the client build (not SSR) after completion.
 		 * This ensures the processing happens exactly once.
 		 */
-		generateBundle() {
+		async generateBundle() {
 			// Skip processing during SSR build
 			if (isSsrBuild) {
 				log.info('Skipping LLMs docs generation in SSR build')
@@ -165,9 +174,11 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			const outDir = config.vitepress?.outDir ?? 'dist'
 
 			// Create output directory if it doesn't exist
-			if (!fs.existsSync(outDir)) {
+			try {
+				await fs.access(outDir)
+			} catch {
 				log.info(`Creating output directory: ${pc.cyan(outDir)}`)
-				fs.mkdirSync(outDir, { recursive: true })
+				await fs.mkdir(outDir, { recursive: true })
 			}
 
 			const mdFilesList = Array.from(mdFiles)
@@ -185,52 +196,58 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				`Processing ${pc.bold(fileCount.toString())} markdown files from ${pc.cyan(settings.workDir)}`,
 			)
 
-			const preparedFiles: PreparedFile[] = []
+			const preparedFiles: PreparedFile[] = await Promise.all(
+				mdFilesList.map(async (file) => {
+					const mdFile = matter(await fs.readFile(file, 'utf-8'))
+					const title = extractTitle(mdFile)?.trim() || 'Untitled'
 
-			// Copy all markdown files to output directory
-			for (const file of mdFilesList) {
-				const mdFile = matter(fs.readFileSync(file, 'utf-8'))
-				const title = extractTitle(mdFile)?.trim() || 'Untitled'
+					const filePath =
+						path.basename(file) === 'index.md' &&
+						path.dirname(file) !== settings.workDir
+							? `${path.dirname(file)}.md`
+							: file
 
-				const filePath =
-					path.basename(file) === 'index.md' &&
-					path.dirname(file) !== settings.workDir
-						? `${path.dirname(file)}.md`
-						: file
-
-				preparedFiles.push({ path: filePath, title, file: mdFile })
-			}
+					return { path: filePath, title, file: mdFile }
+				}),
+			)
 
 			if (settings.generateLLMFriendlyDocsForEachPage) {
-				for (const file of preparedFiles) {
-					try {
-						const mdFile = file.file
+				await Promise.all(
+					preparedFiles.map(async (file) => {
 						const relativePath = path.relative(settings.workDir, file.path)
-						const targetPath = path.resolve(outDir, relativePath)
+						try {
+							const mdFile = file.file
+							const targetPath = path.resolve(outDir, relativePath)
 
-						// Ensure target directory exists
-						fs.mkdirSync(path.dirname(targetPath), { recursive: true })
+							// Ensure target directory exists (async version)
+							await fs.mkdir(path.dirname(targetPath), {
+								recursive: true,
+							})
 
-						// Copy file to output directory
-						fs.writeFileSync(
-							targetPath,
-							matter.stringify(
-								mdFile.content,
-								generateMetadata(mdFile, settings.domain, relativePath),
-							),
-						)
-						log.success(`Processed ${pc.cyan(relativePath)}`)
-					} catch (error) {
-						log.error(
-							// @ts-ignore
-							`Failed to process ${pc.cyan(relativePath)}: ${error.message}`,
-						)
-					}
-				}
+							// Copy file to output directory (async version)
+							await fs.writeFile(
+								targetPath,
+								matter.stringify(
+									mdFile.content,
+									generateMetadata(mdFile, settings.domain, relativePath),
+								),
+							)
+
+							log.success(`Processed ${pc.cyan(relativePath)}`)
+						} catch (error) {
+							log.error(
+								// @ts-ignore
+								`Failed to process ${pc.cyan(relativePath)}: ${error.message}`,
+							)
+						}
+					}),
+				)
 			}
 
 			// Sort files by title for better organization
 			preparedFiles.sort((a, b) => a.title.localeCompare(b.title))
+
+			const tasks: Promise<void>[] = []
 
 			// Generate llms.txt - table of contents with links
 			if (settings.generateLLMsTxt) {
@@ -243,30 +260,35 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					...settings.customTemplateVariables,
 				}
 
-				log.info(`Generating ${pc.cyan('llms.txt')}...`)
+				tasks.push(
+					(async () => {
+						log.info(`Generating ${pc.cyan('llms.txt')}...`)
 
-				const llmsTxt = generateLLMsTxt(
-					preparedFiles,
-					path.resolve(settings.workDir as string, 'index.md'),
-					settings.workDir as string,
-					settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
-					templateVariables,
-					config?.vitepress?.userConfig,
-					settings.domain,
-					settings.sidebar,
-				)
+						const llmsTxt = await generateLLMsTxt(
+							preparedFiles,
+							path.resolve(settings.workDir as string, 'index.md'),
+							settings.workDir as string,
+							settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
+							templateVariables,
+							config?.vitepress?.userConfig,
+							settings.domain,
+							settings.sidebar,
+						)
 
-				fs.writeFileSync(llmsTxtPath, llmsTxt, 'utf-8')
-				log.success(
-					expandTemplate(
-						'Generated {file} (~{tokens} tokens, {size}) with {fileCount} documentation links',
-						{
-							file: pc.cyan('llms.txt'),
-							tokens: pc.bold(millify(approximateTokenSize(llmsTxt))),
-							size: pc.bold(getHumanReadableSizeOf(llmsTxt)),
-							fileCount: pc.bold(fileCount.toString()),
-						},
-					),
+						await fs.writeFile(llmsTxtPath, llmsTxt, 'utf-8')
+
+						log.success(
+							expandTemplate(
+								'Generated {file} (~{tokens} tokens, {size}) with {fileCount} documentation links',
+								{
+									file: pc.cyan('llms.txt'),
+									tokens: pc.bold(millify(approximateTokenSize(llmsTxt))),
+									size: pc.bold(getHumanReadableSizeOf(llmsTxt)),
+									fileCount: pc.bold(fileCount.toString()),
+								},
+							),
+						)
+					})(),
 				)
 			}
 
@@ -274,29 +296,37 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			if (settings.generateLLMsFullTxt) {
 				const llmsFullTxtPath = path.resolve(outDir, 'llms-full.txt')
 
-				log.info(
-					`Generating full documentation bundle (${pc.cyan('llms-full.txt')})...`,
-				)
+				tasks.push(
+					(async () => {
+						log.info(
+							`Generating full documentation bundle (${pc.cyan('llms-full.txt')})...`,
+						)
 
-				const llmsFullTxt = generateLLMsFullTxt(
-					preparedFiles,
-					settings.workDir as string,
-					settings.domain,
-				)
+						const llmsFullTxt = generateLLMsFullTxt(
+							preparedFiles,
+							settings.workDir as string,
+							settings.domain,
+						)
 
-				// Write content to llms-full.txt
-				fs.writeFileSync(llmsFullTxtPath, llmsFullTxt, 'utf-8')
-				log.success(
-					expandTemplate(
-						'Generated {file} (~{tokens} tokens, {size}) with {fileCount} markdown files',
-						{
-							file: pc.cyan('llms-full.txt'),
-							tokens: pc.bold(millify(approximateTokenSize(llmsFullTxt))),
-							size: pc.bold(getHumanReadableSizeOf(llmsFullTxt)),
-							fileCount: pc.bold(fileCount.toString()),
-						},
-					),
+						// Write content to llms-full.txt
+						await fs.writeFile(llmsFullTxtPath, llmsFullTxt, 'utf-8')
+						log.success(
+							expandTemplate(
+								'Generated {file} (~{tokens} tokens, {size}) with {fileCount} markdown files',
+								{
+									file: pc.cyan('llms-full.txt'),
+									tokens: pc.bold(millify(approximateTokenSize(llmsFullTxt))),
+									size: pc.bold(getHumanReadableSizeOf(llmsFullTxt)),
+									fileCount: pc.bold(fileCount.toString()),
+								},
+							),
+						)
+					})(),
 				)
+			}
+
+			if (tasks.length) {
+				await Promise.all(tasks)
 			}
 		},
 	}

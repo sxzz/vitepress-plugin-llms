@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import matter from 'gray-matter'
@@ -17,6 +17,8 @@ import { expandTemplate, extractTitle, generateMetadata } from './utils'
  * @param vitepressConfig - The VitePress configuration.
  * @param LLMsTxtTemplate - Template to use for generating `llms.txt`.
  * @param templateVariables - Template variables for `customLLMsTxtTemplate`.
+ * @param domain - The base domain for the generated links.
+ * @param sidebar - Optional sidebar configuration for organizing the TOC.
  * @returns A string representing the content of the `llms.txt` file.
  *
  * @example
@@ -34,7 +36,7 @@ import { expandTemplate, extractTitle, generateMetadata } from './utils'
  *
  * @see https://llmstxt.org/#format
  */
-export function generateLLMsTxt(
+export async function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
 	indexMd: string,
 	srcDir: VitePressConfig['vitepress']['srcDir'],
@@ -43,10 +45,11 @@ export function generateLLMsTxt(
 	vitepressConfig?: VitePressConfig['vitepress']['userConfig'],
 	domain?: LlmstxtSettings['domain'],
 	sidebar?: DefaultTheme.Sidebar,
-): string {
+): Promise<string> {
 	// @ts-expect-error
 	matter.clearCache()
-	const indexMdFile = matter(fs.readFileSync(indexMd, 'utf-8') as string)
+	const indexMdContent = await fs.readFile(indexMd, 'utf-8')
+	const indexMdFile = matter(indexMdContent as string)
 
 	templateVariables.title ??=
 		indexMdFile.data?.hero?.name ||
@@ -68,7 +71,7 @@ export function generateLLMsTxt(
 		(!templateVariables.description &&
 			'This file contains links to all documentation sections.')
 
-	templateVariables.toc ??= generateTOC(
+	templateVariables.toc ??= await generateTOC(
 		preparedFiles,
 		srcDir,
 		domain,
@@ -83,6 +86,7 @@ export function generateLLMsTxt(
  *
  * @param preparedFiles - An array of prepared files.
  * @param srcDir - The source directory for the files.
+ * @param domain - The base domain for the generated links.
  * @returns A string representing the full content of the LLMs.txt file.
  */
 export function generateLLMsFullTxt(

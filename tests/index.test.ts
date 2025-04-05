@@ -4,19 +4,22 @@ import type { Plugin } from 'vitepress'
 import { fakeMarkdownDocument } from './resources'
 
 // Mock the fs module before it's imported by the module under test
-const existsSync = mock(() => true)
-const mkdirSync = mock()
-const readFileSync = mock(() => fakeMarkdownDocument)
-const copyFileSync = mock()
-const writeFileSync = mock()
 
-mock.module('node:fs', () => ({
+const access = mock(() => {
+	return new Promise((resolve) => {
+		resolve(undefined)
+	})
+})
+const mkdir = mock()
+const readFile = mock(async () => fakeMarkdownDocument)
+const writeFile = mock()
+
+mock.module('node:fs/promises', () => ({
 	default: {
-		existsSync,
-		mkdirSync,
-		readFileSync,
-		copyFileSync,
-		writeFileSync,
+		access,
+		mkdir,
+		readFile,
+		writeFile,
 	},
 }))
 
@@ -43,9 +46,8 @@ describe('llmstxt plugin', () => {
 
 	beforeEach(() => {
 		// Reset mock call counts
-		mkdirSync.mockReset()
-		copyFileSync.mockReset()
-		writeFileSync.mockReset()
+		mkdir.mockReset()
+		writeFile.mockReset()
 
 		// Setup mock config
 		mockConfig = {
@@ -79,15 +81,15 @@ describe('llmstxt plugin', () => {
 	})
 
 	describe('transform', () => {
-		it('should collect markdown files', () => {
+		it('should collect markdown files', async () => {
 			// @ts-ignore
-			const result = plugin.transform(0, 'docs/test.md')
+			const result = await plugin.transform(0, 'docs/test.md')
 			expect(result).toBeNull()
 		})
 
-		it('should not collect non-markdown files', () => {
+		it('should not collect non-markdown files', async () => {
 			// @ts-ignore
-			const result = plugin.transform(0, 'docs/test.ts')
+			const result = await plugin.transform(0, 'docs/test.ts')
 			expect(result).toBeNull()
 		})
 	})
@@ -99,53 +101,57 @@ describe('llmstxt plugin', () => {
 			plugin.configResolved(ssrConfig)
 			// @ts-ignore
 			plugin.generateBundle()
-			expect(writeFileSync).not.toHaveBeenCalled()
+			expect(writeFile).not.toHaveBeenCalled()
 		})
 
-		it('should create output directory if it does not exist', () => {
-			existsSync.mockImplementationOnce(() => false)
+		it('should create output directory if it does not exist', async () => {
+			access.mockImplementationOnce(async () => {
+				throw new Error()
+			})
 
 			// @ts-ignore
 			plugin.configResolved(mockConfig)
 			// @ts-ignore
-			plugin.generateBundle()
+			await plugin.generateBundle()
 
-			expect(mkdirSync).toHaveBeenCalledWith('dist', { recursive: true })
+			expect(mkdir).toHaveBeenCalledWith('dist', { recursive: true })
 		})
 
-		it('should process markdown files and generate output files', () => {
+		it('should process markdown files and generate output files', async () => {
 			plugin = llmstxt({ generateLLMsFullTxt: false, generateLLMsTxt: false })
 			// @ts-ignore
 			plugin.configResolved(mockConfig)
+			await Promise.all([
+				// @ts-ignore
+				plugin.transform(0, 'docs/test.md'),
+				// @ts-ignore
+				plugin.transform(0, 'docs/test/test.md'),
+				// @ts-ignore
+				plugin.transform(0, 'docs/guide/index.md'),
+			])
 			// @ts-ignore
-			plugin.transform(0, 'docs/test.md')
-			// @ts-ignore
-			plugin.transform(0, 'docs/test/test.md')
-			// @ts-ignore
-			plugin.transform(0, 'docs/guide/index.md')
-			// @ts-ignore
-			plugin.generateBundle()
+			await plugin.generateBundle()
 
 			// Verify that files were written
-			expect(writeFileSync).toHaveBeenCalledTimes(3)
-			expect(writeFileSync).nthCalledWith(
+			expect(writeFile).toHaveBeenCalledTimes(3)
+			expect(writeFile).nthCalledWith(
 				1,
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
 				'---\nurl: /test.md\n---\n# Some cool stuff\n',
 			)
-			expect(writeFileSync).nthCalledWith(
+			expect(writeFile).nthCalledWith(
 				2,
 				path.resolve(mockConfig.vitepress.outDir, 'test', 'test.md'),
 				'---\nurl: /test/test.md\n---\n# Some cool stuff\n',
 			)
-			expect(writeFileSync).nthCalledWith(
+			expect(writeFile).nthCalledWith(
 				3,
 				path.resolve(mockConfig.vitepress.outDir, 'guide.md'),
 				'---\nurl: /guide.md\n---\n# Some cool stuff\n',
 			)
 		})
 
-		it('should ignore files specified in ignoreFiles option', () => {
+		it('should ignore files specified in ignoreFiles option', async () => {
 			plugin = llmstxt({
 				generateLLMsFullTxt: false,
 				generateLLMsTxt: false,
@@ -153,16 +159,18 @@ describe('llmstxt plugin', () => {
 			})
 			// @ts-ignore
 			plugin.configResolved(mockConfig)
+			await Promise.all([
+				// @ts-ignore
+				plugin.transform(0, 'docs/test.md'),
+				// @ts-ignore
+				plugin.transform(0, 'docs/test/test.md'),
+			])
 			// @ts-ignore
-			plugin.transform(0, 'docs/test.md')
-			// @ts-ignore
-			plugin.transform(0, 'docs/test/test.md')
-			// @ts-ignore
-			plugin.generateBundle()
+			await plugin.generateBundle()
 
 			// Verify that only non-ignored files were written
-			expect(writeFileSync).toHaveBeenCalledTimes(1)
-			expect(writeFileSync).toBeCalledWith(
+			expect(writeFile).toHaveBeenCalledTimes(1)
+			expect(writeFile).toBeCalledWith(
 				// docs/test.md
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
 				'---\nurl: /test.md\n---\n# Some cool stuff\n',

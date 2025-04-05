@@ -13,13 +13,12 @@ import {
 
 const srcDir = 'docs'
 
-const readFileSync = mock((path) =>
+const readFile = mock(async (path) =>
 	path === `${srcDir}/index.md` ? fakeIndexMd : fakeMarkdownDocument,
 )
 
-mock.module('node:fs', () => ({
-	default: { readFileSync },
-	readFileSync,
+mock.module('node:fs/promises', () => ({
+	default: { readFile },
 }))
 
 import {
@@ -107,32 +106,39 @@ describe('expandTemplate', () => {
 })
 
 describe('generateTOC', () => {
-	it('generates a table of contents', () => {
-		expect(generateTOC([fooMdSample], srcDir)).toBe('- [Title](/foo.md)\n')
+	it('generates a table of contents', async () => {
+		expect(await generateTOC([fooMdSample], srcDir)).toBe(
+			'- [Title](/foo.md)\n',
+		)
 	})
 
-	it('correctly attaches the domain', () => {
-		expect(generateTOC([fooMdSample], srcDir, sampleDomain)).toBe(
+	it('correctly attaches the domain', async () => {
+		expect(await generateTOC([fooMdSample], srcDir, sampleDomain)).toBe(
 			`- [Title](${sampleDomain}/foo.md)\n`,
 		)
 	})
 
-	it('correctly generates TOC with link descriptions', () => {
-		expect(generateTOC(preparedFilesSample.slice(1), srcDir)).toBe(
+	it('correctly generates TOC with link descriptions', async () => {
+		expect(await generateTOC(preparedFilesSample.slice(1), srcDir)).toBe(
 			'- [Getting started](/test/getting-started.md): Instructions on how to get started with the tool\n- [Quickstart](/test/quickstart.md): Instructions for quick project initialization\n- [Some other section](/test/other.md)\n',
 		)
 	})
 
-	it('organizes TOC based on sidebar configuration', () => {
+	it('organizes TOC based on sidebar configuration', async () => {
 		const files = preparedFilesSample.slice(1)
-		const toc = generateTOC(files, srcDir, undefined, sampleVitePressSidebar)
+		const toc = await generateTOC(
+			files,
+			srcDir,
+			undefined,
+			sampleVitePressSidebar,
+		)
 
 		expect(toc).toMatchSnapshot()
 	})
 
-	it('handles object-based sidebar configuration correctly', () => {
+	it('handles object-based sidebar configuration correctly', async () => {
 		const files = preparedFilesSample.slice(1)
-		const toc = generateTOC(
+		const toc = await generateTOC(
 			files,
 			srcDir,
 			undefined,
@@ -189,9 +195,9 @@ describe('generateMetadata', () => {
 })
 
 describe('generateLLMsTxt', () => {
-	it('generates a `llms.txt` file', () => {
+	it('generates a `llms.txt` file', async () => {
 		expect(
-			generateLLMsTxt(
+			await generateLLMsTxt(
 				preparedFilesSample.slice(1),
 				`${srcDir}/index.md`,
 				srcDir,
@@ -201,9 +207,9 @@ describe('generateLLMsTxt', () => {
 			),
 		).toMatchSnapshot()
 	})
-	it('works correctly with a custom template', () => {
+	it('works correctly with a custom template', async () => {
 		expect(
-			generateLLMsTxt(
+			await generateLLMsTxt(
 				preparedFilesSample.slice(1),
 				`${srcDir}/index.md`,
 				srcDir,
@@ -213,9 +219,9 @@ describe('generateLLMsTxt', () => {
 			),
 		).toMatchSnapshot()
 	})
-	it('works correctly with a custom template variables', () => {
+	it('works correctly with a custom template variables', async () => {
 		expect(
-			generateLLMsTxt(
+			await generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
 				srcDir,
@@ -226,9 +232,9 @@ describe('generateLLMsTxt', () => {
 		).toMatchSnapshot()
 	})
 
-	it('works correctly with a custom template and variables', () => {
+	it('works correctly with a custom template and variables', async () => {
 		expect(
-			generateLLMsTxt(
+			await generateLLMsTxt(
 				preparedFilesSample,
 				`${srcDir}/index.md`,
 				srcDir,
@@ -241,15 +247,19 @@ describe('generateLLMsTxt', () => {
 })
 
 describe('generateLLMsFullTxt', () => {
-	it('generates a `llms-full.txt` file', () => {
+	it('generates a `llms-full.txt` file', async () => {
 		expect(
-			generateLLMsFullTxt(preparedFilesSample.slice(1), srcDir),
+			await generateLLMsFullTxt(preparedFilesSample.slice(1), srcDir),
 		).toMatchSnapshot()
 	})
 
-	it('correctly attaches the domain to URLs in context', () => {
+	it('correctly attaches the domain to URLs in context', async () => {
 		expect(
-			generateLLMsFullTxt(preparedFilesSample.slice(1), srcDir, sampleDomain),
+			await generateLLMsFullTxt(
+				preparedFilesSample.slice(1),
+				srcDir,
+				sampleDomain,
+			),
 		).toMatchSnapshot()
 	})
 })
