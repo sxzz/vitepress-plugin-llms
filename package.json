@@ -1,26 +1,18 @@
 {
 	"name": "vitepress-plugin-llms",
-	"version": "1.0.4",
 	"description": "📜 A VitePress plugin for generating LLM-friendly documentation",
+	"version": "1.0.4",
 	"license": "MIT",
-	"type": "module",
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"exports": {
-		"import": "./dist/index.js",
-		"require": "./dist/index.cjs"
-	},
-	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/okineadev/vitepress-plugin-llms.git"
-	},
 	"author": {
 		"name": "Okinea Dev",
 		"email": "hi@okinea.dev",
 		"url": "https://github.com/okineadev"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/okineadev/vitepress-plugin-llms.git"
+	},
+	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
 	"keywords": [
 		"vitepress",
 		"plugin",
@@ -30,6 +22,14 @@
 		"documentation",
 		"ai"
 	],
+	"type": "module",
+	"types": "./dist/index.d.ts",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"exports": {
+		"import": "./dist/index.js",
+		"require": "./dist/index.cjs"
+	},
 	"scripts": {
 		"lint": "biome check --fix",
 		"format": "biome format --write",
@@ -37,6 +37,10 @@
 		"preversion": "bun run format && git add .",
 		"build": "tsup",
 		"prepare": "husky"
+	},
+	"lint-staged": {
+		"{src,tests}/**/*.ts": "bun run test",
+		"*": "bun run format --no-errors-on-unmatched"
 	},
 	"dependencies": {
 		"byte-size": "^9.0.1",
@@ -49,6 +53,7 @@
 		"tokenx": "^0.4.1"
 	},
 	"devDependencies": {
+		"@actions/github-script": "github:actions/github-script",
 		"@biomejs/biome": "1.9.4",
 		"@types/byte-size": "^8.1.2",
 		"@types/node": "^22.13.10",
@@ -59,12 +64,5 @@
 		"typescript": "^5.8.2",
 		"vitepress": "^1.6.3"
 	},
-	"trustedDependencies": ["@biomejs/biome", "esbuild"],
-	"lint-staged": {
-		"{src,tests}/**/*.ts": "bun run test",
-		"*": "bun run format --no-errors-on-unmatched"
-	},
-	"optionalDependencies": {
-		"@actions/github-script": "github:actions/github-script"
-	}
+	"trustedDependencies": ["@biomejs/biome", "esbuild"]
 }
