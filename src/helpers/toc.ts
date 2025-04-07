@@ -15,6 +15,7 @@ import { generateLink, stripExtPosix } from './utils'
  * @param domain - The base domain for the generated link.
  * @param relativePath - The relative path of the file, which is converted to a `.md` link.
  * @param extension - The link extension for the generated link (default is `.md`).
+ * @param cleanUrls - Whether to use clean URLs (without the extension).
  * @returns The formatted TOC entry as a Markdown list item.
  */
 export const generateTOCLink = (
