@@ -5,20 +5,52 @@ import matter from 'gray-matter'
 
 import type { DefaultTheme } from 'vitepress'
 import { defaultLLMsTxtTemplate } from '../constants'
-import type { LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
+import type {
+	LinksExtension,
+	LlmstxtSettings,
+	PreparedFile,
+	VitePressConfig,
+} from '../types'
 import { generateTOC } from './toc'
 import { expandTemplate, extractTitle, generateMetadata } from './utils'
+
+/**
+ * Options for generating the `llms.txt` file.
+ */
+export interface GenerateLLMsTxtOptions {
+	/** Path to the main documentation file `index.md`.*/
+	indexMd: string
+
+	/** The source directory for the files. */
+	srcDir: VitePressConfig['vitepress']['srcDir']
+
+	/** Template to use for generating `llms.txt`. */
+	LLMsTxtTemplate?: LlmstxtSettings['customLLMsTxtTemplate']
+
+	/** Template variables for `customLLMsTxtTemplate`. */
+	templateVariables?: LlmstxtSettings['customTemplateVariables']
+
+	/** The VitePress configuration. */
+	vitepressConfig?: VitePressConfig['vitepress']['userConfig']
+
+	/** The base domain for the generated links. */
+	domain?: LlmstxtSettings['domain']
+
+	/** The link extension for generated links. */
+	linksExtension?: LinksExtension
+
+	/** Whether to use clean URLs (without the extension). */
+	cleanUrls?: VitePressConfig['cleanUrls']
+
+	/** Optional sidebar configuration for organizing the TOC. */
+	sidebar?: DefaultTheme.Sidebar
+}
 
 /**
  * Generates a LLMs.txt file with a table of contents and links to all documentation sections.
  *
  * @param preparedFiles - An array of prepared files.
- * @param indexMd - Path to the main documentation file `index.md`.
- * @param vitepressConfig - The VitePress configuration.
- * @param LLMsTxtTemplate - Template to use for generating `llms.txt`.
- * @param templateVariables - Template variables for `customLLMsTxtTemplate`.
- * @param domain - The base domain for the generated links.
- * @param sidebar - Optional sidebar configuration for organizing the TOC.
+ * @param options - Options for generating the `llms.txt` file.
  * @returns A string representing the content of the `llms.txt` file.
  *
  * @example
@@ -38,16 +70,23 @@ import { expandTemplate, extractTitle, generateMetadata } from './utils'
  */
 export async function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
-	indexMd: string,
-	srcDir: VitePressConfig['vitepress']['srcDir'],
-	LLMsTxtTemplate: LlmstxtSettings['customLLMsTxtTemplate'] = defaultLLMsTxtTemplate,
-	templateVariables: LlmstxtSettings['customTemplateVariables'] = {},
-	vitepressConfig?: VitePressConfig['vitepress']['userConfig'],
-	domain?: LlmstxtSettings['domain'],
-	sidebar?: DefaultTheme.Sidebar,
+	options: GenerateLLMsTxtOptions,
 ): Promise<string> {
+	const {
+		indexMd,
+		srcDir,
+		LLMsTxtTemplate = defaultLLMsTxtTemplate,
+		templateVariables = {},
+		vitepressConfig,
+		domain,
+		sidebar,
+		linksExtension,
+		cleanUrls,
+	} = options
+
 	// @ts-expect-error
 	matter.clearCache()
+
 	const indexMdContent = await fs.readFile(indexMd, 'utf-8')
 	const indexMdFile = matter(indexMdContent as string)
 
@@ -65,42 +104,69 @@ export async function generateLLMsTxt(
 		indexMdFile?.data?.description ||
 		indexMdFile.data?.titleTemplate
 
+	if (templateVariables.description) {
+		templateVariables.description = `> ${templateVariables.description}`
+	}
+
 	templateVariables.details ??=
 		indexMdFile.data?.hero?.tagline ||
 		indexMdFile.data?.tagline ||
 		(!templateVariables.description &&
 			'This file contains links to all documentation sections.')
 
-	templateVariables.toc ??= await generateTOC(
-		preparedFiles,
+	templateVariables.toc ??= await generateTOC(preparedFiles, {
 		srcDir,
 		domain,
-		sidebar || vitepressConfig?.themeConfig?.sidebar,
-	)
+		sidebarConfig: sidebar || vitepressConfig?.themeConfig?.sidebar,
+		linksExtension,
+		cleanUrls,
+	})
 
 	return expandTemplate(LLMsTxtTemplate, templateVariables)
+}
+
+/**
+ * Options for generating the `llms-full.txt` file.
+ */
+export interface GenerateLLMsFullTxtOptions {
+	/** The source directory for the files. */
+	srcDir: VitePressConfig['vitepress']['srcDir']
+
+	/** The base domain for the generated links. */
+	domain?: LlmstxtSettings['domain']
+
+	/** The link extension for generated links. */
+	linksExtension?: LinksExtension
+
+	/** Whether to use clean URLs (without the extension). */
+	cleanUrls?: VitePressConfig['cleanUrls']
 }
 
 /**
  * Generates a `llms-full.txt` file content with all documentation in one file.
  *
  * @param preparedFiles - An array of prepared files.
- * @param srcDir - The source directory for the files.
- * @param domain - The base domain for the generated links.
+ * @param options - Options for generating the `llms-full.txt` file.
  * @returns A string representing the full content of the LLMs.txt file.
  */
 export function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
-	srcDir: VitePressConfig['vitepress']['srcDir'],
-	domain?: LlmstxtSettings['domain'],
+	options: GenerateLLMsFullTxtOptions,
 ) {
+	const { srcDir, domain, linksExtension, cleanUrls } = options
+
 	const llmsFullTxtContent = preparedFiles
 		.map((preparedFile) => {
 			const relativePath = path.relative(srcDir, preparedFile.path)
 
 			return matter.stringify(
 				preparedFile.file.content,
-				generateMetadata(preparedFile.file, domain, relativePath),
+				generateMetadata(preparedFile.file, {
+					domain,
+					filePath: relativePath,
+					linksExtension,
+					cleanUrls,
+				}),
 			)
 		})
 		.join('\n---\n\n')

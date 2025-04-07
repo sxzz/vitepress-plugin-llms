@@ -1,0 +1,20 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`llmstxt plugin generateBundle does not add links with \`.md\` extension in \`llms.txt\` if \`generateLLMFriendlyDocsForEachPage\` option is disabled 1`] = `
+"# Some cool stuff
+
+This file contains links to all documentation sections.
+
+## Table of Contents
+
+- [Some cool stuff](/test.html)
+"
+`;
+
+exports[`llmstxt plugin generateBundle does not add links with \`.md\` extension in \`llms-full.txt\` if \`generateLLMFriendlyDocsForEachPage\` option is disabled 1`] = `
+"---
+url: /test.html
+---
+# Some cool stuff
+"
+`;

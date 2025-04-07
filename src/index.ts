@@ -229,7 +229,10 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 								targetPath,
 								matter.stringify(
 									mdFile.content,
-									generateMetadata(mdFile, settings.domain, relativePath),
+									generateMetadata(mdFile, {
+										domain: settings.domain,
+										filePath: relativePath,
+									}),
 								),
 							)
 
@@ -264,16 +267,20 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 					(async () => {
 						log.info(`Generating ${pc.cyan('llms.txt')}...`)
 
-						const llmsTxt = await generateLLMsTxt(
-							preparedFiles,
-							path.resolve(settings.workDir as string, 'index.md'),
-							settings.workDir as string,
-							settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
+						const llmsTxt = await generateLLMsTxt(preparedFiles, {
+							indexMd: path.resolve(settings.workDir as string, 'index.md'),
+							srcDir: settings.workDir as string,
+							LLMsTxtTemplate:
+								settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 							templateVariables,
-							config?.vitepress?.userConfig,
-							settings.domain,
-							settings.sidebar,
-						)
+							vitepressConfig: config?.vitepress?.userConfig,
+							domain: settings.domain,
+							sidebar: settings.sidebar,
+							linksExtension: !settings.generateLLMFriendlyDocsForEachPage
+								? '.html'
+								: undefined,
+							cleanUrls: config.cleanUrls,
+						})
 
 						await fs.writeFile(llmsTxtPath, llmsTxt, 'utf-8')
 
@@ -302,11 +309,14 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 							`Generating full documentation bundle (${pc.cyan('llms-full.txt')})...`,
 						)
 
-						const llmsFullTxt = generateLLMsFullTxt(
-							preparedFiles,
-							settings.workDir as string,
-							settings.domain,
-						)
+						const llmsFullTxt = generateLLMsFullTxt(preparedFiles, {
+							srcDir: settings.workDir as string,
+							domain: settings.domain,
+							linksExtension: !settings.generateLLMFriendlyDocsForEachPage
+								? '.html'
+								: undefined,
+							cleanUrls: config.cleanUrls,
+						})
 
 						// Write content to llms-full.txt
 						await fs.writeFile(llmsFullTxtPath, llmsFullTxt, 'utf-8')

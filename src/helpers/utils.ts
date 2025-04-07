@@ -4,7 +4,7 @@ import type { GrayMatterFile, Input } from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
 import { stripHtml } from 'string-strip-html'
-import type { LlmstxtSettings } from '../types'
+import type { LinksExtension, LlmstxtSettings, VitePressConfig } from '../types'
 
 /**
  * Splits a file path into its directory and file components.
@@ -131,25 +131,66 @@ export const expandTemplate = (
 }
 
 /**
- * Generates metadata for markdown files to provide additional context for LLMs
+ * Generates a complete link by combining a domain, path, and an optional extension.
  *
- * @param sourceFile - Parsed markdown file with frontmatter using gray-matter
- * @param domain - Optional domain name to prepend to the URL
- * @param filePath - Path to the file relative to content root
- * @returns Object containing metadata properties for the file
+ * @param domain - The base domain of the link (e.g., "https://example.com").
+ * @param path - The path to append to the domain (e.g., "guide").
+ * @param extension - An optional extension to append to the path (e.g., ".md").
+ * @returns The generated link
+ */
+export const generateLink = (
+	path: string,
+	domain?: string,
+	extension?: LinksExtension,
+	cleanUrls?: VitePressConfig['cleanUrls'],
+) =>
+	expandTemplate('{domain}/{path}{extension}', {
+		domain: domain || '',
+		path,
+		extension: cleanUrls ? '' : extension,
+	})
+
+/**
+ * Options for generating metadata for markdown files.
+ */
+export interface GenerateMetadataOptions {
+	/** Optional domain name to prepend to the URL. */
+	domain?: LlmstxtSettings['domain']
+
+	/** Path to the file relative to the content root. */
+	filePath: string
+
+	/** The link extension for generated links. */
+	linksExtension?: LinksExtension
+
+	/** Whether to use clean URLs (without the extension). */
+	cleanUrls?: VitePressConfig['cleanUrls']
+}
+
+/**
+ * Generates metadata for markdown files to provide additional context for LLMs.
+ *
+ * @param sourceFile - Parsed markdown file with frontmatter using gray-matter.
+ * @param options - Options for generating metadata.
+ * @returns Object containing metadata properties for the file.
  *
  * @example
- * generateMetadata(preparedFile, 'https://example.com', 'docs/guide')
+ * generateMetadata(preparedFile, { domain: 'https://example.com', filePath: 'docs/guide' })
  * // Returns { url: 'https://example.com/docs/guide.md', description: 'A guide' }
  */
 export function generateMetadata<GrayMatter extends GrayMatterFile<Input>>(
 	sourceFile: GrayMatter,
-	domain: LlmstxtSettings['domain'],
-	filePath: string,
+	options: GenerateMetadataOptions,
 ) {
+	const { domain, filePath, linksExtension, cleanUrls } = options
 	const frontmatterMetadata: Record<string, string> = {}
 
-	frontmatterMetadata.url = `${domain || ''}/${stripExtPosix(filePath)}.md`
+	frontmatterMetadata.url = generateLink(
+		stripExtPosix(filePath),
+		domain,
+		linksExtension ?? '.md',
+		cleanUrls,
+	)
 
 	if (sourceFile.data?.description?.length) {
 		frontmatterMetadata.description = sourceFile.data?.description

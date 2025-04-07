@@ -39,7 +39,6 @@
 		"prepare": "husky"
 	},
 	"lint-staged": {
-		"{src,tests}/**/*.ts": "bun run test",
 		"*": "bun run format --no-errors-on-unmatched"
 	},
 	"dependencies": {

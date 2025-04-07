@@ -1,7 +1,12 @@
 import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
-import type { LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
-import { stripExtPosix } from './utils'
+import type {
+	LinksExtension,
+	LlmstxtSettings,
+	PreparedFile,
+	VitePressConfig,
+} from '../types'
+import { generateLink, stripExtPosix } from './utils'
 
 /**
  * Generates a Markdown-formatted table of contents (TOC) link for a given file.
@@ -9,15 +14,18 @@ import { stripExtPosix } from './utils'
  * @param file - The prepared file.
  * @param domain - The base domain for the generated link.
  * @param relativePath - The relative path of the file, which is converted to a `.md` link.
+ * @param extension - The link extension for the generated link (default is `.md`).
  * @returns The formatted TOC entry as a Markdown list item.
  */
 export const generateTOCLink = (
 	file: PreparedFile,
 	domain: LlmstxtSettings['domain'],
 	relativePath: string,
+	extension?: LinksExtension,
+	cleanUrls: VitePressConfig['cleanUrls'] = false,
 ) => {
 	const description: string = file.file.data.description
-	return `- [${file.title}](${domain || ''}/${stripExtPosix(relativePath)}.md)${description ? `: ${description.trim()}` : ''}\n`
+	return `- [${file.title}](${generateLink(stripExtPosix(relativePath), domain, extension ?? '.md', cleanUrls)})${description ? `: ${description.trim()}` : ''}\n`
 }
 
 /**
@@ -52,7 +60,7 @@ function collectPathsFromSidebarItems(
  * @param link - The link path to normalize.
  * @returns Normalized link path for consistent comparison.
  */
-function normalizeLinkPath(link: string): string {
+export function normalizeLinkPath(link: string): string {
 	const normalizedPath = stripExtPosix(link)
 
 	if (path.basename(normalizedPath) === 'index') {
@@ -69,7 +77,7 @@ function normalizeLinkPath(link: string): string {
  * @param sidebarPath - The sidebar path to compare against.
  * @returns True if paths match, false otherwise
  */
-function isPathMatch(filePath: string, sidebarPath: string): boolean {
+export function isPathMatch(filePath: string, sidebarPath: string): boolean {
 	const normalizedFilePath = normalizeLinkPath(filePath)
 	const normalizedSidebarPath = normalizeLinkPath(sidebarPath)
 
@@ -86,6 +94,7 @@ function isPathMatch(filePath: string, sidebarPath: string): boolean {
  * @param preparedFiles - An array of prepared files
  * @param srcDir - The VitePress source directory
  * @param domain - Optional domain to prefix URLs with
+ * @param linksExtension - The link extension for generated links.
  * @param depth - Current depth level for headings
  * @returns A string representing the formatted section of the TOC
  */
@@ -94,6 +103,8 @@ async function processSidebarSection(
 	preparedFiles: PreparedFile[],
 	srcDir: VitePressConfig['vitepress']['srcDir'],
 	domain?: LlmstxtSettings['domain'],
+	linksExtension?: LinksExtension,
+	cleanUrls?: VitePressConfig['cleanUrls'],
 	depth = 3,
 ): Promise<string> {
 	let sectionTOC = ''
@@ -118,6 +129,9 @@ async function processSidebarSection(
 						preparedFiles,
 						srcDir,
 						domain,
+						linksExtension,
+						cleanUrls,
+						// Increase depth for nested sections to maintain proper heading levels
 						depth + 1,
 					)
 					nestedSections.push(processedSection)
@@ -134,7 +148,15 @@ async function processSidebarSection(
 
 					if (matchingFile) {
 						const relativePath = path.relative(srcDir, matchingFile.path)
-						linkItems.push(generateTOCLink(matchingFile, domain, relativePath))
+						linkItems.push(
+							generateTOCLink(
+								matchingFile,
+								domain,
+								relativePath,
+								linksExtension,
+								cleanUrls,
+							),
+						)
 					}
 				}
 			}),
@@ -183,6 +205,32 @@ function flattenSidebarConfig(
 }
 
 /**
+ * Options for generating a Table of Contents (TOC).
+ */
+export interface GenerateTOCOptions {
+	/**
+	 * The VitePress source directory.
+	 */
+	srcDir: VitePressConfig['vitepress']['srcDir']
+
+	/**
+	 * Optional domain to prefix URLs with.
+	 */
+	domain?: LlmstxtSettings['domain']
+
+	/**
+	 * Optional VitePress sidebar configuration.
+	 */
+	sidebarConfig?: DefaultTheme.Sidebar
+
+	/** The link extension for generated links. */
+	linksExtension?: LinksExtension
+
+	/** Whether to use clean URLs (without the extension). */
+	cleanUrls?: VitePressConfig['cleanUrls']
+}
+
+/**
  * Generates a Table of Contents (TOC) for the provided prepared files.
  *
  * Each entry in the TOC is formatted as a markdown link to the corresponding
@@ -191,17 +239,14 @@ function flattenSidebarConfig(
  * reflecting the nesting depth of the sections.
  *
  * @param preparedFiles - An array of prepared files.
- * @param srcDir - The VitePress source directory.
- * @param domain - Optional domain to prefix URLs with.
- * @param sidebarConfig - Optional VitePress configuration.
+ * @param options - Options for generating the TOC.
  * @returns A string representing the formatted Table of Contents.
  */
 export async function generateTOC(
 	preparedFiles: PreparedFile[],
-	srcDir: VitePressConfig['vitepress']['srcDir'],
-	domain?: LlmstxtSettings['domain'],
-	sidebarConfig?: DefaultTheme.Sidebar,
+	options: GenerateTOCOptions,
 ): Promise<string> {
+	const { srcDir, domain, sidebarConfig, linksExtension, cleanUrls } = options
 	let tableOfContent = ''
 
 	let filesToProcess = preparedFiles
@@ -219,6 +264,8 @@ export async function generateTOC(
 					filesToProcess,
 					srcDir,
 					domain,
+					linksExtension,
+					cleanUrls,
 				)
 
 				// tableOfContent = `${tableOfContent.trimEnd()}\n\n`
@@ -249,7 +296,9 @@ export async function generateTOC(
 	await Promise.all(
 		filesToProcess.map(async (file) => {
 			const relativePath = path.relative(srcDir, file.path)
-			tocEntries.push(generateTOCLink(file, domain, relativePath))
+			tocEntries.push(
+				generateTOCLink(file, domain, relativePath, linksExtension, cleanUrls),
+			)
 		}),
 	)
 

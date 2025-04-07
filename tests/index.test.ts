@@ -1,27 +1,10 @@
 import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
-import { fakeMarkdownDocument } from './resources'
+import { mockedFs } from './mocks/fs'
 
-// Mock the fs module before it's imported by the module under test
-
-const access = mock(() => {
-	return new Promise((resolve) => {
-		resolve(undefined)
-	})
-})
-const mkdir = mock()
-const readFile = mock(async () => fakeMarkdownDocument)
-const writeFile = mock()
-
-mock.module('node:fs/promises', () => ({
-	default: {
-		access,
-		mkdir,
-		readFile,
-		writeFile,
-	},
-}))
+mock.module('node:fs/promises', () => mockedFs)
+const { access, mkdir, writeFile } = mockedFs.default
 
 // Mock the logger to prevent output
 mock.module('../src/helpers/logger', () => ({
@@ -175,6 +158,42 @@ describe('llmstxt plugin', () => {
 				path.resolve(mockConfig.vitepress.outDir, 'test.md'),
 				'---\nurl: /test.md\n---\n# Some cool stuff\n',
 			)
+		})
+
+		it('does not add links with `.md` extension in `llms.txt` if `generateLLMFriendlyDocsForEachPage` option is disabled', async () => {
+			plugin = llmstxt({
+				generateLLMsFullTxt: false,
+				generateLLMFriendlyDocsForEachPage: false,
+			})
+			// @ts-ignore
+			plugin.configResolved(mockConfig)
+			await Promise.all([
+				// @ts-ignore
+				plugin.transform(0, 'docs/test.md'),
+			])
+			// @ts-ignore
+			await plugin.generateBundle()
+
+			expect(writeFile).toHaveBeenCalledTimes(1)
+			expect(writeFile.mock?.lastCall?.[1]).toMatchSnapshot()
+		})
+
+		it('does not add links with `.md` extension in `llms-full.txt` if `generateLLMFriendlyDocsForEachPage` option is disabled', async () => {
+			plugin = llmstxt({
+				generateLLMsTxt: false,
+				generateLLMFriendlyDocsForEachPage: false,
+			})
+			// @ts-ignore
+			plugin.configResolved(mockConfig)
+			await Promise.all([
+				// @ts-ignore
+				plugin.transform(0, 'docs/test.md'),
+			])
+			// @ts-ignore
+			await plugin.generateBundle()
+
+			expect(writeFile).toHaveBeenCalledTimes(1)
+			expect(writeFile.mock?.lastCall?.[1]).toMatchSnapshot()
 		})
 	})
 })

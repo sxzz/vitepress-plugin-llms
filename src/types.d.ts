@@ -231,3 +231,6 @@ interface VitePressConfig
 		ResolvedConfig {
 	vitepress: SiteConfig
 }
+
+/** Represents the link extension options for generated links. */
+type LinksExtension = string | '.md' | '.html'
