@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.0.5
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.4...v1.0.5)
+
+### 🩹 Fixes
+
+- Move `@actions/github-script` from `optionalDependencies` to `devDependencies` ([540768b](https://github.com/okineadev/vitepress-plugin-llms/commit/540768b))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.0.4
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.3...v1.0.4)
