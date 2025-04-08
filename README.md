@@ -128,11 +128,14 @@ This plugin follows the [llmstxt.org](https://llmstxt.org/) standard, which defi
 
 ## ✨ Projects where this plugin is used
 
-- [**Slidev**](https://sli.dev/) - **35.7**k+ ⭐ - [llms.txt](https://sli.dev/llms.txt) | [llms-full.txt](https://sli.dev/llms-full.txt)
-- [**Elysia**](https://elysiajs.com/) - **11.9**k+ ⭐ - [llms.txt](https://elysiajs.com/llms.txt) | [llms-full.txt](https://elysiajs.com/llms-full.txt)
-- [**shadcn/vue**](https://shadcn-vue.com/) - **6.7**k+ ⭐ - [llms.txt](https://shadcn-vue.com/llms.txt) | [llms-full.txt](https://shadcn-vue.com/llms-full.txt)
-- [**Vue Macros**](https://vue-macros.dev/) - **1.8**k+ ⭐ - [llms.txt](https://vue-macros.dev/llms.txt) | [llms-full.txt](https://vue-macros.dev/llms-full.txt)
-- [**GramIO**](https://gramio.dev/) - **101**+ ⭐ - [llms.txt](https://gramio.dev/llms.txt) | [llms-full.txt](https://gramio.dev/llms-full.txt)
+| Project | Stars | `llms.txt` | `llms-full.txt` |
+|--------|:-----:|:--------:|:--------------:|
+| [**Slidev**](https://sli.dev/) | [![Stars](https://img.shields.io/github/stars/slidevjs/slidev?style=flat&label=%E2%AD%90&labelColor=FAFAFA&color=212121)](https://github.com/slidevjs/slidev) | [llms.txt](https://sli.dev/llms.txt) | [llms-full.txt](https://sli.dev/llms-full.txt) |
+| [**Elysia**](https://elysiajs.com/) | [![Stars](https://img.shields.io/github/stars/elysiajs/elysia?style=flat&label=%E2%AD%90&labelColor=FAFAFA&color=212121)](https://github.com/elysiajs/elysia) | [llms.txt](https://elysiajs.com/llms.txt) | [llms-full.txt](https://elysiajs.com/llms-full.txt) |
+| [**shadcn/vue**](https://shadcn-vue.com/) | [![Stars](https://img.shields.io/github/stars/unovue/shadcn-vue?style=flat&label=%E2%AD%90&labelColor=FAFAFA&color=212121)](https://github.com/unovue/shadcn-vue) | [llms.txt](https://shadcn-vue.com/llms.txt) | [llms-full.txt](https://shadcn-vue.com/llms-full.txt) |
+| [**Fantastic-admin**](https://fantastic-admin.hurui.me/) | [![Stars](https://img.shields.io/github/stars/fantastic-admin/basic?style=flat&label=%E2%AD%90&labelColor=FAFAFA&color=212121)](https://github.com/fantastic-admin/basic) | [llms.txt](https://fantastic-admin.hurui.me/llms.txt) | [llms-full.txt](https://fantastic-admin.hurui.me/llms-full.txt) |
+| [**Vue Macros**](https://vue-macros.dev/) | [![Stars](https://img.shields.io/github/stars/vue-macros/vue-macros?style=flat&label=%E2%AD%90&labelColor=FAFAFA&color=212121)](https://github.com/vue-macros/vue-macros) | [llms.txt](https://vue-macros.dev/llms.txt) | [llms-full.txt](https://vue-macros.dev/llms-full.txt) |
+| [**GramIO**](https://gramio.dev/) | [![Stars](https://img.shields.io/github/stars/gramiojs/gramio?style=flat&label=%E2%AD%90&labelColor=FAFAFA&color=212121)](https://github.com/gramiojs/gramio) | [llms.txt](https://gramio.dev/llms.txt) | [llms-full.txt](https://gramio.dev/llms-full.txt) |
 
 ## ❤️ Support
 
