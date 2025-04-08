@@ -87,7 +87,6 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
-		// @ts-expect-error
 		async configureServer(server: ViteDevServer) {
 			log.info('Dev server configured for serving plain text docs for LLMs')
 			server.middlewares.use(async (req, res, next) => {
