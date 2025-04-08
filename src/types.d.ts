@@ -88,6 +88,13 @@ export interface LlmstxtSettings extends TemplateVariables {
 	generateLLMFriendlyDocsForEachPage?: boolean
 
 	/**
+	 * Whether to strip HTML tags from Markdown files
+	 *
+	 * @default true
+	 */
+	stripHTML?: boolean
+
+	/**
 	 * The directory from which files will be processed.
 	 *
 	 * This is useful for configuring the plugin to generate documentation for LLMs in a specific language.

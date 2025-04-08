@@ -4,9 +4,13 @@ import type { Plugin } from 'vitepress'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import matter from 'gray-matter'
+import matter, { type Input } from 'gray-matter'
 import { minimatch } from 'minimatch'
 import pc from 'picocolors'
+import { remark } from 'remark'
+import remarkFrontmatter from 'remark-frontmatter'
+
+import { remove } from 'unist-util-remove'
 
 import { name as packageName } from '../package.json'
 
@@ -48,6 +52,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		generateLLMFriendlyDocsForEachPage: true,
 		ignoreFiles: [],
 		workDir: undefined as unknown as string,
+		stripHTML: true,
 		...userSettings,
 	}
 
@@ -82,6 +87,7 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		},
 
 		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
+		// @ts-expect-error
 		async configureServer(server: ViteDevServer) {
 			log.info('Dev server configured for serving plain text docs for LLMs')
 			server.middlewares.use(async (req, res, next) => {
@@ -198,7 +204,27 @@ export default function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 			const preparedFiles: PreparedFile[] = await Promise.all(
 				mdFilesList.map(async (file) => {
-					const mdFile = matter(await fs.readFile(file, 'utf-8'))
+					const content = await fs.readFile(file, 'utf-8')
+
+					let mdFile: matter.GrayMatterFile<Input>
+
+					if (settings.stripHTML) {
+						const cleanedMarkdown = await remark()
+							.use(remarkFrontmatter)
+							.use(() => {
+								// Strip HTML tags
+								return (tree) => {
+									remove(tree, { type: 'html' })
+									return tree
+								}
+							})
+							.process(content)
+
+						mdFile = matter(String(cleanedMarkdown))
+					} else {
+						mdFile = matter(content)
+					}
+					// Extract title from frontmatter or use the first heading
 					const title = extractTitle(mdFile)?.trim() || 'Untitled'
 
 					const filePath =

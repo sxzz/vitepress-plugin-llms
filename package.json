@@ -48,8 +48,10 @@
 		"millify": "^6.1.0",
 		"minimatch": "^10.0.1",
 		"picocolors": "^1.1.1",
-		"string-strip-html": "^13.4.12",
-		"tokenx": "^0.4.1"
+		"remark": "^15.0.1",
+		"remark-frontmatter": "^5.0.0",
+		"tokenx": "^0.4.1",
+		"unist-util-remove": "^4.0.0"
 	},
 	"devDependencies": {
 		"@actions/github-script": "github:actions/github-script",
@@ -60,7 +62,7 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^15.5.0",
 		"tsup": "^8.4.0",
-		"typescript": "^5.8.2",
+		"typescript": "^5.8.3",
 		"vitepress": "^1.6.3"
 	},
 	"trustedDependencies": ["@biomejs/biome", "esbuild"]

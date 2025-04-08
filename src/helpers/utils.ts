@@ -3,7 +3,6 @@ import byteSize from 'byte-size'
 import type { GrayMatterFile, Input } from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
-import { stripHtml } from 'string-strip-html'
 import type { LinksExtension, LlmstxtSettings, VitePressConfig } from '../types'
 
 /**
@@ -53,10 +52,6 @@ export function extractTitle(file: GrayMatterFile<Input>): string {
 
 	if (!titleFromFrontmatter) {
 		titleFromMarkdown = markdownTitle(file.content)
-
-		if (titleFromMarkdown) {
-			titleFromMarkdown = stripHtml(titleFromMarkdown).result
-		}
 	}
 	return titleFromFrontmatter || titleFromMarkdown
 }
