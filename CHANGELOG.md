@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v1.1.0
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.5...v1.1.0)
+
+### 🚀 Enhancements
+
+- ✨ clean Markdown with `remark` by default ([5a844f0](https://github.com/okineadev/vitepress-plugin-llms/commit/5a844f0))
+
+### 🩹 Fixes
+
+- Do not add `.md` extension to each link in `llms.txt` if `generateLLMFriendlyDocsForEachPage` option is disabled ([577cae6](https://github.com/okineadev/vitepress-plugin-llms/commit/577cae6))
+
+### 🏡 Chore
+
+- Update TSDoc in `generateTOCLink` function ([343ba46](https://github.com/okineadev/vitepress-plugin-llms/commit/343ba46))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.0.5
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.0.4...v1.0.5)
