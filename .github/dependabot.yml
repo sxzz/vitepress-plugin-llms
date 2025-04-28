@@ -1,4 +1,4 @@
-dversion: 2
+version: 2
 updates:
   # Maintain dependencies for bun
   - package-ecosystem: "bun"
