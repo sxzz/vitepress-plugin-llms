@@ -58,9 +58,6 @@ It is recommended to configure redirects so that AI can use addresses with both 
 `public/_redirects`:
 
 ```plaintext
-/*.txt           /:splat.md 301
-/llms.md         /llms.txt 301
-/llms.txt        /llms.txt 200!
 /llms-full.md    /llms-full.txt 200!
 /llms-full.txt   /llms-full.txt 200!
 ```
