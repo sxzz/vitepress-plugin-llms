@@ -3,7 +3,7 @@
 <!-- markdownlint-disable no-inline-html heading-start-left first-line-h1 -->
 <div align="center">
   
-  **Is this plugin useful for your website? Consider [sponsoring the developer](https://github.com/okineadev/vitepress-plugin-llms?sponsor) to support the project's development 😺**
+  **Is this plugin useful for your site? Consider [sponsoring the developer](https://github.com/okineadev/vitepress-plugin-llms?sponsor) to support the project's development 😺**
   <br><br>
   <a href="https://npmjs.com/package/vitepress-plugin-llms">
     <!-- https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#specifying-the-theme-an-image-is-shown-to -->
