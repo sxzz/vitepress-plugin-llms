@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v1.1.2
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.1...v1.1.2)
+
+### 📖 Documentation
+
+- Update readme ([f7081db](https://github.com/okineadev/vitepress-plugin-llms/commit/f7081db))
+- Update readme ([eef8410](https://github.com/okineadev/vitepress-plugin-llms/commit/eef8410))
+
+### 🏡 Chore
+
+- Update dependabot configuration ([ba38489](https://github.com/okineadev/vitepress-plugin-llms/commit/ba38489))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.1.1
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.0...v1.1.1)
