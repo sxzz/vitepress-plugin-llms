@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.1.3
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.2...v1.1.3)
+
+### 🩹 Fixes
+
+- Fix #24 ([#24](https://github.com/okineadev/vitepress-plugin-llms/issues/24))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.1.2
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.1...v1.1.2)
