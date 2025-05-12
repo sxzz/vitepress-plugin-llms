@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v1.1.4
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.3...v1.1.4)
+
+### 🩹 Fixes
+
+- Dont generate empty sections ([#38](https://github.com/okineadev/vitepress-plugin-llms/pull/38))
+
+### 📖 Documentation
+
+- Update the list of projects that use this plugin ([#32](https://github.com/okineadev/vitepress-plugin-llms/pull/32))
+- Fix markdown ([2f6074d](https://github.com/okineadev/vitepress-plugin-llms/commit/2f6074d))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+- Ubugeeei <ubuge1122@gmail.com>
+
 ## v1.1.3
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.2...v1.1.3)
