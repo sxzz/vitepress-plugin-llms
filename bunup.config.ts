@@ -7,7 +7,8 @@ export default defineConfig({
 	format: ['esm'],
 	// Generate declaration file (.d.ts)
 	dts: true,
-	minify: true,
+	minify: false,
+	external: [/\S+/i],
 	banner: '// Built with bunup',
 	clean: true,
 	plugins: [report()],
