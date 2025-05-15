@@ -1,3 +1,9 @@
+// Markdown with @llm-include comment for testing
+export const mdWithLlmInclude = `# Title\n\n<!-- @llm-include\n\n## Included Section\n\nThis should be included only in llm output\n\n- item 1\n- item 2\n\n-->\n\nSome other content.\n`
+
+export const mdWithoutLlmInclude = `# Title\n\nSome content without special comments.`
+
+export const expectedLlmIncludeOutput = `# Title\n\n## Included Section\n\nThis should be included only in llm output\n\n- item 1\n- item 2\n\n\nSome other content.\n`
 import matter from 'gray-matter'
 import type { DefaultTheme } from 'vitepress'
 import type { LlmstxtSettings, PreparedFile } from '../src/types'

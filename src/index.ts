@@ -3,11 +3,12 @@ import type { Plugin, ViteDevServer } from 'vite'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import matter, { type Input } from 'gray-matter'
+import matter from 'gray-matter'
 import { minimatch } from 'minimatch'
 import pc from 'picocolors'
 import { remark } from 'remark'
 import remarkFrontmatter from 'remark-frontmatter'
+import llmInclude from './remark-plugins/llm-include'
 
 import { remove } from 'unist-util-remove'
 
@@ -199,33 +200,33 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				mdFilesList.map(async (file) => {
 					const content = await fs.readFile(file, 'utf-8')
 
-					let mdFile: matter.GrayMatterFile<Input>
+					const markdownProcessor = remark()
+						.use(remarkFrontmatter)
+						.use(llmInclude)
 
 					if (settings.stripHTML) {
-						const cleanedMarkdown = await remark()
-							.use(remarkFrontmatter)
-							.use(() => {
-								// Strip HTML tags
-								return (tree) => {
-									remove(tree, { type: 'html' })
-									return tree
-								}
-							})
-							.process(content)
-
-						mdFile = matter(String(cleanedMarkdown))
-					} else {
-						mdFile = matter(content)
+						// Strip HTML tags
+						markdownProcessor.use(() => {
+							return (tree) => {
+								remove(tree, { type: 'html' })
+								return tree
+							}
+						})
 					}
+
+					const processedMarkdown = matter(
+						String(await markdownProcessor.process(content)),
+					)
+
 					// Extract title from frontmatter or use the first heading
-					const title = extractTitle(mdFile)?.trim() || 'Untitled'
+					const title = extractTitle(processedMarkdown)?.trim() || 'Untitled'
 					const filePath =
 						path.basename(file) === 'index.md' &&
 						path.dirname(file) !== settings.workDir
 							? `${path.dirname(file)}.md`
 							: file
 
-					return { path: filePath, title, file: mdFile }
+					return { path: filePath, title, file: processedMarkdown }
 				}),
 			)
 

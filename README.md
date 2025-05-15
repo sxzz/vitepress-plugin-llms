@@ -102,6 +102,29 @@ This configuration does the following:
 - `title`: Sets a custom header in `llms.txt`, for your custom variables use `customTemplateVariables`.
 - `customTemplateVariables`: Sets custom variables for the template, replaces `{foo}` with `bar`.
 
+#### Embedding content specifically for LLMs with `@llm-include`
+
+You can add a comment that will be visible in files for LLMs, but invisible to humans, this can be useful for setting special instructions like "Refer to #basic-queries for demonstrations", "NEVER do ....", "ALWAYS use ... in case of ..." etc.
+
+To do this, you need to insert a comment with the tag `@llm-include` and the content inside:
+
+```markdown
+<!-- @llm-include
+
+## Section for LLMs
+
+This content appears only in the generated LLMs files without the comment tag
+-->
+```
+
+Or
+
+```markdown
+Check out the Plugins API Guide for documentation about creating plugins.
+
+<!-- @llm-include <Note for LLM> -->
+```
+
 ## GitAds Sponsored
 
 [![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=okineadev/vitepress-plugin-llms@github)](https://gitads.dev/v1/ad-track?source=okineadev/vitepress-plugin-llms@github)
