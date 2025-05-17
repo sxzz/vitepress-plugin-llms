@@ -196,32 +196,5 @@ describe('llmstxt plugin', () => {
 			expect(writeFile).toHaveBeenCalledTimes(1)
 			expect(writeFile.mock?.lastCall?.[1]).toMatchSnapshot()
 		})
-
-		it('uncomments comments with the `@llm-include` tag', async () => {
-			plugin = llmstxt({
-				generateLLMsTxt: false,
-				generateLLMsFullTxt: false,
-			})
-			// @ts-ignore
-			plugin.configResolved(mockConfig)
-
-			readFile.mockReturnValueOnce(
-				Promise.resolve(
-					`${fakeMarkdownDocument}\n\n<!-- @llm-include\n## Special section for LLMs\n-->`,
-				),
-			)
-			await Promise.all([
-				// @ts-ignore
-				plugin.transform(0, 'docs/test.md'),
-			])
-			// @ts-ignore
-			await plugin.generateBundle()
-
-			expect(writeFile).toHaveBeenCalledTimes(1)
-			console.log(writeFile.mock?.lastCall?.[1])
-			expect(writeFile.mock?.lastCall?.[1]).toBe(
-				`---\nurl: /test.md\n---\n${fakeMarkdownDocument}\n\n## Special section for LLMs\n`,
-			)
-		})
 	})
 })

@@ -241,3 +241,7 @@ interface VitePressConfig
 
 /** Represents the link extension options for generated links. */
 type LinksExtension = string | '.md' | '.html'
+
+type NotUndefined<T> = {
+	[K in keyof T]-?: Exclude<T[K], undefined>
+}

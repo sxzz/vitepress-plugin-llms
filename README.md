@@ -102,19 +102,19 @@ This configuration does the following:
 - `title`: Sets a custom header in `llms.txt`, for your custom variables use `customTemplateVariables`.
 - `customTemplateVariables`: Sets custom variables for the template, replaces `{foo}` with `bar`.
 
-#### Embedding content specifically for LLMs with `@llm-include`
+#### Embedding content specifically for LLMs with `<llm-only>` tag
 
-You can add a comment that will be visible in files for LLMs, but invisible to humans, this can be useful for setting special instructions like "Refer to #basic-queries for demonstrations", "NEVER do ....", "ALWAYS use ... in case of ..." etc.
+You can add a content that will be visible in files for LLMs, but invisible to humans, this can be useful for setting special instructions like "Refer to #basic-queries for demonstrations", "NEVER do ....", "ALWAYS use ... in case of ..." etc.
 
-To do this, you need to insert a comment with the tag `@llm-include` and the content inside:
+To do this, you need to wrap content with the `<llm-only>` tag:
 
 ```markdown
-<!-- @llm-include
+<llm-only>
 
 ## Section for LLMs
 
-This content appears only in the generated LLMs files without the comment tag
--->
+This content appears only in the generated LLMs files without the `<llm-only>` tag
+</llm-only>
 ```
 
 Or
@@ -122,7 +122,27 @@ Or
 ```markdown
 Check out the Plugins API Guide for documentation about creating plugins.
 
-<!-- @llm-include <Note for LLM> -->
+<llm-only>Note for LLM...</llm-only>
+```
+
+#### Excluding content for LLMs with the `<llm-exclude>` tag
+
+You can add a content that will be visible in files for humans, but invisible to LLMs, opposite of `<llm-only>`:
+
+```markdown
+<llm-exclude>
+## Section for humans
+
+This content will not be in the generated files for LLMs
+</llm-exclude>
+```
+
+Or
+
+```markdown
+Check out the Plugins API Guide for documentation about creating plugins.
+
+<llm-exclude>Note only for humans</llm-exclude>
 ```
 
 ## GitAds Sponsored

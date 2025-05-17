@@ -8,7 +8,7 @@ import { minimatch } from 'minimatch'
 import pc from 'picocolors'
 import { remark } from 'remark'
 import remarkFrontmatter from 'remark-frontmatter'
-import llmInclude from './remark-plugins/llm-include'
+import { remarkPlease, vitePressPlease } from './helpers/markdown'
 
 import { remove } from 'unist-util-remove'
 
@@ -68,6 +68,16 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 	return {
 		name: PLUGIN_NAME,
 
+		config(config) {
+			const vitepressConfig = config as unknown as VitePressConfig
+			if (vitepressConfig.vitepress.markdown) {
+				vitepressConfig.vitepress.markdown.config = (md) =>
+					md
+						.use(vitePressPlease('unwrap', 'llm-exclude'))
+						.use(vitePressPlease('remove', 'llm-only'))
+			}
+		},
+
 		/** Resolves the Vite configuration and sets up the working directory. */
 		configResolved(resolvedConfig) {
 			config = resolvedConfig as VitePressConfig
@@ -79,8 +89,10 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			} else {
 				settings.workDir = config.vitepress.srcDir
 			}
+
 			// Detect if this is the SSR build
 			isSsrBuild = !!resolvedConfig.build?.ssr
+
 			log.info(
 				`${pc.bold(PLUGIN_NAME)} initialized ${isSsrBuild ? pc.dim('(SSR build)') : pc.dim('(client build)')} with workDir: ${pc.cyan(settings.workDir as string)}`,
 			)
@@ -202,7 +214,8 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 					const markdownProcessor = remark()
 						.use(remarkFrontmatter)
-						.use(llmInclude)
+						.use(remarkPlease('unwrap', 'llm-only'))
+						.use(remarkPlease('remove', 'llm-exclude'))
 
 					if (settings.stripHTML) {
 						// Strip HTML tags
