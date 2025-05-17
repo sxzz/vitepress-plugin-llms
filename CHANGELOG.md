@@ -1,6 +1,33 @@
 # Changelog
 
 
+## v1.2.0
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.4...v1.2.0)
+
+### 🚀 Enhancements
+
+- Add the ability to insert content specifically for LLMs using comments with the `@llm-include` tag ([5d6aa2c](https://github.com/okineadev/vitepress-plugin-llms/commit/5d6aa2c))
+- 🛂 implement `<llm-only>` and `<llm-exclude>` tags ([cada554](https://github.com/okineadev/vitepress-plugin-llms/commit/cada554))
+
+### 🩹 Fixes
+
+- **build:** Fix package externalization in the `bunup` configuration ([fed3276](https://github.com/okineadev/vitepress-plugin-llms/commit/fed3276))
+
+### 📦 Build
+
+- Upgrade `bunup` and add `report` plugin ([#39](https://github.com/okineadev/vitepress-plugin-llms/pull/39))
+- Disable minification and externalize all packages ([8686ee5](https://github.com/okineadev/vitepress-plugin-llms/commit/8686ee5))
+
+### 🏡 Chore
+
+- **deps-dev:** Bump the dev-dependencies group across 1 directory with 2 updates ([#40](https://github.com/okineadev/vitepress-plugin-llms/pull/40))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+- Arshad <arshadpyaseen@gmail.com>
+
 ## v1.1.4
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.1.3...v1.1.4)
