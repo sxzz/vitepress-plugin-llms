@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.3.1
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.0...v1.3.1)
+
+### 🩹 Fixes
+
+- **workflows:** Correct condition for running tests in `release.yml` ([4efa02c](https://github.com/okineadev/vitepress-plugin-llms/commit/4efa02c))
+- **`package.json`:** 🚑 return `exports` field back ([8b859a9](https://github.com/okineadev/vitepress-plugin-llms/commit/8b859a9))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.3.0
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.2.0...v1.3.0)
