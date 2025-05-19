@@ -77,7 +77,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 		// @ts-expect-error
 		config(config: VitePressConfig) {
-			if (config.vitepress.markdown) {
+			if (config?.vitepress?.markdown) {
 				config.vitepress.markdown.config = (md) =>
 					md
 						.use(vitePressPlease('unwrap', 'llm-exclude'))
