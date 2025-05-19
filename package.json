@@ -25,6 +25,12 @@
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"module": "./dist/index.js",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
 	"scripts": {
 		"lint": "biome check --fix",
 		"format": "biome format --write",
