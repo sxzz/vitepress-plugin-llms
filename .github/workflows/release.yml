@@ -70,7 +70,7 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
-          bunx changelogen --release --push -r $VERSION
+          bunx changelogen --release --push -r $VERSION --no-output --hideAuthorEmail
           bunx changelogen github release --token ${{ secrets.GITHUB_TOKEN }} -r $VERSION
 
       - name: 📦 Publish to NPM Registry
