@@ -8,7 +8,7 @@ on:
         required: false
         type: string
       run-tests:
-        description: Whether to run tests before release
+        description: Run tests before release
         required: false
         default: false
         type: boolean
