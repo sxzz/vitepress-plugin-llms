@@ -15,7 +15,7 @@ on:
 
 jobs:
   test:
-    if: github.event.inputs.run-tests
+    if: github.event.inputs.run-tests == 'true'
     permissions: {}
     uses: ./.github/workflows/tests.yml
 
