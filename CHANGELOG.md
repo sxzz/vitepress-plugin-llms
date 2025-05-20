@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.3.2
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.1...v1.3.2)
+
+### 🩹 Fixes
+
+- Return `enforce: 'post'` back ([3050415](https://github.com/okineadev/vitepress-plugin-llms/commit/3050415))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.3.1
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.0...v1.3.1)
