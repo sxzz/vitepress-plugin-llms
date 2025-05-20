@@ -74,14 +74,18 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 	return {
 		name: PLUGIN_NAME,
+		// Run after all other plugins
+		enforce: 'post',
 
 		// @ts-expect-error
 		config(config: VitePressConfig) {
-			if (config?.vitepress?.markdown) {
-				config.vitepress.markdown.config = (md) =>
-					md
-						.use(vitePressPlease('unwrap', 'llm-exclude'))
-						.use(vitePressPlease('remove', 'llm-only'))
+			if (!config.vitepress.markdown) {
+				config.vitepress.markdown = {}
+			}
+			config.vitepress.markdown.config = (md) => {
+				md.use(vitePressPlease('unwrap', 'llm-exclude')).use(
+					vitePressPlease('remove', 'llm-only'),
+				)
 			}
 		},
 
