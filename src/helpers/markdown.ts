@@ -34,6 +34,29 @@ export function vitePressPlease(intent: 'remove' | 'unwrap', tag: string) {
 	}
 }
 
+/**
+ * Creates a remark plugin that either removes or unwraps specified HTML tags from markdown AST.
+ *
+ * @param intent - Specifies whether to 'remove' the tag and its content completely, or 'unwrap' to keep the content but remove the tags
+ * @param tag - The HTML tag name to process (e.g., 'div', 'span', etc.)
+ *
+ * @returns A function that can be used as a remark plugin
+ *
+ * @example
+ * ```md
+ * // To remove all <custom> tags and their content:
+ * remarkPlease('remove', 'custom')
+ *
+ * // To keep content but remove <wrapper> tags:
+ * remarkPlease('unwrap', 'wrapper')
+ * ```
+ *
+ * The plugin handles two cases:
+ * 1. Single node containing both opening and closing tags
+ * 2. Separate nodes for opening and closing tags
+ *
+ * It also cleans up empty paragraphs that may result from tag removal.
+ */
 export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 	return () => (tree: Root) => {
 		const openTagRegex = new RegExp(`<${tag}>`)
@@ -57,7 +80,7 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 				if (intent === 'remove') {
 					parent.children.splice(index, 1)
 					if (parent.type === 'paragraph' && parent.children.length === 0) {
-						emptyParagraphs.add({ node: parent as Paragraph, parent })
+						emptyParagraphs.add({ node: parent, parent })
 					}
 					continue
 				}
@@ -88,7 +111,7 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 						// Remove all nodes from opening to closing tag (inclusive)
 						parent.children.splice(index, closeIndex - index + 1)
 						if (parent.type === 'paragraph' && parent.children.length === 0) {
-							emptyParagraphs.add({ node: parent as Paragraph, parent })
+							emptyParagraphs.add({ node: parent, parent })
 						}
 					} else if (intent === 'unwrap') {
 						// Keep the content between tags, remove only the HTML tag nodes

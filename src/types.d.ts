@@ -42,7 +42,7 @@ interface CustomTemplateVariables extends TemplateVariables {
 	[key: string]: string | undefined
 }
 
-export interface LlmstxtSettings extends TemplateVariables {
+interface LlmstxtSettings extends TemplateVariables {
 	/**
 	 * The domain that will be appended to the beginning of URLs in `llms.txt` and in the context of other files
 	 *
@@ -244,7 +244,7 @@ export interface LlmstxtSettings extends TemplateVariables {
 /**
  * Represents a prepared file, including its title and path.
  */
-export type PreparedFile = {
+type PreparedFile = {
 	/**
 	 * The title of the file.
 	 *

@@ -17,15 +17,10 @@ import { name as packageName } from '../package.json'
 import { millify } from 'millify'
 import { approximateTokenSize } from 'tokenx'
 import { defaultLLMsTxtTemplate, unnecessaryFilesList } from './constants'
+import viteDevServerMiddleware from './devserer-middleware'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
-import {
-	expandTemplate,
-	extractTitle,
-	generateMetadata,
-	getHumanReadableSizeOf,
-	stripExt,
-} from './helpers/utils'
+import { expandTemplate, extractTitle, generateMetadata, getHumanReadableSizeOf } from './helpers/utils'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 
 const PLUGIN_NAME = packageName
@@ -86,7 +81,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		configResolved(resolvedConfig) {
 			config = resolvedConfig as VitePressConfig
 			if (settings.workDir) {
-				settings.workDir = path.resolve(config.vitepress.srcDir, settings.workDir as string)
+				settings.workDir = path.resolve(config.vitepress.srcDir, settings.workDir)
 			} else {
 				settings.workDir = config.vitepress.srcDir
 			}
@@ -101,32 +96,14 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			isSsrBuild = !!resolvedConfig.build?.ssr
 
 			log.info(
-				`${pc.bold(PLUGIN_NAME)} initialized ${isSsrBuild ? pc.dim('(SSR build)') : pc.dim('(client build)')} with workDir: ${pc.cyan(settings.workDir as string)}`,
+				`${pc.bold(PLUGIN_NAME)} initialized ${isSsrBuild ? pc.dim('(SSR build)') : pc.dim('(client build)')} with workDir: ${pc.cyan(settings.workDir)}`,
 			)
 		},
 
 		/** Configures the development server to handle `llms.txt` and markdown files for LLMs. */
 		async configureServer(server: ViteDevServer) {
+			server.middlewares.use(viteDevServerMiddleware(config?.vitepress))
 			log.info('Dev server configured for serving plain text docs for LLMs')
-			server.middlewares.use(async (req, res, next) => {
-				if (req.url?.endsWith('.md') || req.url?.endsWith('.txt')) {
-					try {
-						// Try to read and serve the markdown file
-						const filePath = path.resolve(config.vitepress?.outDir ?? 'dist', `${stripExt(req.url)}.md`)
-						const content = await fs.readFile(filePath, 'utf-8')
-						res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-						res.end(content)
-						return
-					} catch (e) {
-						// If file doesn't exist or can't be read, continue to next middleware
-						log.warn(`Failed to return ${pc.cyan(req.url)}: File not found`)
-						next()
-					}
-				}
-
-				// Pass to next middleware if not handled
-				next()
-			})
 		},
 
 		/**
@@ -151,7 +128,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 			}
 
 			// Skip files outside workDir if it's configured
-			if (!id.startsWith(settings.workDir as string)) {
+			if (!id.startsWith(settings.workDir)) {
 				return null
 			}
 

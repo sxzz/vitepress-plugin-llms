@@ -65,9 +65,7 @@ export interface GenerateLLMsTxtOptions {
  */
 export async function generateLLMsTxt(
 	preparedFiles: PreparedFile[],
-	options: GenerateLLMsTxtOptions,
-): Promise<string> {
-	const {
+	{
 		indexMd,
 		srcDir,
 		LLMsTxtTemplate = defaultLLMsTxtTemplate,
@@ -77,13 +75,13 @@ export async function generateLLMsTxt(
 		sidebar,
 		linksExtension,
 		cleanUrls,
-	} = options
-
+	}: GenerateLLMsTxtOptions,
+): Promise<string> {
 	// @ts-expect-error
 	matter.clearCache()
 
 	const indexMdContent = await fs.readFile(indexMd, 'utf-8')
-	const indexMdFile = matter(indexMdContent as string)
+	const indexMdFile = matter(indexMdContent)
 
 	templateVariables.title ??=
 		indexMdFile.data?.hero?.name ||

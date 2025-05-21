@@ -1,7 +1,6 @@
 import { describe, expect, it, mock } from 'bun:test'
 
 import { defaultLLMsTxtTemplate } from '../../src/constants'
-import type { VitePressConfig } from '../../src/types'
 
 import { mockedFs } from '../mocks/fs'
 
@@ -30,7 +29,7 @@ describe('generateLLMsTxt', () => {
 				srcDir,
 				LLMsTxtTemplate: defaultLLMsTxtTemplate,
 				templateVariables: {},
-				vitepressConfig: {} as VitePressConfig,
+				vitepressConfig: {},
 			}),
 		).toMatchSnapshot()
 	})
@@ -41,7 +40,7 @@ describe('generateLLMsTxt', () => {
 				srcDir,
 				LLMsTxtTemplate: fakeCustomLlmsTxtTemplate,
 				templateVariables: {},
-				vitepressConfig: {} as VitePressConfig,
+				vitepressConfig: {},
 			}),
 		).toMatchSnapshot()
 	})
@@ -52,7 +51,7 @@ describe('generateLLMsTxt', () => {
 				srcDir,
 				LLMsTxtTemplate: defaultLLMsTxtTemplate,
 				templateVariables: { title: 'foo', description: 'bar', toc: 'zoo' },
-				vitepressConfig: {} as VitePressConfig,
+				vitepressConfig: {},
 			}),
 		).toMatchSnapshot()
 	})
@@ -64,7 +63,7 @@ describe('generateLLMsTxt', () => {
 				srcDir,
 				LLMsTxtTemplate: '# {foo}\n\n**{bar}**\n\n{zoo}',
 				templateVariables: { title: 'foo', description: 'bar', toc: 'zoo' },
-				vitepressConfig: {} as VitePressConfig,
+				vitepressConfig: {},
 			}),
 		).toMatchSnapshot()
 	})

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
-import type { PluginOption, ViteDevServer } from 'vite'
+import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
 import { mockedFs } from './mocks/fs'
 
@@ -21,7 +21,6 @@ import path from 'node:path'
 // @ts-ignore
 import llmstxt from '../src/index'
 import type { VitePressConfig } from '../src/types'
-import { fakeMarkdownDocument } from './resources'
 
 describe('llmstxt plugin', () => {
 	let plugin: Plugin

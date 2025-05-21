@@ -46,14 +46,8 @@ export const stripExtPosix = (filepath: string) => {
  * @param file - The markdown file to extract the title from.
  * @returns The extracted title, or `undefined` if no title is found.
  */
-export function extractTitle(file: GrayMatterFile<Input>): string {
-	const titleFromFrontmatter = file.data?.title || file.data?.titleTemplate
-	let titleFromMarkdown: string | undefined
-
-	if (!titleFromFrontmatter) {
-		titleFromMarkdown = markdownTitle(file.content)
-	}
-	return titleFromFrontmatter || titleFromMarkdown
+export function extractTitle(file: GrayMatterFile<Input>): string | undefined {
+	return file.data?.title || file.data?.titleTemplate || markdownTitle(file.content)
 }
 
 /**
@@ -169,20 +163,14 @@ export interface GenerateMetadataOptions {
  * generateMetadata(preparedFile, { domain: 'https://example.com', filePath: 'docs/guide' })
  * // Returns { url: 'https://example.com/docs/guide.md', description: 'A guide' }
  */
-export function generateMetadata<GrayMatter extends GrayMatterFile<Input>>(
-	sourceFile: GrayMatter,
-	options: GenerateMetadataOptions,
+export function generateMetadata(
+	sourceFile: GrayMatterFile<Input>,
+	{ domain, filePath, linksExtension, cleanUrls }: GenerateMetadataOptions,
 ) {
-	const { domain, filePath, linksExtension, cleanUrls } = options
-	const frontmatterMetadata: Record<string, string> = {}
-
-	frontmatterMetadata.url = generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', cleanUrls)
-
-	if (sourceFile.data?.description?.length) {
-		frontmatterMetadata.description = sourceFile.data?.description
+	return {
+		url: generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', cleanUrls),
+		...(sourceFile.data?.description && { description: sourceFile.data.description }),
 	}
-
-	return frontmatterMetadata
 }
 
 /**

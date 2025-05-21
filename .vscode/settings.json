@@ -16,5 +16,9 @@
 	},
 
 	// Use local TypeScript version
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+
+	"material-icon-theme.files.associations": {
+		"bunup.config.ts": "bun"
+	}
 }
