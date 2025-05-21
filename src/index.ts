@@ -26,12 +26,7 @@ import {
 	getHumanReadableSizeOf,
 	stripExt,
 } from './helpers/utils'
-import type {
-	CustomTemplateVariables,
-	LlmstxtSettings,
-	PreparedFile,
-	VitePressConfig,
-} from './types'
+import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 
 const PLUGIN_NAME = packageName
 
@@ -83,9 +78,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				config.vitepress.markdown = {}
 			}
 			config.vitepress.markdown.config = (md) => {
-				md.use(vitePressPlease('unwrap', 'llm-exclude')).use(
-					vitePressPlease('remove', 'llm-only'),
-				)
+				md.use(vitePressPlease('unwrap', 'llm-exclude')).use(vitePressPlease('remove', 'llm-only'))
 			}
 		},
 
@@ -93,24 +86,15 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 		configResolved(resolvedConfig) {
 			config = resolvedConfig as VitePressConfig
 			if (settings.workDir) {
-				settings.workDir = path.resolve(
-					config.vitepress.srcDir,
-					settings.workDir as string,
-				)
+				settings.workDir = path.resolve(config.vitepress.srcDir, settings.workDir as string)
 			} else {
 				settings.workDir = config.vitepress.srcDir
 			}
 
 			if (settings.excludeUnnecessaryFiles) {
-				if (settings.excludeIndexPage) {
-					settings.ignoreFiles.push(...unnecessaryFilesList.indexPage)
-				}
-				if (settings.excludeBlog) {
-					settings.ignoreFiles.push(...unnecessaryFilesList.blogs)
-				}
-				if (settings.excludeTeam) {
-					settings.ignoreFiles.push(...unnecessaryFilesList.team)
-				}
+				settings.excludeIndexPage && settings.ignoreFiles.push(...unnecessaryFilesList.indexPage)
+				settings.excludeBlog && settings.ignoreFiles.push(...unnecessaryFilesList.blogs)
+				settings.excludeTeam && settings.ignoreFiles.push(...unnecessaryFilesList.team)
 			}
 
 			// Detect if this is the SSR build
@@ -128,10 +112,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				if (req.url?.endsWith('.md') || req.url?.endsWith('.txt')) {
 					try {
 						// Try to read and serve the markdown file
-						const filePath = path.resolve(
-							config.vitepress?.outDir ?? 'dist',
-							`${stripExt(req.url)}.md`,
-						)
+						const filePath = path.resolve(config.vitepress?.outDir ?? 'dist', `${stripExt(req.url)}.md`)
 						const content = await fs.readFile(filePath, 'utf-8')
 						res.setHeader('Content-Type', 'text/plain; charset=utf-8')
 						res.end(content)
@@ -227,9 +208,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 				return
 			}
 
-			log.info(
-				`Processing ${pc.bold(fileCount.toString())} markdown files from ${pc.cyan(settings.workDir)}`,
-			)
+			log.info(`Processing ${pc.bold(fileCount.toString())} markdown files from ${pc.cyan(settings.workDir)}`)
 
 			const preparedFiles: PreparedFile[] = await Promise.all(
 				mdFilesList.map(async (file) => {
@@ -250,15 +229,12 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 						})
 					}
 
-					const processedMarkdown = matter(
-						String(await markdownProcessor.process(content)),
-					)
+					const processedMarkdown = matter(String(await markdownProcessor.process(content)))
 
 					// Extract title from frontmatter or use the first heading
 					const title = extractTitle(processedMarkdown)?.trim() || 'Untitled'
 					const filePath =
-						path.basename(file) === 'index.md' &&
-						path.dirname(file) !== settings.workDir
+						path.basename(file) === 'index.md' && path.dirname(file) !== settings.workDir
 							? `${path.dirname(file)}.md`
 							: file
 
@@ -288,15 +264,12 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 						const llmsTxt = await generateLLMsTxt(preparedFiles, {
 							indexMd: path.resolve(settings.workDir, 'index.md'),
 							srcDir: settings.workDir,
-							LLMsTxtTemplate:
-								settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
+							LLMsTxtTemplate: settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
 							templateVariables,
 							vitepressConfig: config?.vitepress?.userConfig,
 							domain: settings.domain,
 							sidebar: settings.sidebar,
-							linksExtension: !settings.generateLLMFriendlyDocsForEachPage
-								? '.html'
-								: undefined,
+							linksExtension: !settings.generateLLMFriendlyDocsForEachPage ? '.html' : undefined,
 							cleanUrls: config.cleanUrls,
 						})
 
@@ -323,16 +296,12 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 				tasks.push(
 					(async () => {
-						log.info(
-							`Generating full documentation bundle (${pc.cyan('llms-full.txt')})...`,
-						)
+						log.info(`Generating full documentation bundle (${pc.cyan('llms-full.txt')})...`)
 
 						const llmsFullTxt = await generateLLMsFullTxt(preparedFiles, {
 							srcDir: settings.workDir,
 							domain: settings.domain,
-							linksExtension: !settings.generateLLMFriendlyDocsForEachPage
-								? '.html'
-								: undefined,
+							linksExtension: !settings.generateLLMFriendlyDocsForEachPage ? '.html' : undefined,
 							cleanUrls: config.cleanUrls,
 						})
 
@@ -340,15 +309,12 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 						await fs.writeFile(llmsFullTxtPath, llmsFullTxt, 'utf-8')
 
 						log.success(
-							expandTemplate(
-								'Generated {file} (~{tokens} tokens, {size}) with {fileCount} markdown files',
-								{
-									file: pc.cyan('llms-full.txt'),
-									tokens: pc.bold(millify(approximateTokenSize(llmsFullTxt))),
-									size: pc.bold(getHumanReadableSizeOf(llmsFullTxt)),
-									fileCount: pc.bold(fileCount.toString()),
-								},
-							),
+							expandTemplate('Generated {file} (~{tokens} tokens, {size}) with {fileCount} markdown files', {
+								file: pc.cyan('llms-full.txt'),
+								tokens: pc.bold(millify(approximateTokenSize(llmsFullTxt))),
+								size: pc.bold(getHumanReadableSizeOf(llmsFullTxt)),
+								fileCount: pc.bold(fileCount.toString()),
+							}),
 						)
 					})(),
 				)
@@ -379,9 +345,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): Plugin {
 
 							log.success(`Processed ${pc.cyan(relativePath)}`)
 						} catch (error) {
-							log.error(
-								`Failed to process ${pc.cyan(relativePath)}: ${(error as Error).message}`,
-							)
+							log.error(`Failed to process ${pc.cyan(relativePath)}: ${(error as Error).message}`)
 						}
 					}),
 				)

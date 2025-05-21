@@ -68,8 +68,7 @@ export function extractTitle(file: GrayMatterFile<Input>): string {
  * console.log(regex.test('Hello {name}')); // true
  * ```
  */
-const templateVariable = (key: string) =>
-	new RegExp(`(\\n\\s*\\n)?\\{${key}\\}`, 'gi')
+const templateVariable = (key: string) => new RegExp(`(\\n\\s*\\n)?\\{${key}\\}`, 'gi')
 
 /**
  * Replaces occurrences of a template variable `{variable}` in a given content string with a provided value.
@@ -115,10 +114,7 @@ export function replaceTemplateVariable(
  * console.log(result); // 'Hello Alice, welcome to Wonderland!'
  * ```
  */
-export const expandTemplate = (
-	template: string,
-	variables: Record<string, string | undefined>,
-) => {
+export const expandTemplate = (template: string, variables: Record<string, string | undefined>) => {
 	return Object.entries(variables).reduce(
 		(result, [key, value]) => replaceTemplateVariable(result, key, value),
 		template,
@@ -180,12 +176,7 @@ export function generateMetadata<GrayMatter extends GrayMatterFile<Input>>(
 	const { domain, filePath, linksExtension, cleanUrls } = options
 	const frontmatterMetadata: Record<string, string> = {}
 
-	frontmatterMetadata.url = generateLink(
-		stripExtPosix(filePath),
-		domain,
-		linksExtension ?? '.md',
-		cleanUrls,
-	)
+	frontmatterMetadata.url = generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', cleanUrls)
 
 	if (sourceFile.data?.description?.length) {
 		frontmatterMetadata.description = sourceFile.data?.description
@@ -203,5 +194,4 @@ export function generateMetadata<GrayMatter extends GrayMatterFile<Input>>(
  * @param string - The input string whose size needs to be determined.
  * @returns A human-readable size string (e.g., "1.2 KB", "500 B").
  */
-export const getHumanReadableSizeOf = (string: string) =>
-	byteSize(new Blob([string]).size).toString()
+export const getHumanReadableSizeOf = (string: string) => byteSize(new Blob([string]).size).toString()

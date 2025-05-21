@@ -22,8 +22,7 @@ describe('remarkPlease', () => {
 		})
 
 		it('should unwrap content between separate HTML nodes', async () => {
-			const testString =
-				'<llm-only>\n\n## Special section for LLMs\n\n</llm-only>'
+			const testString = '<llm-only>\n\n## Special section for LLMs\n\n</llm-only>'
 
 			remarkProcessor.use(remarkPlease('unwrap', 'llm-only'))
 
@@ -59,8 +58,7 @@ describe('remarkPlease', () => {
 		})
 
 		it('should remove content between separate HTML nodes', async () => {
-			const testString =
-				'<llm-exclude>\n\n## Section to remove\n\n</llm-exclude>'
+			const testString = '<llm-exclude>\n\n## Section to remove\n\n</llm-exclude>'
 
 			remarkProcessor.use(remarkPlease('remove', 'llm-exclude'))
 

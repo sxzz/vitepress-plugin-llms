@@ -5,12 +5,7 @@ import matter from 'gray-matter'
 
 import type { DefaultTheme } from 'vitepress'
 import { defaultLLMsTxtTemplate } from '../constants'
-import type {
-	LinksExtension,
-	LlmstxtSettings,
-	PreparedFile,
-	VitePressConfig,
-} from '../types'
+import type { LinksExtension, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
 import { generateTOC } from './toc'
 import { expandTemplate, extractTitle, generateMetadata } from './utils'
 
@@ -111,8 +106,7 @@ export async function generateLLMsTxt(
 	templateVariables.details ??=
 		indexMdFile.data?.hero?.tagline ||
 		indexMdFile.data?.tagline ||
-		(!templateVariables.description &&
-			'This file contains links to all documentation sections.')
+		(!templateVariables.description && 'This file contains links to all documentation sections.')
 
 	templateVariables.toc ??= await generateTOC(preparedFiles, {
 		srcDir,

@@ -1,11 +1,6 @@
 import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
-import type {
-	LinksExtension,
-	LlmstxtSettings,
-	PreparedFile,
-	VitePressConfig,
-} from '../types'
+import type { LinksExtension, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
 import { generateLink, stripExtPosix } from './utils'
 
 /**
@@ -35,9 +30,7 @@ export const generateTOCLink = (
  * @param items - Array of sidebar items to process.
  * @returns Array of paths collected from the sidebar items.
  */
-async function collectPathsFromSidebarItems(
-	items: DefaultTheme.SidebarItem[],
-): Promise<string[]> {
+async function collectPathsFromSidebarItems(items: DefaultTheme.SidebarItem[]): Promise<string[]> {
 	return Promise.all(
 		items.map(async (item) => {
 			const paths: string[] = []
@@ -84,10 +77,7 @@ export function isPathMatch(filePath: string, sidebarPath: string): boolean {
 	const normalizedFilePath = normalizeLinkPath(filePath)
 	const normalizedSidebarPath = normalizeLinkPath(sidebarPath)
 
-	return (
-		normalizedFilePath === normalizedSidebarPath ||
-		normalizedFilePath === `${normalizedSidebarPath}.md`
-	)
+	return normalizedFilePath === normalizedSidebarPath || normalizedFilePath === `${normalizedSidebarPath}.md`
 }
 
 /**
@@ -118,8 +108,7 @@ async function processSidebarSection(
 			Promise.all(
 				section.items
 					.filter(
-						(item): item is DefaultTheme.SidebarItem & { link: string } =>
-							typeof item.link === 'string',
+						(item): item is DefaultTheme.SidebarItem & { link: string } => typeof item.link === 'string',
 					)
 					.map(async (item) => {
 						// Normalize the link path for matching
@@ -131,13 +120,7 @@ async function processSidebarSection(
 
 						if (matchingFile) {
 							const relativePath = path.relative(srcDir, matchingFile.path)
-							return generateTOCLink(
-								matchingFile,
-								domain,
-								relativePath,
-								linksExtension,
-								cleanUrls,
-							)
+							return generateTOCLink(matchingFile, domain, relativePath, linksExtension, cleanUrls)
 						}
 						return null
 					}),
@@ -168,9 +151,7 @@ async function processSidebarSection(
 		])
 
 		// Filter out empty nested sections
-		const nonEmptyNestedSections = nestedSections.filter(
-			(section) => section.trim() !== '',
-		)
+		const nonEmptyNestedSections = nestedSections.filter((section) => section.trim() !== '')
 
 		// Check if we have any content before adding section header
 		const hasContent = linkItems.length > 0 || nonEmptyNestedSections.length > 0
@@ -204,9 +185,7 @@ async function processSidebarSection(
  * @param sidebarConfig - The sidebar configuration from VitePress.
  * @returns An array of sidebar items.
  */
-function flattenSidebarConfig(
-	sidebarConfig: DefaultTheme.Sidebar,
-): DefaultTheme.SidebarItem[] {
+function flattenSidebarConfig(sidebarConfig: DefaultTheme.Sidebar): DefaultTheme.SidebarItem[] {
 	// If it's already an array, return as is
 	if (Array.isArray(sidebarConfig)) {
 		return sidebarConfig
@@ -276,28 +255,17 @@ export async function generateTOC(
 			// Process sections in parallel
 			const sectionResults = await Promise.all(
 				flattenedSidebarConfig.map((section) =>
-					processSidebarSection(
-						section,
-						preparedFiles,
-						srcDir,
-						domain,
-						linksExtension,
-						cleanUrls,
-					),
+					processSidebarSection(section, preparedFiles, srcDir, domain, linksExtension, cleanUrls),
 				),
 			)
 
 			tableOfContent += `${sectionResults.join('\n')}\n`
 
 			// Find files that didn't match any section
-			const allSidebarPaths = await collectPathsFromSidebarItems(
-				flattenedSidebarConfig,
-			)
+			const allSidebarPaths = await collectPathsFromSidebarItems(flattenedSidebarConfig)
 			const unsortedFiles = preparedFiles.filter((file) => {
 				const relativePath = `/${stripExtPosix(path.relative(srcDir, file.path))}`
-				return !allSidebarPaths.some((sidebarPath: string) =>
-					isPathMatch(relativePath, sidebarPath),
-				)
+				return !allSidebarPaths.some((sidebarPath: string) => isPathMatch(relativePath, sidebarPath))
 			})
 
 			// Add files that didn't match any section
@@ -308,15 +276,7 @@ export async function generateTOC(
 				await Promise.all(
 					unsortedFiles.map(async (file) => {
 						const relativePath = path.relative(srcDir, file.path)
-						tocEntries.push(
-							generateTOCLink(
-								file,
-								domain,
-								relativePath,
-								linksExtension,
-								cleanUrls,
-							),
-						)
+						tocEntries.push(generateTOCLink(file, domain, relativePath, linksExtension, cleanUrls))
 					}),
 				)
 				tableOfContent += tocEntries.join('')
@@ -332,13 +292,7 @@ export async function generateTOC(
 		const tocEntries = await Promise.all(
 			preparedFiles.map(async (file) => {
 				const relativePath = path.relative(srcDir, file.path)
-				return generateTOCLink(
-					file,
-					domain,
-					relativePath,
-					linksExtension,
-					cleanUrls,
-				)
+				return generateTOCLink(file, domain, relativePath, linksExtension, cleanUrls)
 			}),
 		)
 

@@ -276,9 +276,7 @@ export type PreparedFile = {
 	file: GrayMatterFile<Input>
 }
 
-interface VitePressConfig
-	extends Omit<UserConfig, keyof ResolvedConfig>,
-		ResolvedConfig {
+interface VitePressConfig extends Omit<UserConfig, keyof ResolvedConfig>, ResolvedConfig {
 	vitepress: SiteConfig
 }
 

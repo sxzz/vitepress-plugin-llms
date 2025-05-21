@@ -34,8 +34,7 @@ description: Instructions for quick project initialization
 ${blah}`
 
 export const fakeMarkdownDocument = '# Some cool stuff'
-export const fakeCustomLlmsTxtTemplate =
-	'# Custom title\n\n> Custom description\n\n## TOC\n\n{toc}'
+export const fakeCustomLlmsTxtTemplate = '# Custom title\n\n> Custom description\n\n## TOC\n\n{toc}'
 
 export const sampleVitePressSidebar: DefaultTheme.Sidebar = [
 	{

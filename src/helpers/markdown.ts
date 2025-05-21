@@ -41,9 +41,7 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 		const fullTagRegex = new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`)
 
 		// First pass: collect all HTML nodes to process
-		const nodesToProcess: NotUndefined<
-			Parameters<BuildVisitor<Root, 'html'>>
-		>[] = []
+		const nodesToProcess: NotUndefined<Parameters<BuildVisitor<Root, 'html'>>>[] = []
 		visit(tree, 'html', (node, index, parent) => {
 			if (!parent || typeof index !== 'number') return
 			nodesToProcess.push([node, index, parent])
@@ -79,10 +77,7 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 				let closeIndex = index + 1
 				while (closeIndex < parent.children.length) {
 					const closeNode = parent.children[closeIndex]
-					if (
-						closeNode.type === 'html' &&
-						closeTagRegex.test(closeNode.value)
-					) {
+					if (closeNode.type === 'html' && closeTagRegex.test(closeNode.value)) {
 						break
 					}
 					closeIndex++

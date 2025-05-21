@@ -13,15 +13,7 @@
 		"url": "git+https://github.com/okineadev/vitepress-plugin-llms.git"
 	},
 	"funding": "https://github.com/okineadev/vitepress-plugin-llms?sponsor=1",
-	"keywords": [
-		"vitepress",
-		"plugin",
-		"vite-plugin",
-		"vitepress-plugin",
-		"llms",
-		"documentation",
-		"ai"
-	],
+	"keywords": ["vitepress", "plugin", "vite-plugin", "vitepress-plugin", "llms", "documentation", "ai"],
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"module": "./dist/index.js",
