@@ -42,7 +42,7 @@ interface CustomTemplateVariables extends TemplateVariables {
 	[key: string]: string | undefined
 }
 
-interface LlmstxtSettings extends TemplateVariables {
+export interface LlmstxtSettings extends TemplateVariables {
 	/**
 	 * The domain that will be appended to the beginning of URLs in `llms.txt` and in the context of other files
 	 *
@@ -241,9 +241,7 @@ interface LlmstxtSettings extends TemplateVariables {
 	sidebar?: DefaultTheme.Sidebar
 }
 
-/**
- * Represents a prepared file, including its title and path.
- */
+/** Represents a prepared file, including its title and path. */
 type PreparedFile = {
 	/**
 	 * The title of the file.
