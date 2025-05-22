@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
-import MarkdownIt from 'markdown-it'
+import markdownit from 'markdown-it'
 import { remark } from 'remark'
 import { remarkPlease, vitePressPlease } from '../../src/helpers/markdown'
 
@@ -84,10 +84,10 @@ describe('remarkPlease', () => {
 })
 
 describe('vitePressPlease', () => {
-	let md: MarkdownIt
+	let md: InstanceType<typeof markdownit>
 
 	beforeEach(() => {
-		md = new MarkdownIt()
+		md = new markdownit()
 	})
 
 	describe('unwrap', () => {

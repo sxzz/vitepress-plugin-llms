@@ -71,7 +71,7 @@ jobs:
       - name: 📦 Install dependencies
         env:
           BUN_INSTALL_CACHE_DIR: ${{ runner.os == 'Windows' && env.WINDOWS_BUN_CACHE_DIR || '' }}
-        run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts --omit=optional
+        run: bun install --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: 🧪 Run tests
         run: bun run test
