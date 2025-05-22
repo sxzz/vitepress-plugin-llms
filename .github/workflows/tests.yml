@@ -3,7 +3,7 @@ on: [workflow_call]
 permissions: {}
 
 env:
-  WINDOWS_USERPROFILE: 'D:'
+  WINDOWS_USERPROFILE: "D:"
   WINDOWS_BUN_CACHE_DIR: 'D:\.bun\install\cache'
 
 jobs:
@@ -71,7 +71,7 @@ jobs:
       - name: 📦 Install dependencies
         env:
           BUN_INSTALL_CACHE_DIR: ${{ runner.os == 'Windows' && env.WINDOWS_BUN_CACHE_DIR || '' }}
-        run: bun install --frozen-lockfile --prefer-offline --ignore-scripts
+        run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts --omit=optional
 
       - name: 🧪 Run tests
-        run: bun run test tests/
+        run: bun run test
