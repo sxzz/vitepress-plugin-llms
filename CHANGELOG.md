@@ -1,6 +1,33 @@
 # Changelog
 
 
+## v1.3.3
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.2...v1.3.3)
+
+### 🩹 Fixes
+
+- 🚑 rollback `bunup` to version `0.5.14` ([ea7569c](https://github.com/okineadev/vitepress-plugin-llms/commit/ea7569c))
+- Fix `vitePressPlease` plugin ([2a7b0ff](https://github.com/okineadev/vitepress-plugin-llms/commit/2a7b0ff))
+- Install `markdown-it` for tests ([5b0fbae](https://github.com/okineadev/vitepress-plugin-llms/commit/5b0fbae))
+- **ci:** Fix failing tests ([1951f67](https://github.com/okineadev/vitepress-plugin-llms/commit/1951f67))
+- ⚙️ fix functionality that removes `<llm-(only ([exclude)>` tags from human documentation](https://github.com/okineadev/vitepress-plugin-llms/commit/exclude)>` tags from human documentation))
+- Remove `markdown-it` from `devDependencies` ([a4fa0fa](https://github.com/okineadev/vitepress-plugin-llms/commit/a4fa0fa))
+
+### 💅 Refactors
+
+- Refactor and simplify the code ([82fede3](https://github.com/okineadev/vitepress-plugin-llms/commit/82fede3))
+
+### 🏡 Chore
+
+- **formatting:** Set max line width to `110` ([3244253](https://github.com/okineadev/vitepress-plugin-llms/commit/3244253))
+- Dont git blame commit 3244253b2ebc368e6afaa67a93a930191e77553e ([7bf7f1b](https://github.com/okineadev/vitepress-plugin-llms/commit/7bf7f1b))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+- E819d12 <Okinea Dev>
+
 ## v1.3.2
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.1...v1.3.2)
