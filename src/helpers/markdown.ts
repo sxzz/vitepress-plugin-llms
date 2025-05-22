@@ -3,34 +3,49 @@ import type { Paragraph, Parent, Root } from 'mdast'
 import { type BuildVisitor, visit } from 'unist-util-visit'
 import type { NotUndefined } from '../types'
 
+/**
+ * Creates a markdown-it plugin that either removes or unwraps specified HTML tags.
+ *
+ * @param intent - 'remove' to remove tag and content, 'unwrap' to keep content but remove tags
+ * @param tag - HTML tag name to process
+ */
 export function vitePressPlease(intent: 'remove' | 'unwrap', tag: string) {
 	return (md: MarkdownIt) => {
-		md.core.ruler.after('inline', `llm-${intent}-${tag}`, (state) => {
-			const matchRegex = new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`)
-			const newTokens: typeof state.tokens = []
-			for (let i = 0; i < state.tokens.length; i++) {
-				const token = state.tokens[i]
-				if (
-					(token.type === 'html_block' || token.type === 'html_inline') &&
-					token.content.match(matchRegex)
-				) {
-					const match = token.content.match(matchRegex)
-					if (intent === 'remove') {
-						// skip this token (do not push)
-						continue
-					}
-					if (intent === 'unwrap' && match?.[1]) {
-						// parse the inner markdown and inject as tokens
-						const inner = match[1].trim()
-						const innerTokens = md.parse(inner, state.env)
-						newTokens.push(...innerTokens)
-						continue
+		// Process source before any parsing happens
+		md.core.ruler.before('block', `llm-${intent}-${tag}-pre`, (state) => {
+			const pattern = new RegExp(`<${tag}>[\\s\\S]*?<\\/${tag}>`, 'g')
+			const source = state.src
+			let result = ''
+			let lastIndex = 0
+			let match: RegExpExecArray | null
+
+			// Find and process all matching tags
+			// biome-ignore lint/suspicious/noAssignInExpressions:
+			while ((match = pattern.exec(source)) !== null) {
+				// Add text before the match
+				result += source.slice(lastIndex, match.index)
+
+				if (intent === 'unwrap') {
+					// Extract content between tags
+					const content = match[0].replace(new RegExp(`^<${tag}>|<\\/${tag}>$`, 'g'), '')
+					if (content.trim()) {
+						result += content
 					}
 				}
-				newTokens.push(token)
+				// For 'remove', we just skip adding the match
+
+				lastIndex = match.index + match[0].length
 			}
-			state.tokens = newTokens
+
+			// Add any remaining text
+			result += source.slice(lastIndex)
+
+			// Update the source
+			state.src = result
+			return false // Let other rules continue processing
 		})
+
+		return md
 	}
 }
 
