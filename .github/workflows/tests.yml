@@ -74,4 +74,4 @@ jobs:
         run: bun install --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: 🧪 Run tests
-        run: bun run test
+        run: bun run test tests/
