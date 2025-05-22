@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
-import markdownit from 'markdown-it'
 import { remark } from 'remark'
-import { remarkPlease, vitePressPlease } from '../../src/helpers/markdown'
+import { remarkPlease } from '../../src/helpers/markdown'
 
 describe('remarkPlease', () => {
 	let remarkProcessor: typeof remark
@@ -79,68 +78,6 @@ describe('remarkPlease', () => {
 			const result = String(file)
 
 			expect(result).toBe('Keep this content\n')
-		})
-	})
-})
-
-describe('vitePressPlease', () => {
-	let md: InstanceType<typeof markdownit>
-
-	beforeEach(() => {
-		md = new markdownit()
-	})
-
-	describe('unwrap', () => {
-		it('should unwrap content from a single HTML node', () => {
-			const testString = '<llm-only>Special text for LLMs</llm-only>'
-			md.use(vitePressPlease('unwrap', 'llm-only'))
-
-			const result = md.render(testString)
-			expect(result).toBe('<p>Special text for LLMs</p>\n')
-		})
-
-		it('should unwrap content with markdown formatting', () => {
-			const testString = '<llm-only>\n\n## Special section for LLMs\n\nWith *formatted* text\n\n</llm-only>'
-			md.use(vitePressPlease('unwrap', 'llm-only'))
-
-			const result = md.render(testString)
-			expect(result).toBe('<h2>Special section for LLMs</h2>\n<p>With <em>formatted</em> text</p>\n')
-		})
-
-		it('should handle multiple blocks of content', () => {
-			const testString =
-				'<llm-only>First block</llm-only>\n\nRegular content\n\n<llm-only>Second block</llm-only>'
-			md.use(vitePressPlease('unwrap', 'llm-only'))
-
-			const result = md.render(testString)
-			expect(result).toBe('<p>First block</p>\n<p>Regular content</p>\n<p>Second block</p>\n')
-		})
-	})
-
-	describe('remove', () => {
-		it('should remove a single HTML node with content', () => {
-			const testString = '<llm-exclude>\n## Section to remove\n</llm-exclude>'
-			md.use(vitePressPlease('remove', 'llm-exclude'))
-
-			const result = md.render(testString)
-			expect(result).toBeEmpty()
-		})
-
-		it('should remove content with markdown formatting', () => {
-			const testString = '<llm-exclude>\n\n## Section to remove\n\nWith *formatted* text\n\n</llm-exclude>'
-			md.use(vitePressPlease('remove', 'llm-exclude'))
-
-			const result = md.render(testString)
-			expect(result).toBeEmpty()
-		})
-
-		it('should remove multiple blocks while keeping other content', () => {
-			const testString =
-				'<llm-exclude>First block to remove</llm-exclude>\n\nKeep this content\n\n<llm-exclude>Second block to remove</llm-exclude>'
-			md.use(vitePressPlease('remove', 'llm-exclude'))
-
-			const result = md.render(testString)
-			expect(result).toBe('<p>Keep this content</p>\n')
 		})
 	})
 })
