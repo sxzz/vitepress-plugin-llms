@@ -18,6 +18,8 @@ jobs:
     if: github.event.inputs.run-tests == 'true'
     permissions: {}
     uses: ./.github/workflows/tests.yml
+    with:
+      run-on-windows: true
 
   release:
     name: 🚀 Release
