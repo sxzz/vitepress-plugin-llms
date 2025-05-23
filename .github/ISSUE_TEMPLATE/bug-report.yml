@@ -1,13 +1,12 @@
 name: 🐛 Bug Report
 description: Create a report to help us improve
 title: "[Bug]: "
-labels: ["bug"]
+labels: [bug]
 
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
+      value: Thanks for taking the time to fill out this bug report!
 
   - type: textarea
     id: description
@@ -23,10 +22,11 @@ body:
       label: To Reproduce
       description: Steps to reproduce the behavior
       placeholder: |
-        1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
-        4. See error
+        1. Create a new project
+        2. Install the package
+        3. Configure it
+        4. Run the build
+        5. See error
     validations:
       required: true
 
@@ -39,10 +39,10 @@ body:
       required: true
 
   - type: textarea
-    id: screenshots
+    id: solution
     attributes:
-      label: Screenshots
-      description: Add screenshots if applicable
+      label: Suggested solution
+      description: Suggest a fix/reason for the bug
     validations:
       required: false
 
@@ -53,12 +53,3 @@ body:
       description: Additional context about the problem.
     validations:
       required: false
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](../../CODE_OF_CONDUCT.md).
-      options:
-        - label: I agree to follow this project's **Code of Conduct**
-          required: true
