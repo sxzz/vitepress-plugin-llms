@@ -1,10 +1,12 @@
-on: [workflow_call]
+on:
+  workflow_call:
+    inputs:
+      run-on-windows:
+        required: false
+        type: boolean
+        default: false
 
 permissions: {}
-
-env:
-  WINDOWS_USERPROFILE: "D:"
-  WINDOWS_BUN_CACHE_DIR: 'D:\.bun\install\cache'
 
 jobs:
   test:
@@ -12,28 +14,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os:
+          - ubuntu-latest
+          - ${{ inputs.run-on-windows && 'windows-latest' || '' }}
+        exclude:
+          - os: ""
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      # https://ichard26.github.io/blog/2025/03/faster-pip-ci-on-windows-d-drive/#moving-temp-to-the-d-drive
-      - name: 🗂️ Configure Temp Directory (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $TEMP_DIR = "$env:WINDOWS_USERPROFILE\Temp"
-          # Create temp dir
-          New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
-
-          "TEMP=$TEMP_DIR"  >> $env:GITHUB_ENV
-          "TMP=$TEMP_DIR"   >> $env:GITHUB_ENV
-
-      - name: 🔓 Disable Windows Defender (Windows)
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: Set-MpPreference -DisableRealtimeMonitoring $true
-
       - name: 📥 Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -52,25 +41,19 @@ jobs:
 
       - name: 🔧 Setup Bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
-        env:
-          USERPROFILE: ${{ env.WINDOWS_USERPROFILE }}
         with:
           bun-version: latest
 
-        # Run only on Windows because on Linux there are no problems with slow package installation
+      # Run only on Windows because on Linux there are no problems with slow package installation
       - name: 📥 Cache Bun dependencies (Windows)
         if: runner.os == 'Windows'
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
-        env:
-          BUN_INSTALL_CACHE_DIR: ${{ runner.os == 'Windows' && env.WINDOWS_BUN_CACHE_DIR || '' }}
         with:
-          path: ${{ env.BUN_INSTALL_CACHE_DIR }}
+          path: ~\.bun
           key: ${{ matrix.os }}-bun-${{ hashFiles('**/bun.lock') }}
-          restore-keys: ${{ matrix.os }}-bun-
+          restore-keys: ${{ matrix.os }}-bun-cache-
 
       - name: 📦 Install dependencies
-        env:
-          BUN_INSTALL_CACHE_DIR: ${{ runner.os == 'Windows' && env.WINDOWS_BUN_CACHE_DIR || '' }}
         run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts --omit=optional
 
       - name: 🧪 Run tests

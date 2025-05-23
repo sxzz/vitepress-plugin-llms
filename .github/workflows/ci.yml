@@ -29,6 +29,12 @@ on:
       - "!**/*.md"
 
   workflow_dispatch:
+    inputs:
+      run-on-windows:
+        description: Run tests on Windows
+        type: boolean
+        default: false
+        required: false
 
 concurrency:
   group: tests-${{ github.ref }}
@@ -39,6 +45,8 @@ jobs:
     permissions: {}
     if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     uses: ./.github/workflows/tests.yml
+    with:
+      run-on-windows: ${{ inputs.run-on-windows || contains(github.event.head_commit.message, '[test windows]') }}
 
   pkg-pr-new:
     name: ⚡ pkg.pr.new
