@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v1.3.4
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.3...v1.3.4)
+
+### 💅 Refactors
+
+- Refactor the regexs ([7ed052a](https://github.com/okineadev/vitepress-plugin-llms/commit/7ed052a))
+
+### 🏡 Chore
+
+- Improve `bug-report` template ([5c5c518](https://github.com/okineadev/vitepress-plugin-llms/commit/5c5c518))
+- **readme:** Remove GitAds ([b4ef2f9](https://github.com/okineadev/vitepress-plugin-llms/commit/b4ef2f9))
+
+### 🤖 CI
+
+- Refactor tests, disable Windows tests by default ([d9f776c](https://github.com/okineadev/vitepress-plugin-llms/commit/d9f776c))
+- Run tests also on Windows before release by default if they were set to run ([9daf916](https://github.com/okineadev/vitepress-plugin-llms/commit/9daf916))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.3.3
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.2...v1.3.3)
