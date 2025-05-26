@@ -20,18 +20,24 @@ export const unnecessaryFilesList = {
 	team: ['team.md'],
 } as const satisfies Record<string, readonly string[]>
 
+export const tagRegex = (tag: RegExp | string, type: 'open' | 'closed', flags?: string) =>
+	new RegExp(`<${type === 'open' ? '' : '/'}${tag}>`, flags)
 /**
- * Creates a regular expression pattern to match HTML/XML-like tags with the specified tag name
+ * Generates a regular expression that matches a complete custom tag, including its content.
  *
- * @param tagName - The name of the tag to match. Can be either a string or RegExp
- * @param flags - Optional regex flags (e.g., 'g' for global, 'i' for case-insensitive)
- * @returns A RegExp that matches content between opening and closing tags
+ * The resulting RegExp matches an opening tag, captures everything inside (non-greedily),
+ * and then matches the corresponding closing tag. The tag name is provided as an argument.
+ *
+ * @param tag - The name of the tag to match (e.g., "note" will match <note>...</note>).
+ * @returns A RegExp that captures the entire tag block including its inner content.
  *
  * @example
  * ```ts
- * const regex = tagRegex('script'); // matches <script>any content</script>
- * const regexWithFlags = tagRegex('div', 'g'); // matches all <div>content</div> globally
+ * const regex = fullTagRegex('note');
+ * const input = '<note>This is a note</note>';
+ * const match = input.match(regex);
+ * console.log(match?.[1]); // "This is a note"
  * ```
  */
-export const tagRegex = (tagName: RegExp | string, flags?: string) =>
-	new RegExp(`<${tagName}>([\s\S]*?)<\/${tagName}>`, flags)
+export const fullTagRegex = (tag: RegExp | string, flags?: string) =>
+	new RegExp(`${tagRegex(tag, 'open').source}([\\s\\S]*?)${tagRegex(tag, 'closed').source}`, flags)

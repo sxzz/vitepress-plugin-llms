@@ -1,5 +1,6 @@
 import type { Paragraph, Parent, Root } from 'mdast'
 import { type BuildVisitor, visit } from 'unist-util-visit'
+import { fullTagRegex, tagRegex } from '../constants'
 import type { NotUndefined } from '../types'
 
 /**
@@ -27,9 +28,7 @@ import type { NotUndefined } from '../types'
  */
 export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 	return () => (tree: Root) => {
-		const openTagRegex = new RegExp(`<${tag}>`)
-		const closeTagRegex = new RegExp(`</${tag}>`)
-		const fullTagRegex = new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`)
+		const ourFullTagRegex = fullTagRegex(tag)
 
 		// First pass: collect all HTML nodes to process
 		const nodesToProcess: NotUndefined<Parameters<BuildVisitor<Root, 'html'>>>[] = []
@@ -44,7 +43,7 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 		// Second pass: process nodes in reverse order
 		for (const [node, index, parent] of nodesToProcess.reverse()) {
 			// Case 1: The entire content is in one HTML node
-			if (fullTagRegex.test(node.value)) {
+			if (ourFullTagRegex.test(node.value)) {
 				if (intent === 'remove') {
 					parent.children.splice(index, 1)
 					if (parent.type === 'paragraph' && parent.children.length === 0) {
@@ -53,7 +52,7 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 					continue
 				}
 				if (intent === 'unwrap') {
-					const match = node.value.match(fullTagRegex)
+					const match = node.value.match(ourFullTagRegex)
 					if (match?.[1]) {
 						// Replace the node with its inner content
 						node.value = match[1].trim()
@@ -63,12 +62,12 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 			}
 
 			// Case 2: Opening and closing tags are separate nodes
-			if (openTagRegex.test(node.value)) {
+			if (tagRegex(tag, 'open').test(node.value)) {
 				// Find the closing tag
 				let closeIndex = index + 1
 				while (closeIndex < parent.children.length) {
 					const closeNode = parent.children[closeIndex]
-					if (closeNode.type === 'html' && closeTagRegex.test(closeNode.value)) {
+					if (closeNode.type === 'html' && tagRegex(tag, 'closed').test(closeNode.value)) {
 						break
 					}
 					closeIndex++

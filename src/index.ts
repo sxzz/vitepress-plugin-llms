@@ -16,7 +16,7 @@ import { name as packageName } from '../package.json'
 
 import { millify } from 'millify'
 import { approximateTokenSize } from 'tokenx'
-import { defaultLLMsTxtTemplate, tagRegex, unnecessaryFilesList } from './constants'
+import { defaultLLMsTxtTemplate, fullTagRegex, unnecessaryFilesList } from './constants'
 import viteDevServerMiddleware from './devserer-middleware'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
@@ -98,8 +98,8 @@ function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 
 				// strip content between <llm-only> and </llm-only>
 				const modifiedContent = content
-					.replace(tagRegex('llm-only', 'g'), '')
-					.replace(tagRegex('llm-exclude', 'g'), '$1')
+					.replace(fullTagRegex('llm-only', 'g'), '')
+					.replace(fullTagRegex('llm-exclude', 'g'), '$1')
 				// remove <llm-exclude> tags, keep the content
 				// modifiedContent = modifiedContent
 
