@@ -186,4 +186,4 @@ You can read the instructions for contributing here - [CONTRIBUTING.md](./CONTRI
 
 Thank you to everyone who helped with the project!
 
-![Contributors](https://contributors-table.vercel.app/image?repo=okineadev/vitepress-plugin-llms&width=50&columns=10)
+![Contributors](https://contributors-table.vercel.app/image?repo=okineadev/vitepress-plugin-llms&width=50&columns=15)
