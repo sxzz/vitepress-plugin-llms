@@ -50,24 +50,6 @@ Now, thanks to this plugin, the LLM version of the website documentation is auto
 
 See [`src/types.d.ts`](src/types.d.ts)
 
-### Redirects (optional, but recommended ✅)
-
-It is recommended to configure redirects so that AI can use addresses with both `.md` and `.txt` extensions
-
-#### Netlify
-
-`public/_redirects`:
-
-```plaintext
-/llms-full.md    /llms-full.txt 200!
-/llms-full.txt   /llms-full.txt 200!
-```
-
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable-next-line -->
-<sub>Syntax documentation: <https://docs.netlify.com/routing/redirects></sub>
-<!-- prettier-ignore-end -->
-
 #### Example Configuration
 
 Here is an example of how to configure the plugin with custom settings:
