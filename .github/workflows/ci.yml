@@ -8,7 +8,6 @@ on:
       - src/**
       - tests/**
       - package.json
-      - .npmignore
       - bun.lock
       - bunfig.toml
       - bunup.config.ts
@@ -21,7 +20,6 @@ on:
       - src/**
       - tests/**
       - package.json
-      - .npmignore
       - bun.lock
       - bunfig.toml
       - bunup.config.ts
@@ -66,7 +64,6 @@ jobs:
           sparse-checkout: |
             src/
             package.json
-            .npmignore
             bun.lock
             bunfig.toml
             bunup.config.ts
