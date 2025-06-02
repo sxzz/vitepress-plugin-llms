@@ -1,7 +1,7 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:recommended", "helpers:pinGitHubActionDigests", "npm:unpublishSafe"],
-	"labels": ["dependencies"],
+	"labels": ["📦 dependencies"],
 	"packageRules": [
 		{
 			"matchPackagePatterns": ["*"],
@@ -17,7 +17,7 @@
 			"matchManagers": ["github-actions"],
 			"groupName": "github-actions",
 			"commitMessagePrefix": "chore(actions):",
-			"labels": ["workflows"]
+			"labels": ["🔄 workflows"]
 		}
 	],
 	"schedule": ["monthly"],
