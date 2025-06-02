@@ -1,6 +1,8 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:recommended", "helpers:pinGitHubActionDigests", "npm:unpublishSafe"],
+	"extends": ["config:base", "helpers:pinGitHubActionDigests", "npm:unpublishSafe", ":gitSignOff"],
+	"commitMessageLowerCase": "auto",
+	"commitMessagePrefix": "chore(deps):",
 	"labels": ["📦 dependencies"],
 	"packageRules": [
 		{
