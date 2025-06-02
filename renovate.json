@@ -1,0 +1,30 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+	"labels": ["dependencies"],
+	"packageRules": [
+		{
+			"matchPackagePatterns": ["*"],
+			"matchUpdateTypes": ["patch"],
+			"enabled": false
+		},
+		{
+			"matchManagers": ["bun"],
+			"groupName": "dev-dependencies",
+			"commitMessage": {
+				"prefix": "chore(deps-dev)"
+			}
+		},
+		{
+			"matchManagers": ["github-actions"],
+			"groupName": "github-actions",
+			"commitMessage": {
+				"prefix": "chore(actions)"
+			},
+			"labels": ["workflows"]
+		}
+	],
+	"enabledManagers": ["bun", "workflows"],
+	"schedule": ["monthly"],
+	"prConcurrentLimit": 2
+}
