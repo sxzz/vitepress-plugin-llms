@@ -9,11 +9,6 @@
 			"enabled": false
 		},
 		{
-			"matchManagers": ["bun"],
-			"groupName": "dev-dependencies",
-			"commitMessagePrefix": "chore(deps-dev):"
-		},
-		{
 			"matchManagers": ["github-actions"],
 			"groupName": "github-actions",
 			"commitMessagePrefix": "chore(actions):",

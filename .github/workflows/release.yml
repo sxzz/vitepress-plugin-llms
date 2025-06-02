@@ -34,14 +34,14 @@ jobs:
 
     steps:
       - name: 🔐 Authentication for pushing to the main branch
-        uses: actions/create-github-app-token
+        uses: actions/create-github-app-token@v2.0.6
         id: app-token
         with:
           app-id: ${{ secrets.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
 
       - name: 📥 Checkout
-        uses: actions/checkout
+        uses: actions/checkout@v4.2.2
         with:
           # Required for fetching tags and generating release notes
           fetch-depth: 0
@@ -49,9 +49,7 @@ jobs:
           persist-credentials: true
 
       - name: 🔧 Setup Bun
-        uses: oven-sh/setup-bun
-        with:
-          bun-version: latest
+        uses: oven-sh/setup-bun@v2.0.2
 
       - name: 📦 Install dependencies
         run: bun install --frozen-lockfile
