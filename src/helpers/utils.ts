@@ -28,35 +28,20 @@ const contentFileExts = new Set(['.md', '.html'])
  * Strips the file extension from a given file path, only if it is a content file.
  *
  * @param filepath - The path to the file.
- * @returns The filename without the extension.
+ * @param usePosix - Whether to return the path in POSIX format.
+ * @returns The path without the extension if applicable.
  */
-export const stripExt = (filepath: string) => {
+export const stripExt = (filepath: string, usePosix = false) => {
 	const { dir, file } = splitDirAndFile(filepath)
-
 	const ext = path.extname(file)
-	if (contentFileExts.has(ext)) {
-		return path.join(dir, path.basename(file, ext))
-	}
+	const base = contentFileExts.has(ext) ? path.basename(file, ext) : file
 
-	return path.join(dir, file)
+	const joinFn = usePosix ? path.posix.join : path.join
+
+	return joinFn(dir, base)
 }
 
-/**
- * Strips the file extension from a given file path using POSIX format, only if it is a content file.
- *
- * @param filepath - The path to the file.
- * @returns The filename without the extension in POSIX format.
- */
-export const stripExtPosix = (filepath: string) => {
-	const { dir, file } = splitDirAndFile(filepath)
-
-	const ext = path.extname(file)
-	if (contentFileExts.has(ext)) {
-		return path.posix.join(dir, path.basename(file, ext))
-	}
-
-	return path.posix.join(dir, file)
-}
+export const stripExtPosix = (filepath: string) => stripExt(filepath, true)
 
 /**
  * Extracts the title from a markdown file's frontmatter or first heading.
