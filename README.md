@@ -48,6 +48,8 @@ Now, thanks to this plugin, the LLM version of the website documentation is auto
 
 ### Plugin Settings
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/okineadev/vitepress-plugin-llms)
+
 See [`src/types.d.ts`](src/types.d.ts)
 
 #### Example Configuration
