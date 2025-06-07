@@ -1,6 +1,35 @@
 # Changelog
 
 
+## v1.4.0
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.4...v1.4.0)
+
+### 🚀 Enhancements
+
+- Implement VitePress `rewrites` support ([6c8f5f1](https://github.com/okineadev/vitepress-plugin-llms/commit/6c8f5f1))
+
+### 🩹 Fixes
+
+- Fix sidebar file path resolving and add support for `base` sidebar parameter ([#51](https://github.com/okineadev/vitepress-plugin-llms/pull/51))
+
+### 📖 Documentation
+
+- Remove redirects instructions ([1cfecba](https://github.com/okineadev/vitepress-plugin-llms/commit/1cfecba))
+- Stretch the contributor list image from `10` columns to `15` ([a3554c6](https://github.com/okineadev/vitepress-plugin-llms/commit/a3554c6))
+
+### 🏡 Chore
+
+- Migrate back to Renovate ([8c258f2](https://github.com/okineadev/vitepress-plugin-llms/commit/8c258f2))
+- Use `files` field in `package.json` instead of tricks with `.npmignore` ([3597f4f](https://github.com/okineadev/vitepress-plugin-llms/commit/3597f4f))
+- Improve Renovate configuration ([0dbbabb](https://github.com/okineadev/vitepress-plugin-llms/commit/0dbbabb))
+- **actions:** Pin dependencies ([#54](https://github.com/okineadev/vitepress-plugin-llms/pull/54))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+- Gilad S. ([@giladgd](https://github.com/giladgd))
+
 ## v1.3.4
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.3...v1.3.4)
