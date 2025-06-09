@@ -1,6 +1,28 @@
 # Changelog
 
 
+## v1.5.0
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.4.0...v1.5.0)
+
+### 🚀 Enhancements
+
+- Add depth-based generation for hierarchical `llms.txt` files ([#59](https://github.com/okineadev/vitepress-plugin-llms/pull/59))
+
+### 💅 Refactors
+
+- Do not repeat `stripExt` functions ([d7dda58](https://github.com/okineadev/vitepress-plugin-llms/commit/d7dda58))
+- Move devserver middleware back to `src/index.ts` ([cd0b8f5](https://github.com/okineadev/vitepress-plugin-llms/commit/cd0b8f5))
+
+### 📖 Documentation
+
+- Add "Ask DeepWiki" badge ([110319d](https://github.com/okineadev/vitepress-plugin-llms/commit/110319d))
+
+### ❤️ Contributors
+
+- Max <maximogarciamtnez@gmail.com>
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.4.0
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.3.4...v1.4.0)
