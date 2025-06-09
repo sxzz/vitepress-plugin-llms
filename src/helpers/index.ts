@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises'
+import path from 'node:path'
 
 import matter from 'gray-matter'
 
@@ -38,6 +39,12 @@ export interface GenerateLLMsTxtOptions {
 
 	/** Optional sidebar configuration for organizing the TOC. */
 	sidebar?: DefaultTheme.Sidebar
+
+	/**
+	 * Optional directory filter to only include files within the specified directory.
+	 * If not provided, all files will be included.
+	 */
+	directoryFilter?: string
 }
 
 /**
@@ -74,6 +81,7 @@ export async function generateLLMsTxt(
 		sidebar,
 		linksExtension,
 		cleanUrls,
+		directoryFilter,
 	}: GenerateLLMsTxtOptions,
 ): Promise<string> {
 	// @ts-expect-error
@@ -111,6 +119,7 @@ export async function generateLLMsTxt(
 		sidebarConfig: sidebar || vitepressConfig?.themeConfig?.sidebar,
 		linksExtension,
 		cleanUrls,
+		directoryFilter,
 	})
 
 	return expandTemplate(LLMsTxtTemplate, templateVariables)
@@ -128,6 +137,12 @@ export interface GenerateLLMsFullTxtOptions {
 
 	/** Whether to use clean URLs (without the extension). */
 	cleanUrls?: VitePressConfig['cleanUrls']
+
+	/**
+	 * Optional directory filter to only include files within the specified directory.
+	 * If not provided, all files will be included.
+	 */
+	directoryFilter?: string
 }
 
 /**
@@ -141,10 +156,21 @@ export async function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
 	options: GenerateLLMsFullTxtOptions,
 ) {
-	const { domain, linksExtension, cleanUrls } = options
+	const { domain, linksExtension, cleanUrls, directoryFilter } = options
+
+	// Filter files by directory if directoryFilter is provided
+	const filteredFiles = directoryFilter
+		? directoryFilter === '.'
+			? preparedFiles // Root directory includes all files
+			: preparedFiles.filter((file) => {
+					const relativePath = file.path
+					return relativePath.startsWith(directoryFilter + path.sep) || relativePath === directoryFilter
+				})
+		: preparedFiles
 
 	const fileContents = await Promise.all(
-		preparedFiles.map(async (file) => {
+		filteredFiles.map(async (file) => {
+			// file.path is already relative to outDir, so use it directly
 			const metadata = await generateMetadata(file.file, {
 				domain,
 				filePath: file.path,

@@ -146,12 +146,12 @@ export const preparedFilesSample: PreparedFile[] = [
 export const preparedFilesWithCommonPrefixSample: PreparedFile[] = [
 	{
 		title: 'First version',
-		path: `blog/v1.md`,
+		path: 'blog/v1.md',
 		file: matter(fakeIndexMd),
 	},
 	{
 		title: 'New features!',
-		path: `blog/v1.1.md`,
+		path: 'blog/v1.1.md',
 		file: matter(fakeGettingStartedMd),
 	},
 ]
