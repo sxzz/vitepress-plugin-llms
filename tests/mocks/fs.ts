@@ -1,5 +1,5 @@
 import { mock } from 'bun:test'
-import { fakeMarkdownDocument } from '../resources'
+import fakeMarkdownDocument from '../test-assets/markdown-document.md' with { type: 'text' }
 
 /**
  * Mocked filesystem module for testing purposes

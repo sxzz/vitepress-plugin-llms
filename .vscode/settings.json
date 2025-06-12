@@ -19,6 +19,10 @@
 	"typescript.tsdk": "node_modules/typescript/lib",
 
 	"material-icon-theme.files.associations": {
-		"bunup.config.ts": "bun"
+		"bunup.config.ts": "bun",
+		"tsconfig.bun.json": "tsconfig"
+	},
+	"material-icon-theme.folders.associations": {
+		"tests/test-assets": "resource"
 	}
 }

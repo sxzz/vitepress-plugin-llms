@@ -1,39 +1,15 @@
 import matter from 'gray-matter'
 import type { DefaultTheme } from 'vitepress'
 import type { PreparedFile } from '../src/types'
+import fakeGettingStartedMd from './test-assets/getting-started.md' with { type: 'text' }
+import fakeIndexMd from './test-assets/index.md' with { type: 'text' }
+import fakeMarkdownDocument from './test-assets/markdown-document.md' with { type: 'text' }
+import fakeQuickstartMd from './test-assets/quickstart.md' with { type: 'text' }
 
 export const outDir = 'dist'
 
-const blah = 'blah blah blah...'
 export const sampleDomain = 'https://example.com'
 
-export const fakeIndexMd = `\
----
-title: Some cool tool
-description: Blazing fast frontend tool
----`
-
-export const fakeGettingStartedMd = `\
----
-title: Getting started
-description: Instructions on how to get started with the tool
----
-
-# Installation
-
-${blah}`
-
-export const fakeQuickstartMd = `\
----
-title: Quickstart
-description: Instructions for quick project initialization
----
-
-# Project initialization
-
-${blah}`
-
-export const fakeMarkdownDocument = '# Some cool stuff'
 export const fakeCustomLlmsTxtTemplate = '# Custom title\n\n> Custom description\n\n## TOC\n\n{toc}'
 
 export const sampleVitePressSidebar: DefaultTheme.Sidebar = [

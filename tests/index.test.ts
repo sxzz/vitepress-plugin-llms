@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
 import { mockedFs } from './mocks/fs'
-import { fakeMarkdownDocument } from './resources'
+import fakeMarkdownDocument from './test-assets/markdown-document.md' with { type: 'text' }
 
 mock.module('node:fs/promises', () => mockedFs)
 const { access, mkdir, writeFile } = mockedFs.default

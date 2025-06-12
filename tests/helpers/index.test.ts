@@ -13,13 +13,8 @@ import {
 	generateLLMsTxt,
 	// @ts-ignore
 } from '../../src/helpers'
-import {
-	fakeCustomLlmsTxtTemplate,
-	fakeIndexMd,
-	outDir,
-	preparedFilesSample,
-	sampleDomain,
-} from '../resources'
+import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample, sampleDomain } from '../resources'
+import fakeIndexMd from '../test-assets/index.md' with { type: 'text' }
 
 describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', async () => {
