@@ -38,6 +38,7 @@ jobs:
             bunup.config.ts
             tsconfig*.json
             !**/*.md
+            tests/test-assets/*.md
 
       - name: 🔧 Setup Bun
         uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
