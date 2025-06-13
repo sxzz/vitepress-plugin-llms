@@ -46,6 +46,9 @@ export default defineConfig({
 
 Now, thanks to this plugin, the LLM version of the website documentation is automatically generated
 
+> [!NOTE]
+> **For repositories with documentation in other languages:** Please do not use this plugin, only English documentation is enough for LLMs.
+
 ### Plugin Settings
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/okineadev/vitepress-plugin-llms)
