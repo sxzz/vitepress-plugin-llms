@@ -1,4 +1,5 @@
 import { describe, expect, it, mock } from 'bun:test'
+import path from 'node:path'
 
 import { defaultLLMsTxtTemplate } from '../../src/constants'
 
@@ -20,7 +21,7 @@ describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', async () => {
 		expect(
 			await generateLLMsTxt(preparedFilesSample.slice(1), {
-				indexMd: `${outDir}/index.md`,
+				indexMd: path.join(outDir, 'index.md'),
 				outDir: outDir,
 				LLMsTxtTemplate: defaultLLMsTxtTemplate,
 				templateVariables: {},
@@ -31,8 +32,8 @@ describe('generateLLMsTxt', () => {
 	it('works correctly with a custom template', async () => {
 		expect(
 			await generateLLMsTxt(preparedFilesSample.slice(1), {
-				indexMd: `${outDir}/index.md`,
-				outDir: outDir,
+				indexMd: path.join(outDir, 'index.md'),
+				outDir: path.join(outDir),
 				LLMsTxtTemplate: fakeCustomLlmsTxtTemplate,
 				templateVariables: {},
 				vitepressConfig: {},
@@ -42,7 +43,7 @@ describe('generateLLMsTxt', () => {
 	it('works correctly with a custom template variables', async () => {
 		expect(
 			await generateLLMsTxt(preparedFilesSample, {
-				indexMd: `${outDir}/index.md`,
+				indexMd: path.join(outDir, 'index.md'),
 				outDir: outDir,
 				LLMsTxtTemplate: defaultLLMsTxtTemplate,
 				templateVariables: { title: 'foo', description: 'bar', toc: 'zoo' },
@@ -54,7 +55,7 @@ describe('generateLLMsTxt', () => {
 	it('works correctly with a custom template and variables', async () => {
 		expect(
 			await generateLLMsTxt(preparedFilesSample, {
-				indexMd: `${outDir}/index.md`,
+				indexMd: path.join(outDir, 'index.md'),
 				outDir: outDir,
 				LLMsTxtTemplate: '# {foo}\n\n**{bar}**\n\n{zoo}',
 				templateVariables: { title: 'foo', description: 'bar', toc: 'zoo' },

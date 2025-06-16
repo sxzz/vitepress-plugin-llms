@@ -1,7 +1,7 @@
 import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
 import type { LinksExtension, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
-import { generateLink, stripExtPosix } from './utils'
+import { generateLink, stripExtPosix, transformToPosixPath } from './utils'
 
 /**
  * Generates a Markdown-formatted table of contents (TOC) link for a given file.
@@ -117,7 +117,7 @@ async function processSidebarSection(
 							(item.base ?? section.base ?? base ?? '') + item.link,
 						)
 						const matchingFile = preparedFiles.find((file) => {
-							const relativePath = `/${stripExtPosix(file.path)}`
+							const relativePath = `/${transformToPosixPath(stripExtPosix(file.path))}`
 							return isPathMatch(relativePath, normalizedItemLink)
 						})
 
@@ -254,8 +254,9 @@ export async function generateTOC(
 		? directoryFilter === '.'
 			? preparedFiles // Root directory includes all files
 			: preparedFiles.filter((file) => {
-					const relativePath = file.path
-					return relativePath.startsWith(directoryFilter + path.sep) || relativePath === directoryFilter
+					const normalizedPath = transformToPosixPath(file.path)
+					const normalizedFilter = transformToPosixPath(directoryFilter)
+					return normalizedPath.startsWith(`${normalizedFilter}/`) || normalizedPath === normalizedFilter
 				})
 		: preparedFiles
 
@@ -278,7 +279,7 @@ export async function generateTOC(
 			// Find files that didn't match any section
 			const allSidebarPaths = await collectPathsFromSidebarItems(flattenedSidebarConfig)
 			const unsortedFiles = filteredFiles.filter((file) => {
-				const relativePath = `/${stripExtPosix(file.path)}`
+				const relativePath = `/${transformToPosixPath(stripExtPosix(file.path))}`
 				return !allSidebarPaths.some((sidebarPath: string) => isPathMatch(relativePath, sidebarPath))
 			})
 

@@ -119,22 +119,35 @@ export const expandTemplate = (template: string, variables: Record<string, strin
 }
 
 /**
+ * Transforms a file path to use forward slashes (POSIX style) instead of backslashes.
+ *
+ * @param filepath - The file path to transform
+ * @returns The file path with forward slashes
+ *
+ * @example
+ * ```ts
+ * transformToPosixPath('foo\\bar\\baz.md') // Returns 'foo/bar/baz.md'
+ * ```
+ */
+export const transformToPosixPath = (filepath: string) => filepath.replace(/\\/g, '/')
+
+/**
  * Generates a complete link by combining a domain, path, and an optional extension.
  *
  * @param domain - The base domain of the link (e.g., "https://example.com").
- * @param path - The path to append to the domain (e.g., "guide").
+ * @param urlPath - The path to append to the domain (e.g., "guide").
  * @param extension - An optional extension to append to the path (e.g., ".md").
  * @returns The generated link
  */
 export const generateLink = (
-	path: string,
+	urlPath: string,
 	domain?: string,
 	extension?: LinksExtension,
 	cleanUrls?: VitePressConfig['cleanUrls'],
 ) =>
 	expandTemplate('{domain}/{path}{extension}', {
 		domain: domain || '',
-		path,
+		path: transformToPosixPath(urlPath),
 		extension: cleanUrls ? '' : extension,
 	})
 
