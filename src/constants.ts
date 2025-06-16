@@ -18,6 +18,8 @@ export const unnecessaryFilesList = {
 	blogs: ['blog/*', 'blog.md'],
 	/** Pages about team */
 	team: ['team.md'],
+	/** `README.md` */
+	readmeMd: ['README.md'],
 } as const satisfies Record<string, readonly string[]>
 
 export const tagRegex = (tag: RegExp | string, type: 'open' | 'closed', flags?: string) =>
