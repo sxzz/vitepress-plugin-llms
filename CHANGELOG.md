@@ -1,6 +1,31 @@
 # Changelog
 
 
+## v1.5.1
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.5.0...v1.5.1)
+
+### 🩹 Fixes
+
+- 🚑 fix index page resolving ([0461232](https://github.com/okineadev/vitepress-plugin-llms/commit/0461232))
+- 🚑 normalize file paths in TOC generation and tests ([92f7ddf](https://github.com/okineadev/vitepress-plugin-llms/commit/92f7ddf))
+
+### 💅 Refactors
+
+- 🗃️ move sample Markdown documents for testing into separate `.md` files ([b0eca52](https://github.com/okineadev/vitepress-plugin-llms/commit/b0eca52))
+
+### 📖 Documentation
+
+- Add a note advising against use of this plugin in documentation repos for other languages ([5e95245](https://github.com/okineadev/vitepress-plugin-llms/commit/5e95245))
+
+### 🤖 CI
+
+- Fix failing tests ([fa248e6](https://github.com/okineadev/vitepress-plugin-llms/commit/fa248e6))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+
 ## v1.5.0
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.4.0...v1.5.0)
