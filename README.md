@@ -46,7 +46,37 @@ export default defineConfig({
 
 Now, thanks to this plugin, the LLM version of the website documentation is automatically generated
 
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable no-inline-html -->
+
+> [!TIP]
+> You can add <kbd>📋 Copy as Markdown</kbd> and <kbd>📥 Download as Markdown</kbd> buttons for each page so that visitors can copy the page in Markdown format with just one click!
+>
+> <img src="./assets/copy-as-markdown-buttons-screenshot.png" width="400" alt="Screenshot">
+
+<!-- markdownlint-restore -->
+
+Add this configuration to `docs/.vitepress/theme/index.ts`:
+
+```ts
+import { addCopyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms'
+import DefaultTheme from 'vitepress/theme'
+import type { Theme } from 'vitepress'
+
+export default {
+  extends: DefaultTheme,
+  enhanceApp({ router }) {
+    if (typeof window === 'undefined') return
+
+    router.onAfterRouteChange = () => {
+      requestAnimationFrame(addCopyOrDownloadAsMarkdownButtons)
+    }
+  }
+} satisfies Theme
+```
+
 > [!NOTE]
+>
 > **For repositories with documentation in other languages:** Please do not use this plugin, only English documentation is enough for LLMs.
 
 ### Plugin Settings

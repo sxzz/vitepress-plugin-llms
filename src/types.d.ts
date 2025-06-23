@@ -267,6 +267,7 @@ export interface LlmstxtSettings extends TemplateVariables {
 	}
 }
 
+//#region Internal types
 /** Represents a prepared file, including its title and path. */
 type PreparedFile = {
 	/**
@@ -310,3 +311,5 @@ type LinksExtension = string | '.md' | '.html'
 type NotUndefined<T> = {
 	[K in keyof T]-?: Exclude<T[K], undefined>
 }
+
+// #endregion

@@ -23,6 +23,7 @@
 		"tsconfig.bun.json": "tsconfig"
 	},
 	"material-icon-theme.folders.associations": {
-		"tests/test-assets": "resource"
+		"tests/test-assets": "resource",
+		"vitepress-components": "vue"
 	}
 }

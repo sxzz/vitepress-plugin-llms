@@ -6,6 +6,7 @@ import markdownTitle from 'markdown-title'
 import { compile, match } from 'path-to-regexp'
 import type { LinksExtension, LlmstxtSettings, VitePressConfig } from '../types'
 
+// #region Path utilities
 /**
  * Splits a file path into its directory and file components.
  *
@@ -42,6 +43,7 @@ export const stripExt = (filepath: string, usePosix = false) => {
 }
 
 export const stripExtPosix = (filepath: string) => stripExt(filepath, true)
+// #endregion
 
 /**
  * Extracts the title from a markdown file's frontmatter or first heading.

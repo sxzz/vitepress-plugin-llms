@@ -29,8 +29,12 @@ import {
 } from './helpers/utils'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 
+import addCopyOrDownloadAsMarkdownButtons from './vitepress-components/copy-or-download-as-markdown-buttons'
+export { addCopyOrDownloadAsMarkdownButtons }
+
 const PLUGIN_NAME = packageName
 
+//#region Plugin
 /**
  * [VitePress](http://vitepress.dev/) plugin for generating raw documentation
  * for **LLMs** in Markdown format which is much lighter and more efficient for LLMs
@@ -428,3 +432,5 @@ function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 }
 
 export default llmstxt
+
+//#endregion
