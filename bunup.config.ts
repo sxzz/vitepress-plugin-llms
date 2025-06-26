@@ -1,14 +1,21 @@
 import { defineConfig } from 'bunup'
 // @ts-ignore
-import { report } from 'bunup/plugins'
+import { copy } from 'bunup/plugins'
 
 export default defineConfig({
-	entry: ['src/index.ts'],
+	entry: ['src/index.ts', 'src/vitepress-components/utils.ts'],
 	format: ['esm'],
 	// Generate declaration file (.d.ts)
-	dts: true,
+	dts: {
+		entry: ['src/index.ts'],
+		minify: true,
+		splitting: true,
+	},
 	minify: false,
 	banner: '// Built with bunup',
 	clean: true,
-	plugins: [report()],
+	plugins: [
+		// report(),
+		copy(['src/vitepress-components/*.vue'], 'dist/vitepress-components'),
+	],
 })

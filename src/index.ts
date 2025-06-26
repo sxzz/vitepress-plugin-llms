@@ -29,8 +29,8 @@ import {
 } from './helpers/utils'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
 
-import addCopyOrDownloadAsMarkdownButtons from './vitepress-components/copy-or-download-as-markdown-buttons'
-export { addCopyOrDownloadAsMarkdownButtons }
+import { copyOrDownloadAsMarkdownButtons } from './helpers/markdown'
+export { copyOrDownloadAsMarkdownButtons }
 
 const PLUGIN_NAME = packageName
 

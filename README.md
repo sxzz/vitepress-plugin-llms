@@ -46,6 +46,10 @@ export default defineConfig({
 
 Now, thanks to this plugin, the LLM version of the website documentation is automatically generated
 
+> [!NOTE]
+>
+> **For repositories with documentation in other languages:** Please do not use this plugin, only English documentation is enough for LLMs.
+
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-inline-html -->
 
@@ -56,28 +60,36 @@ Now, thanks to this plugin, the LLM version of the website documentation is auto
 
 <!-- markdownlint-restore -->
 
-Add this configuration to `docs/.vitepress/theme/index.ts`:
+First, register a global component with buttons in `docs/.vitepress/theme/index.ts`:
 
 ```ts
-import { addCopyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms'
 import DefaultTheme from 'vitepress/theme'
 import type { Theme } from 'vitepress'
+import CopyOrDownloadAsMarkdownButtons from 'vitepress-plugin-llms/vitepress-components/CopyOrDownloadAsMarkdownButtons.vue'
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ router }) {
-    if (typeof window === 'undefined') return
-
-    router.onAfterRouteChange = () => {
-      requestAnimationFrame(addCopyOrDownloadAsMarkdownButtons)
-    }
+  enhanceApp({ app }) {
+    app.component('CopyOrDownloadAsMarkdownButtons', CopyOrDownloadAsMarkdownButtons)
   }
 } satisfies Theme
 ```
 
-> [!NOTE]
->
-> **For repositories with documentation in other languages:** Please do not use this plugin, only English documentation is enough for LLMs.
+And tell VitePress to use an additional Markdown plugin that will insert them:
+
+```ts
+import { defineConfig } from 'vitepress'
+import { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms'
+
+export default defineConfig({
+  // ...
+  markdown: {
+    config(md) {
+      md.use(copyOrDownloadAsMarkdownButtons)
+    }
+  }
+})
+```
 
 ### Plugin Settings
 

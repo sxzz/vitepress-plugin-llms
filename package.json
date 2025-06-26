@@ -34,6 +34,7 @@
 	"dependencies": {
 		"byte-size": "^9.0.1",
 		"gray-matter": "^4.0.3",
+		"markdown-it": "^14.1.0",
 		"markdown-title": "^1.0.2",
 		"millify": "^6.1.0",
 		"minimatch": "^10.0.1",
@@ -50,7 +51,7 @@
 		"@types/byte-size": "^8.1.2",
 		"@types/node": "^22.15.18",
 		"bun-types": "^1.2.13",
-		"bunup": "0.8.6",
+		"bunup": "0.8.48",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.0.0",
 		"typescript": "^5.8.3",
