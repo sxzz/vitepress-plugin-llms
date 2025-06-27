@@ -50,6 +50,8 @@ Now, thanks to this plugin, the LLM version of the website documentation is auto
 >
 > **For repositories with documentation in other languages:** Please do not use this plugin, only English documentation is enough for LLMs.
 
+---
+
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-inline-html -->
 
@@ -91,11 +93,44 @@ export default defineConfig({
 })
 ```
 
+---
+
+### ✅ Good practices
+
+#### 1. Use `description` in the pages frontmatter
+
+Typically, the list of pages in llms.txt is generated like this:
+
+```markdown
+- [Tailwind v4](/docs/tailwind-v4.md)
+```
+
+As you can see, it's not very clear what's on this page and what it's for
+
+But you can insert `description` in frontmatter in the `docs/tailwind-v4.md` file:
+
+```markdown
+---
+description: How to use shadcn-vue with Tailwind v4.
+---
+
+...
+```
+
+And the link in the generated `llms.txt` will display the page description:
+
+```markdown
+- [Tailwind v4](/docs/tailwind-v4.md): How to use shadcn-vue with Tailwind v4.
+```
+
 ### Plugin Settings
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/okineadev/vitepress-plugin-llms)
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable no-inline-html -->
 
-See [`src/types.d.ts`](src/types.d.ts)
+See <a href="src/types.d.ts">`src/types.d.ts`</a> or <a href="https://deepwiki.com/okineadev/vitepress-plugin-llms"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" align="center"/></a>
+
+<!-- markdownlint-restore -->
 
 #### Example Configuration
 
