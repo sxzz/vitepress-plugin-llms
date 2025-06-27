@@ -1,5 +1,5 @@
 import { defineConfig } from 'bunup'
-// @ts-ignore
+// @ts-expect-error
 import { copy } from 'bunup/plugins'
 
 export default defineConfig({
@@ -14,8 +14,5 @@ export default defineConfig({
 	minify: false,
 	banner: '// Built with bunup',
 	clean: true,
-	plugins: [
-		// report(),
-		copy(['src/vitepress-components/*.vue'], 'dist/vitepress-components'),
-	],
+	plugins: [copy(['src/vitepress-components/*.vue'], 'dist/vitepress-components')],
 })

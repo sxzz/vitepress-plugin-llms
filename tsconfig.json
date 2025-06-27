@@ -1,6 +1,3 @@
 {
-	"references": [
-		{ "path": "./tsconfig.node.json" },
-		{ "path": "./tsconfig.bun.json" }
-	]
+	"references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.bun.json" }]
 }

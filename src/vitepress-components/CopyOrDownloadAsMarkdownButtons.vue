@@ -12,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+/** biome-ignore-all lint/correctness/noUnusedVariables: cuz it Vue o((>ω< ))o */
 import { ref } from 'vue'
 import { cleanUrl, downloadFile } from './utils'
 

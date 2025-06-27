@@ -262,7 +262,7 @@ export function resolveOutputFilePath(
 						resolvedRewrite = compileFn(result.params)
 						break
 					}
-				} catch (error) {
+				} catch (_error) {
 					// Skip invalid patterns silently
 				}
 			}

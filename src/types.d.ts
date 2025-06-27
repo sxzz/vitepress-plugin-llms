@@ -269,7 +269,7 @@ export interface LlmstxtSettings extends TemplateVariables {
 
 //#region Internal types
 /** Represents a prepared file, including its title and path. */
-type PreparedFile = {
+export type PreparedFile = {
 	/**
 	 * The title of the file.
 	 *
@@ -301,14 +301,14 @@ type PreparedFile = {
 	file: GrayMatterFile<Input>
 }
 
-interface VitePressConfig extends Omit<UserConfig, keyof ResolvedConfig>, ResolvedConfig {
+export interface VitePressConfig extends Omit<UserConfig, keyof ResolvedConfig>, ResolvedConfig {
 	vitepress: SiteConfig
 }
 
 /** Represents the link extension options for generated links. */
-type LinksExtension = string | '.md' | '.html'
+export type LinksExtension = string | '.md' | '.html'
 
-type NotUndefined<T> = {
+export type NotUndefined<T> = {
 	[K in keyof T]-?: Exclude<T[K], undefined>
 }
 

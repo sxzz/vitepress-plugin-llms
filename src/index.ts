@@ -1,8 +1,5 @@
-import type { Plugin, ViteDevServer } from 'vite'
-
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
 import matter from 'gray-matter'
 import { millify } from 'millify'
 import { minimatch } from 'minimatch'
@@ -11,13 +8,14 @@ import { remark } from 'remark'
 import remarkFrontmatter from 'remark-frontmatter'
 import { approximateTokenSize } from 'tokenx'
 import { remove } from 'unist-util-remove'
+import type { Plugin, ViteDevServer } from 'vite'
 
 import { name as packageName } from '../package.json'
 
 import { defaultLLMsTxtTemplate, fullTagRegex, unnecessaryFilesList } from './constants'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
-import { remarkPlease } from './helpers/markdown'
+import { copyOrDownloadAsMarkdownButtons, remarkPlease } from './helpers/markdown'
 import {
 	expandTemplate,
 	extractTitle,
@@ -28,8 +26,6 @@ import {
 	stripExt,
 } from './helpers/utils'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
-
-import { copyOrDownloadAsMarkdownButtons } from './helpers/markdown'
 export { copyOrDownloadAsMarkdownButtons }
 
 const PLUGIN_NAME = packageName
@@ -156,7 +152,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 							res.setHeader('Content-Type', 'text/plain; charset=utf-8')
 							res.end(content)
 							return
-						} catch (e) {
+						} catch (_error) {
 							// If file doesn't exist or can't be read, continue to next middleware
 							log.warn(`Failed to return ${pc.cyan(req.url)}: File not found`)
 							next()

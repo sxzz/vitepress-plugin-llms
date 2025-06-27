@@ -13,7 +13,6 @@
 export function cleanUrl(url?: string) {
 	// Use current page URL if none provided
 	if (!url) {
-		// biome-ignore lint/style/noParameterAssign:
 		url = window.location.origin + window.location.pathname
 	}
 

@@ -1,9 +1,9 @@
 {
-    "extends": "./tsconfig.node.json",
-    "compilerOptions": {
-        "composite": true,
-        "types": ["bun-types"]
-    },
+	"extends": "./tsconfig.node.json",
+	"compilerOptions": {
+		"composite": true,
+		"types": ["bun-types"]
+	},
 
-    "include": ["tests/**/*.ts"]
+	"include": ["tests/**/*.ts"]
 }
