@@ -36,6 +36,7 @@
 		"test": "bun test",
 		"preversion": "bun run format && git add .",
 		"build": "bunup",
+		"dev": "bunup --watch",
 		"prepare": "husky"
 	},
 	"lint-staged": {

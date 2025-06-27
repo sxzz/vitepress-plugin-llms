@@ -155,7 +155,7 @@ export interface GenerateLLMsFullTxtOptions {
 export async function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
 	options: GenerateLLMsFullTxtOptions,
-) {
+): Promise<string> {
 	const { domain, linksExtension, cleanUrls, directoryFilter } = options
 
 	// Filter files by directory if directoryFilter is provided

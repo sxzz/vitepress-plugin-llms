@@ -20,10 +20,11 @@ export const unnecessaryFilesList = {
 	team: ['team.md'],
 	/** `README.md` */
 	readmeMd: ['README.md'],
-} as const satisfies Record<string, readonly string[]>
+} as const
 
-export const tagRegex = (tag: RegExp | string, type: 'open' | 'closed', flags?: string) =>
-	new RegExp(`<${type === 'open' ? '' : '/'}${tag}>`, flags)
+export const tagRegex = (tag: RegExp | string, type: 'open' | 'closed', flags?: string): RegExp => {
+	return new RegExp(`<${type === 'open' ? '' : '/'}${tag}>`, flags)
+}
 
 /**
  * Generates a regular expression that matches a complete custom tag, including its content.
@@ -42,5 +43,5 @@ export const tagRegex = (tag: RegExp | string, type: 'open' | 'closed', flags?: 
  * console.log(match?.[1]); // "This is a note"
  * ```
  */
-export const fullTagRegex = (tag: RegExp | string, flags?: string) =>
+export const fullTagRegex = (tag: RegExp | string, flags?: string): RegExp =>
 	new RegExp(`${tagRegex(tag, 'open').source}([\\s\\S]*?)${tagRegex(tag, 'closed').source}`, flags)

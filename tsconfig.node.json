@@ -7,7 +7,7 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleDetection": "force",
-		"allowJs": true,
+		"isolatedDeclarations": true,
 
 		// Bundler mode
 		"moduleResolution": "bundler",

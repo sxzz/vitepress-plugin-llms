@@ -10,7 +10,7 @@
  * cleanUrl() // Uses current page URL
  * // Returns: 'https://currentsite.com/current-page'
  */
-export function cleanUrl(url?: string) {
+export function cleanUrl(url?: string): string {
 	// Use current page URL if none provided
 	if (!url) {
 		url = window.location.origin + window.location.pathname

@@ -13,7 +13,7 @@ import type { LinksExtension, LlmstxtSettings, VitePressConfig } from '../types'
  * @param filepath - The path to the file.
  * @returns An object containing the directory and file name.
  */
-export const splitDirAndFile = (filepath: string) => ({
+export const splitDirAndFile = (filepath: string): { dir: string; file: string } => ({
 	dir: path.dirname(filepath),
 	file: path.basename(filepath),
 })
@@ -32,7 +32,7 @@ const contentFileExts = new Set(['.md', '.html'])
  * @param usePosix - Whether to return the path in POSIX format.
  * @returns The path without the extension if applicable.
  */
-export const stripExt = (filepath: string, usePosix = false) => {
+export const stripExt = (filepath: string, usePosix = false): string => {
 	const { dir, file } = splitDirAndFile(filepath)
 	const ext = path.extname(file)
 	const base = contentFileExts.has(ext) ? path.basename(file, ext) : file
@@ -42,7 +42,7 @@ export const stripExt = (filepath: string, usePosix = false) => {
 	return joinFn(dir, base)
 }
 
-export const stripExtPosix = (filepath: string) => stripExt(filepath, true)
+export const stripExtPosix = (filepath: string): string => stripExt(filepath, true)
 // #endregion
 
 /**
@@ -67,7 +67,7 @@ export function extractTitle(file: GrayMatterFile<Input>): string | undefined {
  * console.log(regex.test('Hello {name}')); // true
  * ```
  */
-const templateVariable = (key: string) => new RegExp(`(\\n\\s*\\n)?\\{${key}\\}`, 'gi')
+const templateVariable = (key: string): RegExp => new RegExp(`(\\n\\s*\\n)?\\{${key}\\}`, 'gi')
 
 /**
  * Replaces occurrences of a template variable `{variable}` in a given content string with a provided value.
@@ -91,7 +91,7 @@ export function replaceTemplateVariable(
 	variable: string,
 	value: string | undefined,
 	fallback?: string,
-) {
+): string {
 	return content.replace(templateVariable(variable), (_, prefix) => {
 		const val = value?.length ? value : fallback?.length ? fallback : ''
 		return val ? `${prefix ? '\n\n' : ''}${val}` : ''
@@ -113,7 +113,7 @@ export function replaceTemplateVariable(
  * console.log(result); // 'Hello Alice, welcome to Wonderland!'
  * ```
  */
-export const expandTemplate = (template: string, variables: Record<string, string | undefined>) => {
+export const expandTemplate = (template: string, variables: Record<string, string | undefined>): string => {
 	return Object.entries(variables).reduce(
 		(result, [key, value]) => replaceTemplateVariable(result, key, value),
 		template,
@@ -131,7 +131,7 @@ export const expandTemplate = (template: string, variables: Record<string, strin
  * transformToPosixPath('foo\\bar\\baz.md') // Returns 'foo/bar/baz.md'
  * ```
  */
-export const transformToPosixPath = (filepath: string) => filepath.replace(/\\/g, '/')
+export const transformToPosixPath = (filepath: string): string => filepath.replace(/\\/g, '/')
 
 /**
  * Generates a complete link by combining a domain, path, and an optional extension.
@@ -146,7 +146,7 @@ export const generateLink = (
 	domain?: string,
 	extension?: LinksExtension,
 	cleanUrls?: VitePressConfig['cleanUrls'],
-) =>
+): string =>
 	expandTemplate('{domain}/{path}{extension}', {
 		domain: domain || '',
 		path: transformToPosixPath(urlPath),
@@ -184,7 +184,7 @@ export interface GenerateMetadataOptions {
 export function generateMetadata(
 	sourceFile: GrayMatterFile<Input>,
 	{ domain, filePath, linksExtension, cleanUrls }: GenerateMetadataOptions,
-) {
+): { url: string; description?: string } {
 	return {
 		url: generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', cleanUrls),
 		...(sourceFile.data?.description && { description: sourceFile.data.description }),
@@ -200,7 +200,7 @@ export function generateMetadata(
  * @param string - The input string whose size needs to be determined.
  * @returns A human-readable size string (e.g., "1.2 KB", "500 B").
  */
-export const getHumanReadableSizeOf = (string: string) => byteSize(new Blob([string]).size).toString()
+export const getHumanReadableSizeOf = (string: string): string => byteSize(new Blob([string]).size).toString()
 
 /**
  * Resolves the output file path for VitePress with support for route rewrites and dynamic slugs.
