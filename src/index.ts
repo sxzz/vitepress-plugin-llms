@@ -15,7 +15,7 @@ import { name as packageName } from '../package.json'
 import { defaultLLMsTxtTemplate, fullTagRegex, unnecessaryFilesList } from './constants'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
-import { copyOrDownloadAsMarkdownButtons, remarkPlease } from './helpers/markdown'
+import { copyOrDownloadAsMarkdownButtons, remarkPlease, remarkReplaceImageUrls } from './helpers/markdown'
 import {
 	expandTemplate,
 	extractTitle,
@@ -177,7 +177,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 			 * Runs only in the client build (not SSR) after completion.
 			 * This ensures the processing happens exactly once.
 			 */
-			async generateBundle() {
+			async generateBundle(_options, bundle) {
 				// Skip processing during SSR build
 				if (isSsrBuild) {
 					log.info('Skipping LLMs docs generation in SSR build')
@@ -216,6 +216,20 @@ function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 					`Processing ${pc.bold(fileCount.toString())} markdown files from ${pc.cyan(settings.workDir)}`,
 				)
 
+				const imageMap = new Map<string, string>()
+				if (bundle) {
+					for (const asset of Object.values(bundle)) {
+						if (
+							asset.type === 'asset' &&
+							asset.fileName &&
+							/(png|jpe?g|gif|svg|webp)$/i.test(path.extname(asset.fileName))
+						) {
+							const name = path.posix.basename(asset.name || asset.fileName)
+							imageMap.set(name, asset.fileName)
+						}
+					}
+				}
+
 				const preparedFiles: PreparedFile[] = await Promise.all(
 					mdFilesList.map(async (file) => {
 						const resolvedOutFilePath = path.relative(
@@ -234,6 +248,7 @@ function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 							.use(remarkFrontmatter)
 							.use(remarkPlease('unwrap', 'llm-only'))
 							.use(remarkPlease('remove', 'llm-exclude'))
+							.use(remarkReplaceImageUrls(imageMap))
 
 						if (settings.stripHTML) {
 							// Strip HTML tags

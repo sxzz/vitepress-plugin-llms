@@ -1,3 +1,4 @@
+import path from 'node:path'
 import type MarkdownIt from 'markdown-it'
 import Token from 'markdown-it/lib/token.mjs'
 import type { Paragraph, Parent, Root } from 'mdast'
@@ -155,5 +156,25 @@ export function copyOrDownloadAsMarkdownButtons(md: MarkdownIt): void {
 		}
 		// }
 		return orig(tokens, options, env)
+	}
+}
+
+/**
+ * Creates a remark plugin that replaces image URLs with their hashed equivalents.
+ *
+ * @param map - Map of original image file names to hashed file paths.
+ * @returns A remark plugin that rewrites image URLs.
+ *
+ * @author [Benjamin BERNARD](https://github.com/Benvii)
+ */
+export function remarkReplaceImageUrls(map: Map<string, string>) {
+	return () => (tree: Root) => {
+		visit(tree, 'image', (node) => {
+			const original = path.posix.basename(node.url)
+			const hashed = map.get(original)
+			if (hashed) {
+				node.url = `/${hashed}`
+			}
+		})
 	}
 }
