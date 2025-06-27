@@ -168,13 +168,14 @@ export function copyOrDownloadAsMarkdownButtons(md: MarkdownIt): void {
  * @author [Benjamin BERNARD](https://github.com/Benvii)
  */
 export function remarkReplaceImageUrls(map: Map<string, string>) {
-	return () => (tree: Root) => {
-		visit(tree, 'image', (node) => {
-			const original = path.posix.basename(node.url)
-			const hashed = map.get(original)
-			if (hashed) {
-				node.url = `/${hashed}`
-			}
-		})
-	}
+	return () =>
+		(tree: Root): void => {
+			visit(tree, 'image', (node) => {
+				const original = path.posix.basename(node.url)
+				const hashed = map.get(original)
+				if (hashed) {
+					node.url = `/${hashed}`
+				}
+			})
+		}
 }
