@@ -8,6 +8,7 @@ on:
       - src/**
       - tests/**
       - package.json
+      - biome.jsonc
       - bun.lock
       - bunfig.toml
       - bunup.config.ts
@@ -20,6 +21,7 @@ on:
       - src/**
       - tests/**
       - package.json
+      - biome.jsonc
       - bun.lock
       - bunfig.toml
       - bunup.config.ts
