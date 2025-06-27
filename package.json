@@ -31,7 +31,9 @@
 		}
 	},
 	"scripts": {
-		"lint": "biome check --fix",
+		"lint:tsc": "tsc --noEmit -p tsconfig.node.json",
+		"lint:biome": "biome check",
+		"lint": "bun run lint:tsc && bun run lint:biome",
 		"format": "biome format --write",
 		"test": "bun test",
 		"preversion": "bun run format && git add .",

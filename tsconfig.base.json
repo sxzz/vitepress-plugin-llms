@@ -2,13 +2,27 @@
 	"compilerOptions": {
 		// Best practices
 		"strict": true,
-		"skipLibCheck": false,
+		"skipLibCheck": true,
 		"noFallthroughCasesInSwitch": true,
 
 		// Some stricter flags (disabled by default)
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noPropertyAccessFromIndexSignature": false
+		"noPropertyAccessFromIndexSignature": false,
+
+		// Enable latest features
+		"lib": ["ESNext", "DOM"],
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleDetection": "force",
+
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"emitDeclarationOnly": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true
 	}
 }

@@ -55,5 +55,8 @@ jobs:
       - name: 📦 Install dependencies
         run: bun install --production --frozen-lockfile --prefer-offline --ignore-scripts --omit=optional
 
+      - name: 🗞️ Lint
+        run: bun run lint
+
       - name: 🧪 Run tests
         run: bun run test
