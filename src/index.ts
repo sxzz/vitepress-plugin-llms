@@ -15,7 +15,7 @@ import { name as packageName } from '../package.json'
 import { defaultLLMsTxtTemplate, fullTagRegex, unnecessaryFilesList } from './constants'
 import { generateLLMsFullTxt, generateLLMsTxt } from './helpers/index'
 import log from './helpers/logger'
-import { copyOrDownloadAsMarkdownButtons, remarkPlease, remarkReplaceImageUrls } from './helpers/markdown'
+import { remarkPlease, remarkReplaceImageUrls } from './helpers/markdown'
 import {
 	expandTemplate,
 	extractTitle,
@@ -26,7 +26,8 @@ import {
 	stripExt,
 } from './helpers/utils'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from './types'
-export { copyOrDownloadAsMarkdownButtons }
+
+export { copyOrDownloadAsMarkdownButtons } from './helpers/markdown'
 
 const PLUGIN_NAME = packageName
 

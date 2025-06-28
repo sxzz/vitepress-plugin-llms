@@ -131,12 +131,19 @@ export function remarkPlease(intent: 'remove' | 'unwrap', tag: string) {
 }
 
 /**
- * Markdown-it plugin that injects <LlmCopyAndDownload /> after the first H1 heading
- * if `env.frontmatter.layout` is `'doc'` (or not set).
+ * Markdown-it plugin that injects <CopyOrDownloadAsMarkdownButtons /> after the first H1 heading
+ *
+ * @param componentName - The name of the Vue component to inject
+ * (default: `'CopyOrDownloadAsMarkdownButtons'`), useful when you need to
+ * customize the name of a component if such a component is already registered
+ * so as not to get confused with it
  *
  * @author [Divyansh Singh](https://github.com/brc-dd)
  */
-export function copyOrDownloadAsMarkdownButtons(md: MarkdownIt): void {
+export function copyOrDownloadAsMarkdownButtons(
+	md: MarkdownIt,
+	componentName = 'CopyOrDownloadAsMarkdownButtons',
+): void {
 	const orig = md.renderer.render.bind(md.renderer.render)
 	md.renderer.render = (tokens, options, env) => {
 		// if (env?.frontmatter && env.frontmatter.layout === 'doc') {
@@ -145,8 +152,7 @@ export function copyOrDownloadAsMarkdownButtons(md: MarkdownIt): void {
 				for (let j = i + 1; j < tokens.length; j++) {
 					if (tokens[j].tag === 'h1' && tokens[j].type === 'heading_close') {
 						const htmlToken = new Token('html_block', '', 0)
-						// We using <llm-exclude> to prevent the component from being rendered in the LLMs files
-						htmlToken.content = '<CopyOrDownloadAsMarkdownButtons />'
+						htmlToken.content = `<${componentName} />`
 						tokens.splice(j + 1, 0, htmlToken)
 						break
 					}
@@ -160,7 +166,7 @@ export function copyOrDownloadAsMarkdownButtons(md: MarkdownIt): void {
 }
 
 /**
- * Creates a remark plugin that replaces image URLs with their hashed equivalents.
+ * A Remark plugin that replaces image URLs with their hashed equivalents.
  *
  * @param map - Map of original image file names to hashed file paths.
  * @returns A remark plugin that rewrites image URLs.
