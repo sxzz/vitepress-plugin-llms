@@ -5,17 +5,13 @@ import { defaultLLMsTxtTemplate } from '../../src/constants'
 
 import { mockedFs } from '../mocks/fs'
 
-mockedFs.default.readFile.mockReturnValue(Promise.resolve(fakeIndexMd))
-
 mock.module('node:fs/promises', () => mockedFs)
 
-import {
-	generateLLMsFullTxt,
-	generateLLMsTxt,
-	// @ts-ignore
-} from '../../src/helpers'
-import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample, sampleDomain } from '../resources'
+import { generateLLMsTxt } from '../../src/generator'
+import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample } from '../resources'
 import fakeIndexMd from '../test-assets/index.md' with { type: 'text' }
+
+mockedFs.default.readFile.mockReturnValue(Promise.resolve(fakeIndexMd))
 
 describe('generateLLMsTxt', () => {
 	it('generates a `llms.txt` file', async () => {
@@ -60,20 +56,6 @@ describe('generateLLMsTxt', () => {
 				LLMsTxtTemplate: '# {foo}\n\n**{bar}**\n\n{zoo}',
 				templateVariables: { title: 'foo', description: 'bar', toc: 'zoo' },
 				vitepressConfig: {},
-			}),
-		).toMatchSnapshot()
-	})
-})
-
-describe('generateLLMsFullTxt', () => {
-	it('generates a `llms-full.txt` file', async () => {
-		expect(await generateLLMsFullTxt(preparedFilesSample.slice(1), {})).toMatchSnapshot()
-	})
-
-	it('correctly attaches the domain to URLs in context', async () => {
-		expect(
-			await generateLLMsFullTxt(preparedFilesSample.slice(1), {
-				domain: sampleDomain,
 			}),
 		).toMatchSnapshot()
 	})

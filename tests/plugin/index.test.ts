@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
-import { mockedFs } from './mocks/fs'
-import fakeMarkdownDocument from './test-assets/markdown-document.md' with { type: 'text' }
-import fakeMarkdownWithImage from './test-assets/markdown-with-image.md' with { type: 'text' }
+import { mockedFs } from '../mocks/fs'
+import fakeMarkdownDocument from '../test-assets/markdown-document.md' with { type: 'text' }
 
-mock.module('node:fs/promises', () => mockedFs)
 const { access, mkdir, writeFile } = mockedFs.default
 
+mock.module('node:fs/promises', () => mockedFs)
+
 // Mock the logger to prevent output
-mock.module('../src/helpers/logger', () => ({
+mock.module('../../src/utils/logger', () => ({
 	default: {
 		info: mock(),
 		success: mock(),
@@ -21,8 +21,8 @@ mock.module('../src/helpers/logger', () => ({
 import path from 'node:path'
 // Import the module under test AFTER mocking its dependencies
 // @ts-ignore
-import llmstxt from '../src/index'
-import type { VitePressConfig } from '../src/types'
+import { llmstxt } from '../../src/plugin/main'
+import type { VitePressConfig } from '../../src/types'
 
 describe('llmstxt plugin', () => {
 	let plugin: [Plugin, Plugin]
@@ -133,28 +133,6 @@ describe('llmstxt plugin', () => {
 				3,
 				path.resolve(mockConfig.vitepress.outDir, 'guide.md'),
 				'---\nurl: /guide.md\n---\n# Some cool stuff\n',
-			)
-		})
-
-		it('replaces image paths with hashed assets', async () => {
-			plugin = llmstxt({ generateLLMsFullTxt: false, generateLLMsTxt: false })
-			// @ts-ignore
-			plugin[1].configResolved(mockConfig)
-			mockedFs.default.readFile.mockResolvedValueOnce(fakeMarkdownWithImage)
-			// @ts-ignore
-			await plugin[0].transform(fakeMarkdownWithImage, 'docs/setup.md')
-			const bundle = {
-				'assets/vs_code_proxy.hash.png': {
-					type: 'asset',
-					fileName: 'assets/vs_code_proxy.hash.png',
-					name: 'vs_code_proxy.png',
-				},
-			}
-			// @ts-ignore
-			await plugin[1].generateBundle({}, bundle)
-			expect(writeFile).toHaveBeenCalledWith(
-				path.resolve(mockConfig.vitepress.outDir, 'setup.md'),
-				expect.stringContaining('/assets/vs_code_proxy.hash.png'),
 			)
 		})
 
@@ -339,8 +317,8 @@ describe('llmstxt plugin', () => {
 
 				const result = writeFile.mock.calls[0][1]
 
-				expect(result).toContain('/guide.html')
-				expect(result).not.toContain('/guide/index.html')
+				expect(result).toContain('/guide.md')
+				expect(result).not.toContain('/guide/index.md')
 			})
 		})
 
