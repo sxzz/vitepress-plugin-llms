@@ -1,6 +1,44 @@
 # Changelog
 
 
+## v1.6.0
+
+[compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.5.1...v1.6.0)
+
+### 🚀 Enhancements
+
+- Add `README.md` to the `unnecessaryFilesList` ([b039dc2](https://github.com/okineadev/vitepress-plugin-llms/commit/b039dc2))
+- ✨ add the ability to enable a buttons to instantly copy or download a page in Markdown format on the human documentation side ([4bb73e9](https://github.com/okineadev/vitepress-plugin-llms/commit/4bb73e9))
+- Add hashed image support ([3ceea9e](https://github.com/okineadev/vitepress-plugin-llms/commit/3ceea9e))
+- Add linting step to CI and setup `tsc` linting for `src/**/*.ts` ([52ee133](https://github.com/okineadev/vitepress-plugin-llms/commit/52ee133))
+- Add ability to set a custom Vue component name for `copyOrDownloadAsMarkdownButtons` and fix comments ([1254c83](https://github.com/okineadev/vitepress-plugin-llms/commit/1254c83))
+
+### 🩹 Fixes
+
+- Fix build errors caused by 3ceea9eead27acfd5311630abe3e7e3b120da702 ([d75a57a](https://github.com/okineadev/vitepress-plugin-llms/commit/d75a57a))
+- **ci:** Fix missing `@types/node` package error by removing `--production` from bun install ([1362166](https://github.com/okineadev/vitepress-plugin-llms/commit/1362166))
+- **ci:** Do not omit optional dependencies in `bun install` ([b7a5865](https://github.com/okineadev/vitepress-plugin-llms/commit/b7a5865))
+- **ci:** Checkout `biome.jsonc` file which is required for linting ([5ef8dd7](https://github.com/okineadev/vitepress-plugin-llms/commit/5ef8dd7))
+
+### 💅 Refactors
+
+- ♻️ refactor the "Copy as Markdown" button components and convert them to a Vue component ([2a3b001](https://github.com/okineadev/vitepress-plugin-llms/commit/2a3b001))
+- **types:** Explicitly set types for all functions for `isolatedDeclarations` ([b2767f7](https://github.com/okineadev/vitepress-plugin-llms/commit/b2767f7))
+
+### 📖 Documentation
+
+- Add best practices section ([8a3c859](https://github.com/okineadev/vitepress-plugin-llms/commit/8a3c859))
+
+### 🏡 Chore
+
+- Update commitlint rules to enforce lower-case subject lines ([6a5aae2](https://github.com/okineadev/vitepress-plugin-llms/commit/6a5aae2))
+- Update deps, migrate Biome configuration to `v2` and fix new linting errors ([a64fecb](https://github.com/okineadev/vitepress-plugin-llms/commit/a64fecb))
+
+### ❤️ Contributors
+
+- Okinea Dev ([@okineadev](https://github.com/okineadev))
+- Benjamin BERNARD <benjamin.bernard@benvii.com>
+
 ## v1.5.1
 
 [compare changes](https://github.com/okineadev/vitepress-plugin-llms/compare/v1.5.0...v1.5.1)
