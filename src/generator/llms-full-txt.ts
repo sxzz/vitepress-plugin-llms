@@ -13,9 +13,6 @@ export interface GenerateLLMsFullTxtOptions {
 	/** The link extension for generated links. */
 	linksExtension?: LinksExtension
 
-	/** Whether to use clean URLs (without the extension). */
-	cleanUrls?: VitePressConfig['cleanUrls']
-
 	/** The base URL path from VitePress config.
 	 *
 	 * {@link VitePressConfig.base}
@@ -40,7 +37,7 @@ export async function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
 	options: GenerateLLMsFullTxtOptions,
 ): Promise<string> {
-	const { domain, linksExtension, cleanUrls, base, directoryFilter } = options
+	const { domain, linksExtension, base, directoryFilter } = options
 
 	// Filter files by directory if directoryFilter is provided
 	const filteredFiles = directoryFilter
@@ -59,7 +56,6 @@ export async function generateLLMsFullTxt(
 				domain,
 				filePath: file.path,
 				linksExtension,
-				cleanUrls,
 				base,
 			})
 

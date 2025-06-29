@@ -11,14 +11,12 @@ import { generateMetadata } from '../utils/template-utils'
  * @param preparedFiles - An array of prepared files.
  * @param outDir - The output directory.
  * @param domain - The domain to use for links.
- * @param cleanUrls - Whether to use clean URLs.
  * @param base - The base URL path from VitePress config.
  */
 export async function generateLLMFriendlyPages(
 	preparedFiles: PreparedFile[],
 	outDir: string,
 	domain?: string,
-	cleanUrls?: boolean,
 	base?: string,
 ): Promise<void> {
 	const tasks = preparedFiles.map(async (file) => {
@@ -36,7 +34,6 @@ export async function generateLLMFriendlyPages(
 						domain,
 						filePath: file.path,
 						linksExtension: '.md',
-						cleanUrls,
 						base,
 					}),
 				),
