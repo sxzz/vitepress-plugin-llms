@@ -16,6 +16,12 @@ export interface GenerateLLMsFullTxtOptions {
 	/** Whether to use clean URLs (without the extension). */
 	cleanUrls?: VitePressConfig['cleanUrls']
 
+	/** The base URL path from VitePress config.
+	 *
+	 * {@link VitePressConfig.base}
+	 */
+	base?: VitePressConfig['base']
+
 	/**
 	 * Optional directory filter to only include files within the specified directory.
 	 * If not provided, all files will be included.
@@ -34,7 +40,7 @@ export async function generateLLMsFullTxt(
 	preparedFiles: PreparedFile[],
 	options: GenerateLLMsFullTxtOptions,
 ): Promise<string> {
-	const { domain, linksExtension, cleanUrls, directoryFilter } = options
+	const { domain, linksExtension, cleanUrls, base, directoryFilter } = options
 
 	// Filter files by directory if directoryFilter is provided
 	const filteredFiles = directoryFilter
@@ -49,11 +55,12 @@ export async function generateLLMsFullTxt(
 	const fileContents = await Promise.all(
 		filteredFiles.map(async (file) => {
 			// file.path is already relative to outDir, so use it directly
-			const metadata = await generateMetadata(file.file, {
+			const metadata = generateMetadata(file.file, {
 				domain,
 				filePath: file.path,
 				linksExtension,
 				cleanUrls,
+				base,
 			})
 
 			return matter.stringify(file.file.content, metadata)

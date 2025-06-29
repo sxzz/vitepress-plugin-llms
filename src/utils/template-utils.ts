@@ -73,6 +73,8 @@ export const expandTemplate = (template: string, variables: Record<string, strin
  * @param domain - The base domain of the link (e.g., "https://example.com").
  * @param urlPath - The path to append to the domain (e.g., "guide").
  * @param extension - An optional extension to append to the path (e.g., ".md").
+ * @param cleanUrls - Whether to use clean URLs (without the extension).
+ * @param base - The base URL path from VitePress config (e.g., "/docs/flowdown").
  * @returns The generated link
  */
 export const generateLink = (
@@ -80,9 +82,11 @@ export const generateLink = (
 	domain?: string,
 	extension?: LinksExtension,
 	cleanUrls?: VitePressConfig['cleanUrls'],
+	base?: VitePressConfig['base'],
 ): string =>
-	expandTemplate('{domain}/{path}{extension}', {
+	expandTemplate('{domain}/{base}{path}{extension}', {
 		domain: domain || '',
+		base: base ? `${base.slice(base.startsWith('/') ? 1 : 0) + (!base.endsWith('/') ? '/' : '')}` : '',
 		path: transformToPosixPath(urlPath),
 		extension: cleanUrls ? '' : extension,
 	})
@@ -102,6 +106,12 @@ export interface GenerateMetadataOptions {
 
 	/** Whether to use clean URLs (without the extension). */
 	cleanUrls?: VitePressConfig['cleanUrls']
+
+	/** The base URL path from VitePress config.
+	 *
+	 * {@link VitePressConfig.base}
+	 */
+	base?: VitePressConfig['base']
 }
 
 /**
@@ -117,10 +127,10 @@ export interface GenerateMetadataOptions {
  */
 export function generateMetadata(
 	sourceFile: GrayMatterFile<Input>,
-	{ domain, filePath, linksExtension, cleanUrls }: GenerateMetadataOptions,
+	{ domain, filePath, linksExtension, cleanUrls, base }: GenerateMetadataOptions,
 ): { url: string; description?: string } {
 	return {
-		url: generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', cleanUrls),
+		url: generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', cleanUrls, base),
 		...(sourceFile.data?.description && { description: sourceFile.data.description }),
 	}
 }
