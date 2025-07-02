@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
+import { afterAll, beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'
 import mockedFs from '../mocks/fs'
@@ -6,7 +6,7 @@ import mockedLogger from '../mocks/utils/logger'
 
 import fakeMarkdownDocument from '../test-assets/markdown-document.md' with { type: 'text' }
 
-const { access, mkdir, writeFile } = mockedFs.default
+const { access, mkdir, writeFile, readFile } = mockedFs.default
 
 mock.module('node:fs/promises', () => mockedFs)
 
@@ -23,6 +23,8 @@ describe('llmstxt plugin', () => {
 	let plugin: [Plugin, Plugin]
 	let mockConfig: VitePressConfig
 	let mockServer: ViteDevServer
+
+	readFile.mockReturnValue(Promise.resolve(fakeMarkdownDocument))
 
 	beforeEach(() => {
 		// Reset mock call counts
@@ -50,6 +52,8 @@ describe('llmstxt plugin', () => {
 		// Initialize plugin
 		plugin = llmstxt()
 	})
+
+	afterAll(() => readFile.mockReset())
 
 	describe('configureServer', () => {
 		it('should configure server middleware', () => {

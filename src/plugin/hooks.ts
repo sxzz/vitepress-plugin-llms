@@ -31,7 +31,7 @@ export async function transform(
 	id: string,
 	settings: LlmstxtSettings & { ignoreFiles: string[]; workDir: string },
 	mdFiles: Set<string>,
-	// TODO: Fix type
+	// biome-ignore lint/suspicious/noExplicitAny: TODO: Fix type
 ): Promise<any> {
 	const orig = content
 
