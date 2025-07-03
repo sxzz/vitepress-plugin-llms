@@ -1,4 +1,4 @@
-import { describe, expect, it, mock } from 'bun:test'
+import { afterAll, describe, expect, it, mock } from 'bun:test'
 import path from 'node:path'
 
 import { defaultLLMsTxtTemplate } from '../../src/constants'
@@ -13,9 +13,10 @@ import { generateLLMsTxt } from '../../src/generator'
 import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample } from '../resources'
 import fakeIndexMd from '../test-assets/index.md' with { type: 'text' }
 
-readFile.mockReturnValue(Promise.resolve(fakeIndexMd))
-
 describe('generateLLMsTxt', () => {
+	readFile.mockReturnValue(Promise.resolve(fakeIndexMd))
+	afterAll(() => readFile.mockReset())
+
 	it('generates a `llms.txt` file', async () => {
 		expect(
 			await generateLLMsTxt(preparedFilesSample.slice(1), {

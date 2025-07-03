@@ -16,6 +16,7 @@ describe('generateLLMFriendlyPages', () => {
 		mkdir.mockReset()
 		writeFile.mockReset()
 	})
+
 	it('should generate LLM friendly pages for each prepared file', async () => {
 		const preparedFiles = preparedFilesSample.slice(1)
 		await generateLLMFriendlyPages(preparedFiles, outDir, 'https://example.com')
