@@ -15,6 +15,7 @@ import { generateLLMFriendlyPages, generateLLMsFullTxt, generateLLMsTxt } from '
 import { remarkPlease, remarkReplaceImageUrls } from '../markdown'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types.d'
 import {
+	cleanUrl,
 	expandTemplate,
 	extractTitle,
 	getDirectoriesAtDepths,
@@ -31,6 +32,7 @@ export async function transform(
 	id: string,
 	settings: LlmstxtSettings & { ignoreFiles: string[]; workDir: string },
 	mdFiles: Set<string>,
+	config: VitePressConfig, // Add config parameter
 	// biome-ignore lint/suspicious/noExplicitAny: TODO: Fix type
 ): Promise<any> {
 	const orig = content
@@ -60,10 +62,57 @@ export async function transform(
 		// remove <llm-exclude> tags, keep the content
 		.replace(fullTagRegex('llm-exclude', 'g'), '$1')
 
+	// Generate note for LLMs
+	let llmNotice = ''
+	const notices = []
+
+	// const relativePath = path.relative(settings.workDir, id)
+	const resolvedOutFilePath = resolveOutputFilePath(
+		id,
+		settings.workDir,
+		// @ts-expect-error
+		config.vitepress.rewrites,
+	)
+	const currentCleanUrl = cleanUrl(path.relative(settings.workDir, resolvedOutFilePath))
+
+	const base = config.base || '/'
+	const basePath = base === '/' ? '' : base.replace(/\/$/, '')
+
+	// // Check if it's the main page (index.md)
+	// const isMainPage = path.basename(id) === 'index.md' && path.dirname(relativePath) === '.'
+
+	// TODO: Add this later
+	// if (isMainPage) {
+	// 	if (settings.generateLLMsTxt) {
+	// 		notices.push(`${basePath}/llms.txt for optimized Markdown documentation`)
+	// 	}
+
+	// 	if (settings.generateLLMsFullTxt) {
+	// 		notices.push(`${basePath}/llms-full.txt for full documentation bundle`)
+	// 	}
+
+	// 	if (notices.length > 0) {
+	// 		llmNotice = `Are you an LLM? View ${notices.join(', or ')}`
+	// 	}
+	// } else {
+	// Regular page
+	if (settings.generateLLMFriendlyDocsForEachPage) {
+		const mdUrl = `${basePath}/${currentCleanUrl}`
+		notices.push(`${mdUrl} for this page in Markdown format`)
+	}
+
+	if (notices.length > 0) {
+		llmNotice = `Are you an LLM? You can read better optimized documentation at ${notices.join(', or ')}`
+	}
+	// }
+
+	llmNotice = `<div style="display: none;" hidden="true" aria-hidden="true">${llmNotice}</div>\n\n`
+
 	// Add markdown file path to our collection
 	mdFiles.add(id)
 
-	return modifiedContent !== orig ? { code: modifiedContent, map: null } : null
+	const finalContent = llmNotice + modifiedContent
+	return finalContent !== orig ? { code: finalContent, map: null } : null
 }
 
 /**

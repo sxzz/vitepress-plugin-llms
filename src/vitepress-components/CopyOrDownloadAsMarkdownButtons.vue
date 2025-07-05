@@ -1,14 +1,14 @@
 <template>
-  <div class="markdown-copy-buttons">
-    <div class="markdown-copy-buttons-inner">
-      <button ref="copyBtn" class="copy" @click="copyMarkdown">
-        <span v-html="copied ? iconCheck : iconCopy"></span> Copy as Markdown
-      </button>
-      <button ref="downloadBtn" class="download" @click="downloadMarkdown">
-        <span v-html="downloaded ? iconCheck : iconDownload"></span> Download as Markdown
-      </button>
-    </div>
-  </div>
+	<div class="markdown-copy-buttons">
+		<div class="markdown-copy-buttons-inner">
+			<button ref="copyBtn" class="copy" @click="copyMarkdown">
+				<span v-html="copied ? iconCheck : iconCopy"></span> Copy as Markdown
+			</button>
+			<button ref="downloadBtn" class="download" @click="downloadMarkdown">
+				<span v-html="downloaded ? iconCheck : iconDownload"></span> Download as Markdown
+			</button>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -28,9 +28,11 @@ const iconDownload =
 const copied = ref(false)
 const downloaded = ref(false)
 
+const currentURL = window.location.origin + window.location.pathname
+
 /** Copies markdown content from the current page to clipboard */
 function copyMarkdown() {
-	const url = `${cleanUrl()}.md`
+	const url = `${cleanUrl(currentURL)}.md`
 	fetch(url)
 		.then((response) => response.text())
 		.then((text) => navigator.clipboard.writeText(text))
@@ -45,7 +47,7 @@ function copyMarkdown() {
 
 /** Downloads markdown content from the current page as a file */
 function downloadMarkdown() {
-	const cleanedUrl = cleanUrl()
+	const cleanedUrl = cleanUrl(currentURL)
 	const url = `${cleanedUrl}.md`
 	fetch(url)
 		.then((response) => response.text())
@@ -63,30 +65,30 @@ function downloadMarkdown() {
 
 <style scoped>
 .markdown-copy-buttons {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 16px;
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-bottom: 16px;
 }
 .markdown-copy-buttons-inner {
-  margin: 16px 0;
-  display: flex;
-  gap: 12px;
+	margin: 16px 0;
+	display: flex;
+	gap: 12px;
 }
 .markdown-copy-buttons button {
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.2s, border 0.2s;
+	border-radius: 6px;
+	font-size: 14px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: background 0.2s, border 0.2s;
 }
 .markdown-copy-buttons button:hover {
-  color: white;
+	color: white;
 }
 .markdown-copy-buttons img {
-  vertical-align: middle;
+	vertical-align: middle;
 }
 </style>

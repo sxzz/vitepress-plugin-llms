@@ -3,6 +3,7 @@
 	"editor.defaultFormatter": "biomejs.biome",
 	"[json]": { "editor.defaultFormatter": "biomejs.biome" },
 	"[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+	"[vue]": { "editor.codeActionsOnSave": {} },
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit",
 		"source.fixAll.biome": "explicit",

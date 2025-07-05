@@ -1,35 +1,4 @@
-/**
- * Cleans a URL by removing query parameters, hash fragments, and file extensions
- * @param url - The URL to clean. If not provided, uses current page URL
- * @returns The cleaned URL without query params, hash, and file extension
- *
- * @example
- * cleanUrl('https://example.com/page.html?param=value#section')
- * // Returns: 'https://example.com/page'
- *
- * cleanUrl() // Uses current page URL
- * // Returns: 'https://currentsite.com/current-page'
- */
-export function cleanUrl(url?: string): string {
-	// Use current page URL if none provided
-	if (!url) {
-		url = window.location.origin + window.location.pathname
-	}
-
-	const urlObj = new URL(url)
-	let pathname = urlObj.pathname
-
-	// Remove file extension
-	const lastSlashIndex = pathname.lastIndexOf('/')
-	const lastDotIndex = pathname.lastIndexOf('.')
-
-	// Only remove extension if dot comes after last slash (it's a file, not a directory)
-	if (lastDotIndex > lastSlashIndex && lastDotIndex !== -1) {
-		pathname = pathname.substring(0, lastDotIndex)
-	}
-
-	return urlObj.origin + pathname
-}
+export { cleanUrl } from '../utils/file-utils'
 
 /**
  * Triggers a file download in the browser with the specified filename and content.

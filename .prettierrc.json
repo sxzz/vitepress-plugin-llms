@@ -1,10 +1,10 @@
 {
+	"semi": false,
 	"overrides": [
 		{
 			"files": "*.md",
 			"options": {
-				"trailingComma": "none",
-				"semi": false
+				"trailingComma": "none"
 			}
 		}
 	]

@@ -61,7 +61,7 @@ export function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 
 			/** Processes each Markdown file */
 			async transform(content, id) {
-				return transform(content, id, settings, mdFiles)
+				return transform(content, id, settings, mdFiles, config)
 			},
 		},
 		{
