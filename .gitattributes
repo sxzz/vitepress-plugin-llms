@@ -3,4 +3,5 @@
 # Normalize EOL for all files that Git considers text files
 * text=auto eol=lf
 
-.github/workflows/scripts/* linguist-vendored
+# Fixes syntax highlighting on GitHub to allow comments
+tsconfig*.json linguist-language=JSON-with-Comments

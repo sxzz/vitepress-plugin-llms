@@ -6,8 +6,8 @@
 	"[vue]": { "editor.codeActionsOnSave": {} },
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit",
-		"source.fixAll.biome": "explicit",
-		"quickfix.biome": "explicit"
+		"source.fixAll.biome": "explicit"
+		// "quickfix.biome": "explicit"
 	},
 
 	// Read-only files
