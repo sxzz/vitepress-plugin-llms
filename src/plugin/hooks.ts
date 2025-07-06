@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import matter from 'gray-matter'
+import matter, { type GrayMatterFile, type Input } from 'gray-matter'
 import { millify } from 'millify'
 import { minimatch } from 'minimatch'
 import pc from 'picocolors'
@@ -9,7 +9,7 @@ import remarkFrontmatter from 'remark-frontmatter'
 import { approximateTokenSize } from 'tokenx'
 import { remove } from 'unist-util-remove'
 // @ts-expect-error
-import type { OutputBundle, PluginContext } from 'vite'
+import type { OutputBundle } from 'vite'
 import { defaultLLMsTxtTemplate, fullTagRegex } from '../constants'
 import { generateLLMsFullTxt } from '../generator/llms-full-txt'
 import { generateLLMsTxt } from '../generator/llms-txt'
@@ -44,6 +44,15 @@ export async function transform(
 		return null
 	}
 
+	// Check if it's the main page (index.md) before ignore check
+	const resolvedOutFilePath = resolveOutputFilePath(
+		id,
+		settings.workDir,
+		config.vitepress.rewrites as unknown as VitePressConfig['rewrites'],
+	)
+	const isMainPage = path.relative(settings.workDir, resolvedOutFilePath) === 'index.md'
+
+	// Apply ignore rules, but skip them for main page
 	if (settings.ignoreFiles?.length) {
 		const shouldIgnore = await Promise.all(
 			settings.ignoreFiles.map(async (pattern) => {
@@ -54,75 +63,74 @@ export async function transform(
 			}),
 		)
 
-		if (shouldIgnore.some((result) => result === true)) {
+		// If file should be ignored AND it's not the main page, skip processing
+		if (shouldIgnore.some((result) => result === true) && !isMainPage) {
 			return null
 		}
 	}
 
-	const modifiedContent = content
+	let modifiedContent: string | GrayMatterFile<Input> = content
 		// strip content between <llm-only> and </llm-only>
 		.replace(fullTagRegex('llm-only', 'g'), '')
 		// remove <llm-exclude> tags, keep the content
 		.replace(fullTagRegex('llm-exclude', 'g'), '$1')
 
-	// Generate note for LLMs
-	let llmNotice = ''
-	const notices = []
+	if (
+		settings.injectLLMHint &&
+		(settings.generateLLMFriendlyDocsForEachPage || settings.generateLLMsTxt || settings.generateLLMsFullTxt)
+	) {
+		// @ts-expect-error
+		matter.clearCache()
+		modifiedContent = matter(modifiedContent)
 
-	// const relativePath = path.relative(settings.workDir, id)
-	const resolvedOutFilePath = resolveOutputFilePath(
-		id,
-		settings.workDir,
-		config.vitepress.rewrites as unknown as VitePressConfig['rewrites'],
-	)
-	const currentCleanUrl = cleanUrl(path.relative(settings.workDir, resolvedOutFilePath))
+		// Generate hint for LLMs
+		let llmHint = ''
 
-	const base = config.base || '/'
-	const basePath = base === '/' ? '' : base.replace(/\/$/, '')
+		const currentCleanUrl = cleanUrl(path.relative(settings.workDir, resolvedOutFilePath))
 
-	// // Check if it's the main page (index.md)
-	// const isMainPage = path.basename(id) === 'index.md' && path.dirname(relativePath) === '.'
+		const base = config.base || '/'
+		const basePath = base === '/' ? '' : base.replace(/\/$/, '')
 
-	// TODO: Add this later
-	// if (isMainPage) {
-	// 	if (settings.generateLLMsTxt) {
-	// 		notices.push(`${basePath}/llms.txt for optimized Markdown documentation`)
-	// 	}
+		if (isMainPage) {
+			const notices = []
 
-	// 	if (settings.generateLLMsFullTxt) {
-	// 		notices.push(`${basePath}/llms-full.txt for full documentation bundle`)
-	// 	}
+			if (settings.generateLLMsTxt) {
+				notices.push(`${basePath}/llms.txt for optimized Markdown documentation`)
+			}
 
-	// 	if (notices.length > 0) {
-	// 		llmNotice = `Are you an LLM? View ${notices.join(', or ')}`
-	// 	}
-	// } else {
-	// Regular page
-	if (settings.generateLLMFriendlyDocsForEachPage) {
-		const mdUrl = `${basePath}/${currentCleanUrl}`
-		notices.push(`${mdUrl} for this page in Markdown format`)
+			if (settings.generateLLMsFullTxt) {
+				notices.push(`${basePath}/llms-full.txt for full documentation bundle`)
+			}
+
+			if (notices.length > 0) {
+				llmHint = `Are you an LLM? View ${notices.join(', or ')}`
+			}
+		} else {
+			// Regular page
+			if (settings.generateLLMFriendlyDocsForEachPage) {
+				const mdUrl = `${basePath}/${currentCleanUrl}`
+				// TODO: Add some useful metadata like tokens count or size in kilobytes
+				llmHint = `Are you an LLM? You can read better optimized documentation at ${mdUrl} for this page in Markdown format`
+			}
+		}
+
+		llmHint = `<div style="display: none;" hidden="true" aria-hidden="true">${llmHint}</div>\n\n`
+
+		modifiedContent = matter.stringify(llmHint + modifiedContent.content, modifiedContent.data)
 	}
-
-	if (notices.length > 0) {
-		llmNotice = `Are you an LLM? You can read better optimized documentation at ${notices.join(', or ')}`
-	}
-	// }
-
-	llmNotice = `<div style="display: none;" hidden="true" aria-hidden="true">${llmNotice}</div>\n\n`
 
 	// Add markdown file path to our collection
-	mdFiles.add(id)
+	if (!isMainPage) {
+		mdFiles.add(id)
+	}
 
-	const finalContent = llmNotice + modifiedContent
-	return finalContent !== orig ? { code: finalContent, map: null } : null
+	return modifiedContent !== orig ? { code: modifiedContent, map: null } : null
 }
-
 /**
  * Runs only in the client build (not SSR) after completion.
  * This ensures the processing happens exactly once.
  */
 export async function generateBundle(
-	_options: Readonly<PluginContext>,
 	bundle: OutputBundle,
 	settings: LlmstxtSettings & { ignoreFiles: string[]; workDir: string },
 	config: VitePressConfig,

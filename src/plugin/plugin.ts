@@ -37,6 +37,7 @@ export function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 		excludeIndexPage: true,
 		excludeBlog: true,
 		excludeTeam: true,
+		injectLLMHint: true,
 		workDir: undefined as unknown as string,
 		stripHTML: true,
 		experimental: {
@@ -112,7 +113,7 @@ export function llmstxt(userSettings: LlmstxtSettings = {}): [Plugin, Plugin] {
 			 * This ensures the processing happens exactly once.
 			 */
 			async generateBundle(_options, bundle) {
-				await generateBundle(_options, bundle, settings, config, mdFiles, isSsrBuild)
+				await generateBundle(bundle, settings, config, mdFiles, isSsrBuild)
 			},
 		},
 	]

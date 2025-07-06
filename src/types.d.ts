@@ -44,6 +44,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 	/**
 	 * The domain that will be appended to the beginning of URLs in `llms.txt` and in the context of other files
 	 *
+	 * ---
+	 *
 	 * Domain attachment is not yet agreed upon (since it depends on the AI ​​whether it can resolve the relative paths that are currently there), but if you want you can add it
 	 *
 	 * ℹ️ **Note**: Domain cannot end with `/`.
@@ -87,14 +89,39 @@ export interface LlmstxtSettings extends TemplateVariables {
 	generateLLMFriendlyDocsForEachPage?: boolean
 
 	/**
-	 * Whether to strip HTML tags from Markdown files
+	 * Whether to strip HTML tags from Markdown files.
 	 *
 	 * @default true
 	 */
 	stripHTML?: boolean
 
 	/**
+	 * Whether to insert invisible text with a reference to LLM-Friendly documentation for LLMs on every page.
+	 *
+	 * Could significantly advance the use of LLM-Friendly documentation in regular chats (possibly).
+	 *
+	 * ---
+	 *
+	 * It inserts text on each page that is invisible to humans but visible to machines (thanks to the CSS property `display: none`), in simple sections it looks like this:
+	 *
+	 * ```plaintext
+	 * Are you an LLM? You can read better optimized documentation at /guide/what-is-vitepress.md for this page in Markdown format
+	 * ```
+	 *
+	 * On the main page it will look like this:
+	 *
+	 * ```plaintext
+	 * Are you an LLM? View /llms.txt for optimized Markdown documentation, or /llms-full.txt for full documentation bundle
+	 * ```
+	 *
+	 * @default true
+	 */
+	injectLLMHint?: boolean
+
+	/**
 	 * The directory from which files will be processed.
+	 *
+	 * ---
 	 *
 	 * This is useful for configuring the plugin to generate documentation for LLMs in a specific language.
 	 *
@@ -112,6 +139,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 
 	/**
 	 * An array of file path patterns to be ignored during processing.
+	 *
+	 * ---
 	 *
 	 * This is useful for excluding certain files from LLMs, such as those not related to documentation (e.g., sponsors, team, etc.).
 	 *
@@ -132,6 +161,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 
 	/**
 	 * Whether to exclude unnecessary files (such as blog, sponsor or team information) that LLM does not need at all to save tokens ♻️
+	 *
+	 * ---
 	 *
 	 * You can granularly disable certain page presets, see these options:
 	 *
@@ -175,6 +206,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 	/**
 	 * A custom template for the `llms.txt` file, allowing for a personalized order of elements.
 	 *
+	 * ---
+	 *
 	 * Available template elements include:
 	 *
 	 * - `{title}`: The title extracted from the frontmatter or the first h1 heading in the main document (`index.md`).
@@ -201,6 +234,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 
 	/**
 	 * Custom variables for {@link LlmstxtSettings.customLLMsTxtTemplate | `customLLMsTxtTemplate`}.
+	 *
+	 * ---
 	 *
 	 * With this option you can edit or add variables to the template.
 	 *
@@ -232,6 +267,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 	/**
 	 * VitePress {@link DefaultTheme.Sidebar | Sidebar}
 	 *
+	 * ---
+	 *
 	 * Here you can insert your {@link DefaultTheme.Sidebar | `sidebar`} if it is not in the VitePress configuration
 	 *
 	 * Usually this parameter is used in rare cases
@@ -250,6 +287,8 @@ export interface LlmstxtSettings extends TemplateVariables {
 	experimental?: {
 		/**
 		 * Determines how many directory levels deep to generate `llms.txt` files.
+		 *
+		 * ---
 		 *
 		 * - `1` (default): Generate `llms.txt` only in the root directory
 		 * - `2`: Generate `llms.txt` in the root and first-level subdirectories

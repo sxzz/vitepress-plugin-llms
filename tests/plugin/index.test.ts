@@ -76,6 +76,238 @@ describe('llmstxt plugin', () => {
 			const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/test.ts')
 			expect(result).toBeNull()
 		})
+
+		// Add these tests to the existing describe('transform', () => { ... }) block
+
+		describe('LLM hint injection', () => {
+			it('should inject LLM hint for main page when generateLLMsTxt is enabled', async () => {
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: true,
+					generateLLMsFullTxt: false,
+					generateLLMFriendlyDocsForEachPage: false,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+
+				expect(result).not.toBeNull()
+				expect(result.code).toMatchSnapshot()
+			})
+
+			it('should inject LLM hint for main page when generateLLMsFullTxt is enabled', async () => {
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: false,
+					generateLLMsFullTxt: true,
+					generateLLMFriendlyDocsForEachPage: false,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+
+				expect(result).not.toBeNull()
+				expect(result.code).toContain('Are you an LLM? View /llms-full.txt for full documentation bundle')
+			})
+
+			it('should inject LLM hint for main page when both generateLLMsTxt and generateLLMsFullTxt are enabled', async () => {
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: true,
+					generateLLMsFullTxt: true,
+					generateLLMFriendlyDocsForEachPage: false,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+
+				expect(result).not.toBeNull()
+				expect(result.code).toContain(
+					'Are you an LLM? View /llms.txt for optimized Markdown documentation, or /llms-full.txt for full documentation bundle',
+				)
+			})
+
+			it('should inject LLM hint for regular page when generateLLMFriendlyDocsForEachPage is enabled', async () => {
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: false,
+					generateLLMsFullTxt: false,
+					generateLLMFriendlyDocsForEachPage: true,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/test.md')
+
+				expect(result).not.toBeNull()
+				expect(result.code).toContain(
+					'Are you an LLM? You can read better optimized documentation at /test.md for this page in Markdown format',
+				)
+			})
+
+			it('should respect base path in LLM hints', async () => {
+				const configWithBase = {
+					...mockConfig,
+					base: '/myproject/',
+				}
+
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: true,
+					generateLLMsFullTxt: false,
+					generateLLMFriendlyDocsForEachPage: true,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(configWithBase)
+
+				// Test main page
+				// @ts-ignore
+				const mainResult = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+				expect(mainResult.code).toContain(
+					'Are you an LLM? View /myproject/llms.txt for optimized Markdown documentation',
+				)
+
+				// Test regular page
+				// @ts-ignore
+				const pageResult = await plugin[0].transform(fakeMarkdownDocument, 'docs/test.md')
+				expect(pageResult.code).toContain(
+					'Are you an LLM? You can read better optimized documentation at /myproject/test.md for this page in Markdown format',
+				)
+			})
+
+			it('should not inject LLM hint when injectLLMHint is disabled', async () => {
+				const plugin = llmstxt({
+					injectLLMHint: false,
+					generateLLMsTxt: true,
+					generateLLMsFullTxt: true,
+					generateLLMFriendlyDocsForEachPage: true,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+
+				// Should return null since no content modification occurred
+				expect(result).toBeNull()
+			})
+
+			it('should not inject LLM hint when no generation options are enabled', async () => {
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: false,
+					generateLLMsFullTxt: false,
+					generateLLMFriendlyDocsForEachPage: false,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+
+				// Should return null since no LLM hint should be generated
+				expect(result).toBeNull()
+			})
+
+			it('should handle rewrites correctly in LLM hints', async () => {
+				const configWithRewrites = {
+					...mockConfig,
+					vitepress: {
+						...mockConfig.vitepress,
+						rewrites: {
+							'docs/guide/index.md': 'guide.md',
+						},
+					},
+				}
+
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMFriendlyDocsForEachPage: true,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(configWithRewrites)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(fakeMarkdownDocument, 'docs/guide/index.md')
+
+				expect(result.code).toContain(
+					'Are you an LLM? You can read better optimized documentation at /guide.md for this page in Markdown format',
+				)
+			})
+
+			it('should preserve frontmatter when injecting LLM hint', async () => {
+				const contentWithFrontmatter = `---
+title: Test Page
+description: A test page
+---
+
+# Test Content
+
+This is a test page.`
+
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMFriendlyDocsForEachPage: true,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(mockConfig)
+
+				// @ts-ignore
+				const result = await plugin[0].transform(contentWithFrontmatter, 'docs/test.md')
+
+				expect(result.code).toContain('---')
+				expect(result.code).toContain('title: Test Page')
+				expect(result.code).toContain('description: A test page')
+				expect(result.code).toContain('Are you an LLM?')
+				expect(result.code).toContain('# Test Content')
+			})
+
+			it('should handle root base path correctly', async () => {
+				const configWithRootBase = {
+					...mockConfig,
+					base: '/',
+				}
+
+				const plugin = llmstxt({
+					injectLLMHint: true,
+					generateLLMsTxt: true,
+					generateLLMFriendlyDocsForEachPage: true,
+				})
+
+				// @ts-ignore
+				plugin[1].configResolved(configWithRootBase)
+
+				// Test main page
+				// @ts-ignore
+				const mainResult = await plugin[0].transform(fakeMarkdownDocument, 'docs/index.md')
+				expect(mainResult.code).toContain(
+					'Are you an LLM? View /llms.txt for optimized Markdown documentation',
+				)
+
+				// Test regular page
+				// @ts-ignore
+				const pageResult = await plugin[0].transform(fakeMarkdownDocument, 'docs/test.md')
+				expect(pageResult.code).toContain(
+					'Are you an LLM? You can read better optimized documentation at /test.md for this page in Markdown format',
+				)
+			})
+		})
 	})
 
 	describe('generateBundle', () => {
