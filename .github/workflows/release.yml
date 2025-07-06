@@ -6,6 +6,7 @@ on:
       version:
         description: Version to release (e.g. 1.2.3)
         required: false
+        default: conventional
         type: string
       run-tests:
         description: Run tests before release
@@ -60,18 +61,18 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git config --global push.followTags true
 
-      - name: 🚀 Prepare release
-        run: bun run preversion
+      - name: 📈 Bump version
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: bunx bumpp@^10.2.0 $VERSION --commit --tag --push
 
       - name: 🛠️ Build package
         run: bun run build
 
-      - name: 📜 Generate changelog and release notes
+      - name: 📜 Generate changelog and create GitHub release
         env:
-          VERSION: ${{ github.event.inputs.version }}
-        run: |
-          bunx changelogen --release --push -r $VERSION --hideAuthorEmail
-          bunx changelogen github release --token ${{ secrets.GITHUB_TOKEN }} -r $VERSION
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bunx changelogithub@^13.16.0
 
       - name: 📦 Publish to NPM Registry
         run: |
