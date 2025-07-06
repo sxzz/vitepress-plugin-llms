@@ -9,7 +9,10 @@ const { mkdir, writeFile } = mockedFs.default
 mock.module('node:fs/promises', () => mockedFs)
 mock.module('../../src/utils/logger', () => mockedLogger)
 
-import { generateLLMFriendlyPages } from '../../src/generator'
+import {
+	generateLLMFriendlyPages,
+	// @ts-ignore
+} from '../../src/generator/page-generator'
 
 describe('generateLLMFriendlyPages', () => {
 	beforeEach(() => {

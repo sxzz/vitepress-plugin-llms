@@ -6,5 +6,5 @@
 	},
 
 	// Setup linting for tests later
-	"include": ["tests/**/*.ts"]
+	"include": ["tests/**/*.ts", "lint-staged.config.ts"]
 }

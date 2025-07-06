@@ -41,9 +41,6 @@
 		"dev": "bunup --watch",
 		"prepare": "husky"
 	},
-	"lint-staged": {
-		"*": "bun run format --no-errors-on-unmatched"
-	},
 	"dependencies": {
 		"byte-size": "^9.0.1",
 		"gray-matter": "^4.0.3",

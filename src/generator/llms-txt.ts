@@ -3,7 +3,8 @@ import matter from 'gray-matter'
 import type { DefaultTheme } from 'vitepress'
 import { defaultLLMsTxtTemplate } from '../constants'
 import type { LinksExtension, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
-import { expandTemplate, extractTitle } from '../utils'
+import { extractTitle } from '../utils/file-utils'
+import { expandTemplate } from '../utils/template-utils'
 import { generateTOC } from './toc'
 
 /**

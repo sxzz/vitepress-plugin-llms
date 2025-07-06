@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 
-// @ts-ignore
-import { generateLLMsFullTxt } from '../../src/generator'
+import {
+	generateLLMsFullTxt,
+	// @ts-ignore
+} from '../../src/generator/llms-full-txt'
 import { preparedFilesSample, sampleDomain } from '../resources'
 
 describe('generateLLMsFullTxt', () => {

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import matter from 'gray-matter'
-import { extractTitle } from '../../src/utils'
-import { cleanUrl } from '../../src/utils/file-utils'
+import { cleanUrl, extractTitle } from '../../src/utils/file-utils'
 
 const fakeIndexMd = matter(`\
 ---

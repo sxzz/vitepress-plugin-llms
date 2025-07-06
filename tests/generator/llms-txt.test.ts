@@ -9,7 +9,10 @@ mock.module('node:fs/promises', () => mockedFs)
 
 const { readFile } = mockedFs.default
 
-import { generateLLMsTxt } from '../../src/generator'
+import {
+	generateLLMsTxt,
+	// @ts-ignore
+} from '../../src/generator/llms-txt'
 import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample } from '../resources'
 import fakeIndexMd from '../test-assets/index.md' with { type: 'text' }
 

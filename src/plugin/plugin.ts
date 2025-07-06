@@ -6,7 +6,7 @@ import { name as packageName } from '../../package.json'
 
 import { unnecessaryFilesList } from '../constants'
 import type { LlmstxtSettings, VitePressConfig } from '../types'
-import { log } from '../utils'
+import log from '../utils/logger'
 import { configureDevServer } from './dev-server'
 import { generateBundle, transform } from './hooks'
 

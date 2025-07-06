@@ -16,7 +16,7 @@ mock.module('../../src/utils/logger', () => mockedLogger)
 import path from 'node:path'
 // Import the module under test AFTER mocking its dependencies
 // @ts-ignore
-import { llmstxt } from '../../src/plugin/main'
+import { llmstxt } from '../../src/plugin/plugin'
 import type { VitePressConfig } from '../../src/types'
 
 describe('llmstxt plugin', () => {

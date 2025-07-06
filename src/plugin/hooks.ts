@@ -11,18 +11,20 @@ import { remove } from 'unist-util-remove'
 // @ts-expect-error
 import type { OutputBundle, PluginContext } from 'vite'
 import { defaultLLMsTxtTemplate, fullTagRegex } from '../constants'
-import { generateLLMFriendlyPages, generateLLMsFullTxt, generateLLMsTxt } from '../generator'
-import { remarkPlease, remarkReplaceImageUrls } from '../markdown'
+import { generateLLMsFullTxt } from '../generator/llms-full-txt'
+import { generateLLMsTxt } from '../generator/llms-txt'
+import { generateLLMFriendlyPages } from '../generator/page-generator'
+import { remarkPlease, remarkReplaceImageUrls } from '../markdown/remark-plugins'
 import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types.d'
 import {
 	cleanUrl,
-	expandTemplate,
 	extractTitle,
 	getDirectoriesAtDepths,
 	getHumanReadableSizeOf,
-	log,
 	resolveOutputFilePath,
-} from '../utils'
+} from '../utils/file-utils'
+import log from '../utils/logger'
+import { expandTemplate } from '../utils/template-utils'
 
 /**
  * Processes each Markdown file.
