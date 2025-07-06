@@ -14,8 +14,9 @@ import { defaultLLMsTxtTemplate, fullTagRegex } from '../constants'
 import { generateLLMsFullTxt } from '../generator/llms-full-txt'
 import { generateLLMsTxt } from '../generator/llms-txt'
 import { generateLLMFriendlyPages } from '../generator/page-generator'
+import type { PreparedFile, VitePressConfig } from '../internal-types'
 import { remarkPlease, remarkReplaceImageUrls } from '../markdown/remark-plugins'
-import type { CustomTemplateVariables, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types.d'
+import type { CustomTemplateVariables, LlmstxtSettings } from '../types.d'
 import {
 	cleanUrl,
 	extractTitle,
@@ -34,7 +35,7 @@ export async function transform(
 	id: string,
 	settings: LlmstxtSettings & { ignoreFiles: string[]; workDir: string },
 	mdFiles: Set<string>,
-	config: VitePressConfig, // Add config parameter
+	config: VitePressConfig,
 	// biome-ignore lint/suspicious/noExplicitAny: TODO: Fix type
 ): Promise<any> {
 	const orig = content
@@ -72,8 +73,7 @@ export async function transform(
 	const resolvedOutFilePath = resolveOutputFilePath(
 		id,
 		settings.workDir,
-		// @ts-expect-error
-		config.vitepress.rewrites,
+		config.vitepress.rewrites as unknown as VitePressConfig['rewrites'],
 	)
 	const currentCleanUrl = cleanUrl(path.relative(settings.workDir, resolvedOutFilePath))
 

@@ -4,7 +4,7 @@ import type { GrayMatterFile, Input } from 'gray-matter'
 // @ts-ignore
 import markdownTitle from 'markdown-title'
 import { compile, match } from 'path-to-regexp'
-import type { VitePressConfig } from '../types'
+import type { VitePressConfig } from '../internal-types'
 
 // #region Path utilities
 /**

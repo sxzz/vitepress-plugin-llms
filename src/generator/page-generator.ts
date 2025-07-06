@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import matter from 'gray-matter'
-import type { PreparedFile } from '../types'
+import type { PreparedFile } from '../internal-types'
 import log from '../utils/logger'
 import { generateMetadata } from '../utils/template-utils'
 

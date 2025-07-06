@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import pc from 'picocolors'
 import type { ViteDevServer } from 'vite'
-import type { VitePressConfig } from '../types'
+import type { VitePressConfig } from '../internal-types'
 import { stripExt } from '../utils/file-utils'
 
 import log from '../utils/logger'

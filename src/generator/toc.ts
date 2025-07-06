@@ -1,6 +1,7 @@
 import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
-import type { LinksExtension, LlmstxtSettings, PreparedFile, VitePressConfig } from '../types'
+import type { LinksExtension, PreparedFile, VitePressConfig } from '../internal-types'
+import type { LlmstxtSettings } from '../types'
 import { stripExtPosix, transformToPosixPath } from '../utils/file-utils'
 import { generateLink } from '../utils/template-utils'
 

@@ -2,7 +2,7 @@ import path from 'node:path'
 import type { Paragraph, Parent, Root } from 'mdast'
 import { type BuildVisitor, visit } from 'unist-util-visit'
 import { fullTagRegex, tagRegex } from '../constants'
-import type { NotUndefined } from '../types'
+import type { NotUndefined } from '../internal-types'
 
 /**
  * Creates a remark plugin that either removes or unwraps specified HTML tags from markdown AST.
