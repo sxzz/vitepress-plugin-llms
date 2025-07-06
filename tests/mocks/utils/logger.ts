@@ -1,4 +1,5 @@
 import { mock } from 'bun:test'
+// @ts-ignore
 import logger from '../../../src/utils/logger'
 
 /** Mocked {@link logger} for silencing logs in tests. */

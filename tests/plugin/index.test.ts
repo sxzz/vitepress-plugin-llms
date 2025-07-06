@@ -14,10 +14,10 @@ mock.module('node:fs/promises', () => mockedFs)
 mock.module('../../src/utils/logger', () => mockedLogger)
 
 import path from 'node:path'
+import type { VitePressConfig } from '../../src/internal-types'
 // Import the module under test AFTER mocking its dependencies
 // @ts-ignore
 import { llmstxt } from '../../src/plugin/plugin'
-import type { VitePressConfig } from '../../src/types'
 
 describe('llmstxt plugin', () => {
 	let plugin: [Plugin, Plugin]
