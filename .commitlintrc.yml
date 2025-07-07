@@ -1,7 +1,6 @@
 extends: ['@commitlint/config-conventional']
 rules:
-  # Enforce subject line to be lower-case
   subject-case:
     - 2
     - always
-    - lower-case
+    - [lower-case, upper-case]
