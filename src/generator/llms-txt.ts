@@ -4,7 +4,7 @@ import type { DefaultTheme } from 'vitepress'
 import { defaultLLMsTxtTemplate } from '../constants'
 import type { LinksExtension, PreparedFile, VitePressConfig } from '../internal-types'
 import type { LlmstxtSettings } from '../types'
-import { extractTitle } from '../utils/file-utils'
+import { extractTitle } from '../utils/markdown'
 import { expandTemplate } from '../utils/template-utils'
 import { generateTOC } from './toc'
 

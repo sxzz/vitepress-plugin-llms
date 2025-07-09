@@ -17,15 +17,12 @@ import { generateLLMFriendlyPages } from '../generator/page-generator'
 import type { PreparedFile, VitePressConfig } from '../internal-types'
 import { remarkPlease, remarkReplaceImageUrls } from '../markdown/remark-plugins'
 import type { CustomTemplateVariables, LlmstxtSettings } from '../types.d'
-import {
-	cleanUrl,
-	extractTitle,
-	getDirectoriesAtDepths,
-	getHumanReadableSizeOf,
-	resolveOutputFilePath,
-} from '../utils/file-utils'
+import { cleanUrl, getDirectoriesAtDepths } from '../utils/file-utils'
+import { getHumanReadableSizeOf } from '../utils/helpers'
 import log from '../utils/logger'
+import { extractTitle } from '../utils/markdown'
 import { expandTemplate } from '../utils/template-utils'
+import { resolveOutputFilePath } from '../utils/vitepress-rewrites'
 
 /**
  * Processes each Markdown file.
@@ -126,6 +123,7 @@ export async function transform(
 
 	return modifiedContent !== orig ? { code: modifiedContent, map: null } : null
 }
+
 /**
  * Runs only in the client build (not SSR) after completion.
  * This ensures the processing happens exactly once.

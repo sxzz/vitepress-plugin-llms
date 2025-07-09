@@ -1,10 +1,4 @@
 import path from 'node:path'
-import byteSize from 'byte-size'
-import type { GrayMatterFile, Input } from 'gray-matter'
-// @ts-ignore
-import markdownTitle from 'markdown-title'
-import { compile, match } from 'path-to-regexp'
-import type { VitePressConfig } from '../internal-types'
 
 // #region Path utilities
 /**
@@ -113,67 +107,6 @@ export function cleanUrl(path: string): string {
 
 	return removeHtmlExtension(cleanedPath)
 }
-/**
- * Resolves the output file path for VitePress with support for route rewrites and dynamic slugs.
- *
- * Handles both static rewrites (exact matches) and dynamic patterns using path-to-regexp.
- * Dynamic patterns support parameters (`:param`) and wildcards (`*wildcard`) as defined
- * in VitePress rewrites configuration.
- *
- * @param file - The source file path to resolve (e.g., 'packages/pkg-a/src/index.md')
- * @param workDir - The working directory to join resolved paths with
- * @param rewrites - VitePress rewrites configuration (object, function, or undefined)
- * @returns The resolved output file path
- */
-export function resolveOutputFilePath(
-	file: string,
-	workDir: string,
-	rewrites: VitePressConfig['rewrites'],
-): string {
-	let resolvedRewrite: string | undefined
-
-	// Handle function-based rewrites
-	if (typeof rewrites === 'function') {
-		const resolvedFilePath = rewrites(file)
-		if (resolvedFilePath) resolvedRewrite = resolvedFilePath
-	}
-	// Handle object-based rewrites
-	else if (rewrites && typeof rewrites === 'object') {
-		// First try exact match (static rewrites)
-		if (file in rewrites) {
-			resolvedRewrite = rewrites[file]
-		} else {
-			// Try dynamic pattern matching
-			for (const [pattern, replacement] of Object.entries(rewrites)) {
-				// Skip if it's not a dynamic pattern (no : or *)
-				if (!pattern.includes(':') && !pattern.includes('*')) {
-					continue
-				}
-
-				try {
-					const matcher = match(pattern)
-					const result = matcher(file)
-
-					if (result) {
-						// Compile the replacement pattern with matched parameters
-						const compileFn = compile(replacement)
-						resolvedRewrite = compileFn(result.params)
-						break
-					}
-				} catch (_error) {
-					// Skip invalid patterns silently
-				}
-			}
-		}
-	}
-
-	// Return resolved path or original file path
-	if (resolvedRewrite) {
-		return path.join(workDir, resolvedRewrite)
-	}
-
-	return file
-}
 
 /**
  * Gets all directories at specific depths relative to the base directory.
@@ -223,24 +156,3 @@ export function getDirectoriesAtDepths(
 		})
 }
 // #endregion
-
-/**
- * Extracts the title from a markdown file's frontmatter or first heading.
- *
- * @param file - The markdown file to extract the title from.
- * @returns The extracted title, or `undefined` if no title is found.
- */
-export function extractTitle(file: GrayMatterFile<Input>): string | undefined {
-	return file.data?.title || file.data?.titleTemplate || markdownTitle(file.content)
-}
-
-/**
- * Returns a human-readable string representation of the given string's size in bytes.
- *
- * This function calculates the byte size of a given string by creating a `Blob`
- * and then converts it into a human-readable format using `byte-size`.
- *
- * @param string - The input string whose size needs to be determined.
- * @returns A human-readable size string (e.g., "1.2 KB", "500 B").
- */
-export const getHumanReadableSizeOf = (string: string): string => byteSize(new Blob([string]).size).toString()
