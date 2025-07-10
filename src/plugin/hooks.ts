@@ -23,7 +23,7 @@ import log from '@/utils/logger'
 import { extractTitle } from '@/utils/markdown'
 import { cleanUrl } from '@/utils/shared'
 import { expandTemplate } from '@/utils/template-utils'
-import { resolveOutputFilePath } from '@/utils/vitepress-rewrites'
+import { resolveOutputFilePath, resolveSourceFilePath } from '@/utils/vitepress-rewrites'
 
 /**
  * Processes each Markdown file.
@@ -38,7 +38,7 @@ export async function transform(
 ): Promise<any> {
 	const orig = content
 
-	if (!id.endsWith('.md') || !id.startsWith(settings.workDir)) {
+	if (!id.endsWith('.md') || !path.resolve(id).startsWith(settings.workDir)) {
 		return null
 	}
 
@@ -46,7 +46,7 @@ export async function transform(
 	const resolvedOutFilePath = resolveOutputFilePath(
 		id,
 		settings.workDir,
-		config.vitepress.rewrites as unknown as VitePressConfig['rewrites'],
+		config.vitepress.userConfig?.rewrites,
 	)
 	const isMainPage = path.relative(settings.workDir, resolvedOutFilePath) === 'index.md'
 
@@ -195,12 +195,7 @@ export async function generateBundle(
 		mdFilesList.map(async (file) => {
 			const resolvedOutFilePath = path.relative(
 				settings.workDir,
-				resolveOutputFilePath(
-					file,
-					settings.workDir,
-					// @ts-ignore
-					config.vitepress.rewrites,
-				),
+				resolveOutputFilePath(file, settings.workDir, config.vitepress.userConfig?.rewrites),
 			)
 
 			const content = await fs.readFile(file, 'utf-8')
@@ -276,12 +271,7 @@ export async function generateBundle(
 					const llmsTxt = await generateLLMsTxt(preparedFiles, {
 						indexMd: path.resolve(
 							settings.workDir,
-							resolveOutputFilePath(
-								'index.md',
-								settings.workDir,
-								// @ts-ignore
-								config.vitepress.rewrites,
-							),
+							resolveSourceFilePath('index.md', settings.workDir, config.vitepress.userConfig?.rewrites),
 						),
 						outDir: settings.workDir,
 						LLMsTxtTemplate: settings.customLLMsTxtTemplate || defaultLLMsTxtTemplate,
