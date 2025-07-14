@@ -1,15 +1,13 @@
 import path from 'node:path'
 import pc from 'picocolors'
 import type { Plugin, ViteDevServer } from 'vite'
-
-import { name as packageName } from '../../package.json'
-
-import { unnecessaryFilesList } from '../constants'
-import type { VitePressConfig } from '../internal-types'
-import type { LlmstxtSettings } from '../types'
-import log from '../utils/logger'
-import { configureDevServer } from './dev-server'
-import { generateBundle, transform } from './hooks'
+import { name as packageName } from '@/../package.json'
+import { unnecessaryFilesList } from '@/constants'
+import type { VitePressConfig } from '@/internal-types'
+import { configureDevServer } from '@/plugin/dev-server'
+import { generateBundle, transform } from '@/plugin/hooks'
+import type { LlmstxtSettings } from '@/types'
+import log from '@/utils/logger'
 
 const PLUGIN_NAME = packageName
 

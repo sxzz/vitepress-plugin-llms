@@ -1,5 +1,5 @@
 import type { DefaultTheme } from 'vitepress'
-import { unnecessaryFilesList } from './constants'
+import { unnecessaryFilesList } from '@/constants'
 
 interface TemplateVariables {
 	/**

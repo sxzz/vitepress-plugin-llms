@@ -1,12 +1,12 @@
 import fs from 'node:fs/promises'
 import matter from 'gray-matter'
 import type { DefaultTheme } from 'vitepress'
-import { defaultLLMsTxtTemplate } from '../constants'
-import type { LinksExtension, PreparedFile, VitePressConfig } from '../internal-types'
-import type { LlmstxtSettings } from '../types'
-import { extractTitle } from '../utils/markdown'
-import { expandTemplate } from '../utils/template-utils'
-import { generateTOC } from './toc'
+import { defaultLLMsTxtTemplate } from '@/constants'
+import { generateTOC } from '@/generator/toc'
+import type { LinksExtension, PreparedFile, VitePressConfig } from '@/internal-types'
+import type { LlmstxtSettings } from '@/types'
+import { extractTitle } from '@/utils/markdown'
+import { expandTemplate } from '@/utils/template-utils'
 
 /**
  * Options for generating the `llms.txt` file.

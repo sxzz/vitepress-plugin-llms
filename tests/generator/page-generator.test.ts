@@ -7,12 +7,12 @@ import { outDir, preparedFilesSample } from '../resources'
 const { mkdir, writeFile } = mockedFs.default
 
 mock.module('node:fs/promises', () => mockedFs)
-mock.module('../../src/utils/logger', () => mockedLogger)
+mock.module('@/utils/logger', () => mockedLogger)
 
 import {
 	generateLLMFriendlyPages,
 	// @ts-ignore
-} from '../../src/generator/page-generator'
+} from '@/generator/page-generator'
 
 describe('generateLLMFriendlyPages', () => {
 	beforeEach(() => {

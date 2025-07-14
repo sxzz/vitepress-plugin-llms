@@ -1,4 +1,4 @@
-export { cleanUrl } from '../utils/file-utils'
+export { cleanUrl } from '@/utils/file-utils'
 
 /**
  * Triggers a file download in the browser with the specified filename and content.

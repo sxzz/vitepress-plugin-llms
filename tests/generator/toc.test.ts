@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import type { DefaultTheme } from 'vitepress'
-import { generateTOC, generateTOCLink, isPathMatch, normalizeLinkPath } from '../../src/generator/toc'
+import { generateTOC, generateTOCLink, isPathMatch, normalizeLinkPath } from '@/generator/toc'
 import {
 	fooMdSample,
 	outDir,

@@ -1,6 +1,6 @@
 import matter from 'gray-matter'
 import type { DefaultTheme } from 'vitepress'
-import type { PreparedFile } from '../src/internal-types'
+import type { PreparedFile } from '@/internal-types'
 import fakeGettingStartedMd from './test-assets/getting-started.md' with { type: 'text' }
 import fakeIndexMd from './test-assets/index.md' with { type: 'text' }
 import fakeMarkdownDocument from './test-assets/markdown-document.md' with { type: 'text' }

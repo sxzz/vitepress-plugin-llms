@@ -3,7 +3,7 @@ import { describe, expect, it } from 'bun:test'
 import {
 	generateLLMsFullTxt,
 	// @ts-ignore
-} from '../../src/generator/llms-full-txt'
+} from '@/generator/llms-full-txt'
 import { preparedFilesSample, sampleDomain } from '../resources'
 
 describe('generateLLMsFullTxt', () => {

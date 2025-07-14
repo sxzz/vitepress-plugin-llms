@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { remark } from 'remark'
 // @ts-ignore
-import { remarkPlease, remarkReplaceImageUrls } from '../../src/markdown/remark-plugins'
+import { remarkPlease, remarkReplaceImageUrls } from '@/markdown/remark-plugins'
 
 describe('remarkPlease', () => {
 	let remarkProcessor: typeof remark

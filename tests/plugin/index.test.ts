@@ -11,13 +11,13 @@ const { access, mkdir, writeFile, readFile } = mockedFs.default
 mock.module('node:fs/promises', () => mockedFs)
 
 // Mock the logger to prevent logs in tests
-mock.module('../../src/utils/logger', () => mockedLogger)
+mock.module('@/utils/logger', () => mockedLogger)
 
 import path from 'node:path'
-import type { VitePressConfig } from '../../src/internal-types'
+import type { VitePressConfig } from '@/internal-types'
 // Import the module under test AFTER mocking its dependencies
 // @ts-ignore
-import { llmstxt } from '../../src/plugin/plugin'
+import { llmstxt } from '@/plugin/plugin'
 
 describe('llmstxt plugin', () => {
 	let plugin: [Plugin, Plugin]

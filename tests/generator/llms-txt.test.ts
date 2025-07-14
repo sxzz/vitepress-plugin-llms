@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, it, mock } from 'bun:test'
 import path from 'node:path'
 
-import { defaultLLMsTxtTemplate } from '../../src/constants'
+import { defaultLLMsTxtTemplate } from '@/constants'
 
 import mockedFs from '../mocks/fs'
 
@@ -12,7 +12,7 @@ const { readFile } = mockedFs.default
 import {
 	generateLLMsTxt,
 	// @ts-ignore
-} from '../../src/generator/llms-txt'
+} from '@/generator/llms-txt'
 import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample } from '../resources'
 import fakeIndexMd from '../test-assets/index.md' with { type: 'text' }
 

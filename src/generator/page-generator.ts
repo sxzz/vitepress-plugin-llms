@@ -1,9 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import matter from 'gray-matter'
-import type { PreparedFile } from '../internal-types'
-import log from '../utils/logger'
-import { generateMetadata } from '../utils/template-utils'
+import type { PreparedFile } from '@/internal-types'
+import log from '@/utils/logger'
+import { generateMetadata } from '@/utils/template-utils'
 
 /**
  * Generates an LLM-friendly version of the documentation for each page.

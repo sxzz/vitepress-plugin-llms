@@ -1,9 +1,9 @@
 import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
-import type { LinksExtension, PreparedFile, VitePressConfig } from '../internal-types'
-import type { LlmstxtSettings } from '../types'
-import { stripExtPosix, transformToPosixPath } from '../utils/file-utils'
-import { generateLink } from '../utils/template-utils'
+import type { LinksExtension, PreparedFile, VitePressConfig } from '@/internal-types'
+import type { LlmstxtSettings } from '@/types'
+import { stripExtPosix, transformToPosixPath } from '@/utils/file-utils'
+import { generateLink } from '@/utils/template-utils'
 
 /**
  * Generates a Markdown-formatted table of contents (TOC) link for a given file.

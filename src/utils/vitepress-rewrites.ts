@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { compile, match } from 'path-to-regexp'
-import type { VitePressConfig } from '../internal-types'
+import type { VitePressConfig } from '@/internal-types'
 
 /**
  * Resolves the output file path for VitePress with support for route rewrites and dynamic slugs.

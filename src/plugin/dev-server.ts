@@ -2,10 +2,9 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import pc from 'picocolors'
 import type { ViteDevServer } from 'vite'
-import type { VitePressConfig } from '../internal-types'
-import { stripExt } from '../utils/file-utils'
-
-import log from '../utils/logger'
+import type { VitePressConfig } from '@/internal-types'
+import { stripExt } from '@/utils/file-utils'
+import log from '@/utils/logger'
 
 /**
  * Configures the development server to handle `llms.txt` and markdown files for LLMs.

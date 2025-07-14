@@ -1,8 +1,8 @@
 import path from 'node:path'
 import matter from 'gray-matter'
-import type { LinksExtension, PreparedFile, VitePressConfig } from '../internal-types'
-import type { LlmstxtSettings } from '../types'
-import { generateMetadata } from '../utils/template-utils'
+import type { LinksExtension, PreparedFile, VitePressConfig } from '@/internal-types'
+import type { LlmstxtSettings } from '@/types'
+import { generateMetadata } from '@/utils/template-utils'
 
 /**
  * Options for generating the `llms-full.txt` file.

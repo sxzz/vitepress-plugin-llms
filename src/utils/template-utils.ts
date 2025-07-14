@@ -1,7 +1,7 @@
 import type { GrayMatterFile, Input } from 'gray-matter'
-import type { LinksExtension, VitePressConfig } from '../internal-types'
-import type { LlmstxtSettings } from '../types'
-import { stripExtPosix, transformToPosixPath } from './file-utils'
+import type { LinksExtension, VitePressConfig } from '@/internal-types'
+import type { LlmstxtSettings } from '@/types'
+import { stripExtPosix, transformToPosixPath } from '@/utils/file-utils'
 
 /**
  * Creates a regular expression to match a specific template variable in the format `{key}`.
