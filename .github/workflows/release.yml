@@ -65,9 +65,7 @@ jobs:
       - name: 📈 Bump version
         env:
           VERSION: ${{ github.event.inputs.version }}
-        run: |
-          bunx bumpp@^10.2.0 $VERSION --commit --tag --push
-          echo "RELEASE_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        run: bunx bumpp@^10.2.0 $VERSION --commit --tag --push
 
       - name: 🛠️ Build package
         run: bun run build
@@ -75,8 +73,7 @@ jobs:
       - name: 📜 Generate changelog and create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG: ${{ env.RELEASE_TAG }}
-        run: bunx changelogithub@^13.16.0 --from ${{ env.RELEASE_TAG }}
+        run: bunx changelogithub@^13.16.0
 
       - name: 📦 Publish to NPM Registry
         run: |
