@@ -57,11 +57,11 @@
 		"unist-util-visit": "^5.0.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.0.6",
+		"@biomejs/biome": "2.1.1",
 		"@types/byte-size": "^8.1.2",
 		"@types/node": "^24.0.4",
 		"bun-types": "^1.2.17",
-		"bunup": "0.8.48",
+		"bunup": "0.8.60",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.1.2",
 		"typescript": "^5.8.3",
