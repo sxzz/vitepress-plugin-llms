@@ -65,7 +65,7 @@ jobs:
       - name: 📈 Bump version
         env:
           VERSION: ${{ github.event.inputs.version }}
-        run: bunx bumpp@^10.2.0 $VERSION --commit --tag --push --yes
+        run: bunx bumpp@^10.2.0 $VERSION --commit --tag --push --yes --no-verify
 
       - name: 🛠️ Build package
         run: bun run build
