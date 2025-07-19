@@ -24,6 +24,7 @@ languageSettings:
       - Rolldown
 
 ignorePaths:
+  - .github/**/*.yml
   - tests/**/__snapshots__/
   - cspell.yml
   - LICENSE

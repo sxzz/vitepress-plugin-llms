@@ -7,11 +7,13 @@ on:
       - .github/workflows/**
       - src/**
       - tests/**
+      - .gitignore
+      - bunup.config.ts
       - package.json
       - biome.jsonc
       - bun.lock
       - bunfig.toml
-      - bunup.config.ts
+      - cspell.yml
       - tsconfig*.json
       - "!**/*.md"
 
@@ -20,11 +22,13 @@ on:
       - .github/workflows/**
       - src/**
       - tests/**
+      - .gitignore
+      - bunup.config.ts
       - package.json
       - biome.jsonc
       - bun.lock
       - bunfig.toml
-      - bunup.config.ts
+      - cspell.yml
       - tsconfig*.json
       - "!**/*.md"
 
@@ -65,10 +69,11 @@ jobs:
           # Download only the necessary files
           sparse-checkout: |
             src/
+            .gitignore
+            bunup.config.ts
             package.json
             bun.lock
             bunfig.toml
-            bunup.config.ts
             README.md
             LICENSE
             tsconfig*.json

@@ -30,13 +30,15 @@ jobs:
           sparse-checkout-cone-mode: false
           # Download only the necessary files
           sparse-checkout: |
-            src
-            tests
+            src/
+            tests/
+            .gitignore
+            bunup.config.ts
             package.json
             biome.jsonc
             bun.lock
             bunfig.toml
-            bunup.config.ts
+            cspell.yml
             tsconfig*.json
             !**/*.md
             tests/test-assets/*.md
