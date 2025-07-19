@@ -33,7 +33,8 @@
 	"scripts": {
 		"lint:tsc": "tsc --noEmit -p tsconfig.node.json",
 		"lint:biome": "biome check",
-		"lint": "bun run lint:tsc && bun run lint:biome",
+		"lint:spell": "cspell --gitignore .",
+		"lint": "bun run lint:tsc && bun run lint:biome && bun run lint:spell",
 		"format": "biome format --write",
 		"test": "bun test",
 		"preversion": "bun run format && git add .",
@@ -62,6 +63,7 @@
 		"@types/node": "^24.0.4",
 		"bun-types": "^1.2.17",
 		"bunup": "0.8.60",
+		"cspell": "^9.1.5",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.1.2",
 		"typescript": "^5.8.3",

@@ -146,7 +146,7 @@ async function processSidebarSection(
 							outDir,
 							domain,
 							linksExtension,
-							// Increase depth for nested sections to maintaint proper heading levels
+							// Increase depth for nested sections to maintain proper heading levels
 							depth + 1,
 							item.base ?? section.base ?? base ?? '',
 						),

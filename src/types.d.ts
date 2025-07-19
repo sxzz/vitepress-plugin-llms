@@ -23,6 +23,7 @@ interface TemplateVariables {
 	 */
 	details?: string
 
+	// spell-checker:disable
 	/**
 	 * An automatically generated **T**able **O**f **C**ontents.
 	 *
@@ -32,6 +33,7 @@ interface TemplateVariables {
 	 * - [Title 2](/bar/baz.md): Cras vel nibh id ipsum pharetra efficitur.
 	 * ```
 	 */
+	// spell-checker:enable
 	toc?: string
 }
 
@@ -203,6 +205,7 @@ export interface LlmstxtSettings extends TemplateVariables {
 	 */
 	excludeTeam?: boolean
 
+	// spell-checker:disable
 	/**
 	 * A custom template for the `llms.txt` file, allowing for a personalized order of elements.
 	 *
@@ -230,6 +233,7 @@ export interface LlmstxtSettings extends TemplateVariables {
 	 * {toc}
 	 * ```
 	 */
+	// spell-checker:enable
 	customLLMsTxtTemplate?: string
 
 	/**

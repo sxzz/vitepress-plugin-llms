@@ -1,3 +1,5 @@
+// spell-checker:words awesomeproject myproject otherdocs
+
 import { afterEach, beforeEach, describe, expect, it, mock, spyOn } from 'bun:test'
 import type { ViteDevServer } from 'vite'
 import type { Plugin } from 'vitepress'

@@ -266,6 +266,8 @@ You can read the instructions for contributing here - [CONTRIBUTING.md](./CONTRI
 
 ## 📜 License
 
+<!-- spell-checker:disable-next-line -->
+
 [MIT License](./LICENSE) © 2025-present [Yurii Bogdan](https://github.com/okineadev)
 
 ## 👨‍🏭 Contributors

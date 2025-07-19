@@ -68,6 +68,7 @@ export const expandTemplate = (template: string, variables: Record<string, strin
 	)
 }
 
+// spell-checker:words flowdown
 /**
  * Generates a complete link by combining a domain, path, and an optional extension.
  *

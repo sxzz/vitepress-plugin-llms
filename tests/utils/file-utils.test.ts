@@ -1,3 +1,5 @@
+// spell-checker:words awesomeproject
+
 import { describe, expect, it } from 'bun:test'
 import path from 'node:path'
 import { getDirectoriesAtDepths } from '@/utils/file-utils'

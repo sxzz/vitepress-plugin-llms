@@ -1,6 +1,7 @@
 import type MarkdownIt from 'markdown-it'
 import Token from 'markdown-it/lib/token.mjs'
 
+// spell-checker:words Divyansh
 /**
  * Markdown-it plugin that injects <CopyOrDownloadAsMarkdownButtons /> after the first H1 heading
  *

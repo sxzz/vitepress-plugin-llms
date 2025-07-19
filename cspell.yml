@@ -1,0 +1,29 @@
+$schema: https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json
+
+words:
+  - bunup
+  - llms
+  - Llms
+  - Llmstxt
+  - millify
+  - frontmatter
+  - tokenx
+
+overrides:
+  - filename: '**/package.json'
+    words:
+      - Okinea
+
+languageSettings:
+  - languageId: markdown
+    words:
+      - srcset
+      - shadcn
+      - Slidev
+      - Elysia
+      - Rolldown
+
+ignorePaths:
+  - tests/**/__snapshots__/
+  - cspell.yml
+  - LICENSE
