@@ -56,11 +56,8 @@ jobs:
       - name: 📦 Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: 🔧 Configure Git
-        run: |
-          git config --global user.name  'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git config --global push.followTags true
+      - name: 🤖 Setup GitHub Actions Bot
+        uses: cli-stuff/setup-github-actions-bot@6f48e564efbb89283f4ec530312d3cfd23a95f58 # v0.1
 
       - name: 📈 Bump version
         env:
