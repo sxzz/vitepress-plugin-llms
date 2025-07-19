@@ -44,9 +44,9 @@ describe('expandTemplate', () => {
 // Updated the test cases to fix argument mismatches for generateTOC, generateMetadata, generateLLMsTxt, and generateLLMsFullTxt
 
 describe('generateMetadata', () => {
-	const dummyMatter = matter('')
+	const sampleMatter = matter('')
 	it('should generate URL with domain when provided', () => {
-		const result = generateMetadata(dummyMatter, {
+		const result = generateMetadata(sampleMatter, {
 			domain: sampleDomain,
 			filePath: 'docs/guide',
 		})
@@ -55,7 +55,7 @@ describe('generateMetadata', () => {
 	})
 
 	it('should generate URL without domain when domain is undefined', () => {
-		const result = generateMetadata(dummyMatter, {
+		const result = generateMetadata(sampleMatter, {
 			filePath: 'docs/guide',
 		})
 
@@ -65,7 +65,7 @@ describe('generateMetadata', () => {
 	it('should include description from frontmatter when available', () => {
 		const result = generateMetadata(
 			{
-				...dummyMatter,
+				...sampleMatter,
 				data: {
 					description: 'A comprehensive guide',
 				},
@@ -81,7 +81,7 @@ describe('generateMetadata', () => {
 	})
 
 	it('should not include description when frontmatter description is empty', () => {
-		const result = generateMetadata(dummyMatter, {
+		const result = generateMetadata(sampleMatter, {
 			domain: sampleDomain,
 			filePath: 'docs/guide',
 		})
@@ -91,7 +91,7 @@ describe('generateMetadata', () => {
 	})
 
 	it('should not include description when frontmatter has no description', () => {
-		const result = generateMetadata(dummyMatter, {
+		const result = generateMetadata(sampleMatter, {
 			domain: sampleDomain,
 			filePath: 'docs/guide',
 		})
