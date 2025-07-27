@@ -1,4 +1,11 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`llmstxt plugin transform LLM hint injection should inject LLM hint for main page when generateLLMsTxt is enabled 1`] = `
+"<div style="display: none;" hidden="true" aria-hidden="true">Are you an LLM? View /llms.txt for optimized Markdown documentation</div>
+
+# Some cool stuff
+"
+`;
 
 exports[`llmstxt plugin generateBundle does not add links with \`.md\` extension in \`llms.txt\` if \`generateLLMFriendlyDocsForEachPage\` option is disabled 1`] = `
 "# Some cool stuff
@@ -15,13 +22,6 @@ exports[`llmstxt plugin generateBundle does not add links with \`.md\` extension
 "---
 url: /test.html
 ---
-# Some cool stuff
-"
-`;
-
-exports[`llmstxt plugin transform LLM hint injection should inject LLM hint for main page when generateLLMsTxt is enabled 1`] = `
-"<div style="display: none;" hidden="true" aria-hidden="true">Are you an LLM? View /llms.txt for optimized Markdown documentation</div>
-
 # Some cool stuff
 "
 `;

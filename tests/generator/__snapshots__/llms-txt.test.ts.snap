@@ -1,4 +1,4 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
 exports[`generateLLMsTxt generates a \`llms.txt\` file 1`] = `
 "# Some cool tool
