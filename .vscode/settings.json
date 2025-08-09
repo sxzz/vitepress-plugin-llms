@@ -26,5 +26,10 @@
 	"material-icon-theme.folders.associations": {
 		"tests/test-assets": "resource",
 		"vitepress-components": "vue"
+	},
+
+	"yaml.schemas": {
+		// Use the local cspell schema  from `node_modules` for `cspell.yml` configuration
+		"./node_modules/@cspell/cspell-types/cspell.schema.json": ["cspell.yml"]
 	}
 }
