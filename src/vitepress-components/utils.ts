@@ -1,4 +1,40 @@
-export { cleanUrl } from '@/utils/shared'
+const removeHtmlExtension = (pathSegment: string): string => {
+	const lastSlashIndex = pathSegment.lastIndexOf('/')
+	const lastDotIndex = pathSegment.lastIndexOf('.')
+
+	if (lastDotIndex > lastSlashIndex && lastDotIndex !== -1 && pathSegment.endsWith('.html')) {
+		return pathSegment.substring(0, lastDotIndex)
+	}
+
+	return pathSegment
+}
+
+/**
+ * Cleans a given URL by removing its file extension from the pathname, if present.
+ *
+ * This function parses the input URL, removes the file extension from the last path segment
+ * if it exists (i.e., if the last dot comes after the last slash), and trims any trailing slash
+ * (except for the root path). The returned URL excludes query parameters and hash fragments.
+ *
+ * @param url - The full URL string to clean.
+ * @returns The cleaned URL string with the file extension removed from the pathname.
+ *
+ * @example
+ * cleanUrl('https://example.com/docs/page.md')          // 'https://example.com/docs/page'
+ * cleanUrl('https://example.com/docs/')                 // 'https://example.com/docs'
+ * cleanUrl('https://example.com/docs/page.md?query=1')  // 'https://example.com/docs/page'
+ */
+export function cleanUrl(url: string): string {
+	const { origin, pathname } = new URL(url)
+
+	const pathnameWithoutTrailingSlash = pathname.replace(/\/+$/, '')
+
+	if (pathname.length) {
+		return origin + removeHtmlExtension(pathnameWithoutTrailingSlash)
+	} else {
+		return origin
+	}
+}
 
 /**
  * Triggers a file download in the browser with the specified filename and content.

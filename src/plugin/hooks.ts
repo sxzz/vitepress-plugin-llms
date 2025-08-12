@@ -21,7 +21,6 @@ import { getDirectoriesAtDepths } from '@/utils/file-utils'
 import { getHumanReadableSizeOf } from '@/utils/helpers'
 import log from '@/utils/logger'
 import { extractTitle } from '@/utils/markdown'
-import { cleanUrl } from '@/utils/shared'
 import { expandTemplate } from '@/utils/template-utils'
 import { resolveOutputFilePath, resolveSourceFilePath } from '@/utils/vitepress-rewrites'
 
@@ -84,7 +83,7 @@ export async function transform(
 		// Generate hint for LLMs
 		let llmHint = ''
 
-		const currentCleanUrl = cleanUrl(path.relative(settings.workDir, resolvedOutFilePath))
+		const currentUrl = path.relative(settings.workDir, resolvedOutFilePath)
 
 		const base = config.base || '/'
 		const basePath = base === '/' ? '' : base.replace(/\/$/, '')
@@ -106,7 +105,7 @@ export async function transform(
 		} else {
 			// Regular page
 			if (settings.generateLLMFriendlyDocsForEachPage) {
-				const mdUrl = `${basePath}/${currentCleanUrl}`
+				const mdUrl = `${basePath}/${currentUrl}`
 				// TODO: Add some useful metadata like tokens count or size in kilobytes
 				llmHint = `Are you an LLM? You can read better optimized documentation at ${mdUrl} for this page in Markdown format`
 			}

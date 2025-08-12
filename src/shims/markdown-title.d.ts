@@ -17,7 +17,7 @@ declare module 'markdown-title' {
 	 * console.log(title) // "My Title"
 	 * ```
 	 */
-	declare function markdownTitle(markdown: string): string | undefined
+	function markdownTitle(markdown: string): string | undefined
 
 	export default markdownTitle
 }
