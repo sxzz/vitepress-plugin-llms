@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
           # Only fetch the config file from the repository
           sparse-checkout-cone-mode: false
-          sparse-checkout: .commitlintrc.yml
+          sparse-checkout: commitlint.config.ts
 
       - name: 📦 Install dependencies
         run: npm install --global @commitlint/config-conventional commitlint
@@ -27,5 +27,4 @@ jobs:
       - name: 🔍 Check PR title with commitlint
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-          HELP_URL: https://github.com/okineadev/vitepress-plugin-llms/blob/main/CONTRIBUTING.md#conventional-pr-titles
-        run: echo "$PR_TITLE" | npx commitlint --help-url $HELP_URL
+        run: echo "$PR_TITLE" | npx commitlint
