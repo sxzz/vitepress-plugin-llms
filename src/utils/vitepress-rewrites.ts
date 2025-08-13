@@ -120,3 +120,25 @@ export function resolveSourceFilePath(
 	// Return original path if no rewrite found
 	return path.join(workDir, outputPath)
 }
+
+/**
+ * Resolves a VitePress page URL from its file system path.
+ *
+ * This function converts the internal file path (e.g., `guide/index.md`)
+ * to the actual URL path (e.g., `guide.md`).
+ *
+ * @param url The file system path of the page (e.g., `guide/index.md`).
+ * @returns The resolved URL path (e.g., `guide.md`).
+ */
+export function resolvePageURL(url: string): string {
+	// Normalize leading slash
+	const hasLeadingSlash = url.startsWith('/')
+	const normalized = hasLeadingSlash ? url.slice(1) : url
+
+	// Only rewrite if ends with /index.md and is not just index.md
+	if (normalized.endsWith('/index.md') && normalized !== 'index.md') {
+		const newUrl = normalized.slice(0, -'/index.md'.length) + '.md'
+		return hasLeadingSlash ? '/' + newUrl : newUrl
+	}
+	return url
+}

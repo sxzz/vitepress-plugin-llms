@@ -22,7 +22,7 @@ import { getHumanReadableSizeOf } from '@/utils/helpers'
 import log from '@/utils/logger'
 import { extractTitle } from '@/utils/markdown'
 import { expandTemplate } from '@/utils/template-utils'
-import { resolveOutputFilePath, resolveSourceFilePath } from '@/utils/vitepress-rewrites'
+import { resolveOutputFilePath, resolvePageURL, resolveSourceFilePath } from '@/utils/vitepress-rewrites'
 
 /**
  * Processes each Markdown file.
@@ -83,7 +83,7 @@ export async function transform(
 		// Generate hint for LLMs
 		let llmHint = ''
 
-		const currentUrl = path.relative(settings.workDir, resolvedOutFilePath)
+		const currentUrl = resolvePageURL(path.relative(settings.workDir, resolvedOutFilePath))
 
 		const base = config.base || '/'
 		const basePath = base === '/' ? '' : base.replace(/\/$/, '')
@@ -117,7 +117,7 @@ export async function transform(
 	}
 
 	// Add markdown file path to our collection
-	if (!isMainPage) {
+	if (!isMainPage || !settings.excludeIndexPage) {
 		mdFiles.add(id)
 	}
 
@@ -222,7 +222,9 @@ export async function generateBundle(
 
 			const filePath =
 				path.basename(resolvedOutFilePath) === 'index.md' &&
-				path.dirname(resolvedOutFilePath) !== settings.workDir
+				// Suspicious.
+				path.dirname(resolvedOutFilePath) !== '.' &&
+				path.dirname(resolvedOutFilePath) !== ''
 					? `${path.dirname(resolvedOutFilePath)}.md`
 					: resolvedOutFilePath
 
