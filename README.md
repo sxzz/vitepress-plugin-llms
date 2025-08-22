@@ -275,3 +275,5 @@ You can read the instructions for contributing here - [CONTRIBUTING.md](./CONTRI
 Thank you to everyone who helped with the project!
 
 ![Contributors](https://contributors-table.vercel.app/image?repo=okineadev/vitepress-plugin-llms&width=50&columns=15)
+
+[![Sponsors](https://raw.githubusercontent.com/okineadev/static/main/sponsors.svg)](https://github.com/okineadev/vitepress-plugin-llms?sponsor)
