@@ -9,14 +9,10 @@
 		"ignoreUnknown": true
 	},
 	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
 		"lineWidth": 110
 	},
 	"linter": {
-		"enabled": true,
 		"rules": {
-			"recommended": true,
 			"complexity": {
 				"noBannedTypes": "warn"
 			}
@@ -27,5 +23,18 @@
 			"quoteStyle": "single",
 			"semicolons": "asNeeded"
 		}
-	}
+	},
+
+	"overrides": [
+		{
+			"includes": ["**/*.vue"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedImports": "off"
+					}
+				}
+			}
+		}
+	]
 }
