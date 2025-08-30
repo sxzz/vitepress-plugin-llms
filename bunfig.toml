@@ -1,5 +1,8 @@
 [run]
 bun = true
 
+[loader]
+".md" = "text"
+
 # [test]
 # coverage = true

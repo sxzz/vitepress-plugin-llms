@@ -21,6 +21,7 @@ export const unnecessaryFilesList = {
 	/** `README.md` */
 	readmeMd: ['README.md'],
 } as const
+unnecessaryFilesList satisfies { [type: string]: readonly string[] }
 
 export const tagRegex = (tag: RegExp | string, type: 'open' | 'closed', flags?: string): RegExp => {
 	return new RegExp(`<${type === 'open' ? '' : '/'}${tag}>`, flags)

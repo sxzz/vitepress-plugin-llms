@@ -6,7 +6,7 @@ import type { Plugin } from 'vitepress'
 import mockedFs from '../mocks/fs'
 import mockedLogger from '../mocks/utils/logger'
 
-import fakeMarkdownDocument from '../test-assets/markdown-document.md' with { type: 'text' }
+import fakeMarkdownDocument from '../test-assets/markdown-document.md'
 
 const { access, mkdir, writeFile, readFile } = mockedFs.default
 

@@ -14,7 +14,7 @@ import {
 	// @ts-ignore
 } from '@/generator/llms-txt'
 import { fakeCustomLlmsTxtTemplate, outDir, preparedFilesSample } from '../resources'
-import fakeIndexMd from '../test-assets/index.md' with { type: 'text' }
+import fakeIndexMd from '../test-assets/index.md'
 
 describe('generateLLMsTxt', () => {
 	readFile.mockReturnValue(Promise.resolve(fakeIndexMd))
