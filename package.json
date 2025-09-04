@@ -46,7 +46,6 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
-		"byte-size": "^9.0.1",
 		"gray-matter": "^4.0.3",
 		"markdown-it": "^14.1.0",
 		"markdown-title": "^1.0.2",
@@ -55,6 +54,7 @@
 		"path-to-regexp": "^8.2.0",
 		"picocolors": "^1.1.1",
 		"remark": "^15.0.1",
+		"pretty-bytes": "^7.0.1",
 		"remark-frontmatter": "^5.0.0",
 		"tokenx": "^1.1.0",
 		"unist-util-remove": "^4.0.0",
@@ -63,7 +63,6 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.1.4",
 		"@commitlint/types": "^19.8.1",
-		"@types/byte-size": "^8.1.2",
 		"@types/node": "^24.0.4",
 		"bun-types": "^1.2.17",
 		"bunup": "0.9.2",
