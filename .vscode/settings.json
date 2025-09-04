@@ -21,7 +21,8 @@
 
 	"material-icon-theme.files.associations": {
 		"bunup.config.ts": "bun",
-		"tsconfig.bun.json": "tsconfig"
+		"tsconfig.bun.json": "tsconfig",
+		"lint-staged.config.ts": "lintstaged"
 	},
 	"material-icon-theme.folders.associations": {
 		"tests/test-assets": "resource",

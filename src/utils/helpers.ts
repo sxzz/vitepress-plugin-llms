@@ -1,4 +1,4 @@
-import byteSize from 'byte-size'
+import prettyBytes from 'pretty-bytes'
 
 /**
  * Returns a human-readable string representation of the given string's size in bytes.
@@ -9,4 +9,5 @@ import byteSize from 'byte-size'
  * @param string - The input string whose size needs to be determined.
  * @returns A human-readable size string (e.g., "1.2 KB", "500 B").
  */
-export const getHumanReadableSizeOf = (string: string): string => byteSize(new Blob([string]).size).toString()
+export const getHumanReadableSizeOf = (string: string): string =>
+	prettyBytes(Buffer.byteLength(string, 'utf8'))

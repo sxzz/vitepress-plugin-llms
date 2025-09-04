@@ -1,10 +1,20 @@
 {
 	"extends": "./tsconfig.base.json",
+	"references": [{ "path": "./src/vitepress-components/tsconfig.json" }],
 	"compilerOptions": {
 		"composite": true,
 		"isolatedDeclarations": true,
+		"checkJs": false,
+
+		"lib": ["es2023"],
+		"module": "preserve",
+		"target": "es2022",
+		"allowImportingTsExtensions": true,
+		"allowArbitraryExtensions": false,
+		"exactOptionalPropertyTypes": false,
+
 		"types": ["@types/node"]
 	},
-
-	"include": ["src/**/*.ts"]
+	"include": ["src/**/*.ts"],
+	"exclude": ["src/vitepress-components"]
 }

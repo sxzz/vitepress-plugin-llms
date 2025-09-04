@@ -1,18 +1,7 @@
 {
+	"extends": "@tsconfig/strictest/tsconfig.json",
 	"compilerOptions": {
-		// Best practices
-		"strict": true,
-		"skipLibCheck": true,
-		"noFallthroughCasesInSwitch": true,
-
-		// Some stricter flags (disabled by default)
-		"noImplicitAny": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noPropertyAccessFromIndexSignature": false,
-
-		// Enable latest features
-		"lib": ["ESNext", "DOM"],
+		"lib": ["ESNext"],
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleDetection": "force",
@@ -20,10 +9,12 @@
 		// Bundler mode
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
-		"verbatimModuleSyntax": true,
-		"emitDeclarationOnly": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
+
+		"emitDeclarationOnly": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
 
 		"baseUrl": ".",
 		"paths": {

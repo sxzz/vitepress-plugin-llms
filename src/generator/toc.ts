@@ -22,7 +22,7 @@ export const generateTOCLink = (
 	extension?: LinksExtension,
 	base?: string,
 ) => {
-	const description: string = file.file.data.description
+	const description: string = file.file.data['description']
 	return `- [${file.title}](${generateLink(stripExtPosix(relativePath), domain, extension ?? '.md', base)})${description ? `: ${description.trim()}` : ''}\n`
 }
 

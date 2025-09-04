@@ -77,26 +77,26 @@ export async function generateLLMsTxt(
 	const indexMdFile = matter(indexMdContent)
 
 	templateVariables.title ??=
-		indexMdFile.data?.hero?.name ||
-		indexMdFile.data?.title ||
+		indexMdFile.data?.['hero']?.name ||
+		indexMdFile.data?.['title'] ||
 		vitepressConfig?.title ||
 		vitepressConfig?.titleTemplate ||
 		extractTitle(indexMdFile) ||
 		'LLMs Documentation'
 
 	templateVariables.description ??=
-		indexMdFile.data?.hero?.text ||
+		indexMdFile.data?.['hero']?.text ||
 		vitepressConfig?.description ||
-		indexMdFile?.data?.description ||
-		indexMdFile.data?.titleTemplate
+		indexMdFile?.data?.['description'] ||
+		indexMdFile.data?.['titleTemplate']
 
 	if (templateVariables.description) {
 		templateVariables.description = `> ${templateVariables.description}`
 	}
 
 	templateVariables.details ??=
-		indexMdFile.data?.hero?.tagline ||
-		indexMdFile.data?.tagline ||
+		indexMdFile.data?.['hero']?.tagline ||
+		indexMdFile.data?.['tagline'] ||
 		(!templateVariables.description && 'This file contains links to all documentation sections.')
 
 	templateVariables.toc ??= await generateTOC(preparedFiles, {

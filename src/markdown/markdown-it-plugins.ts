@@ -16,23 +16,24 @@ export function copyOrDownloadAsMarkdownButtons(
 	md: MarkdownIt,
 	componentName = 'CopyOrDownloadAsMarkdownButtons',
 ): void {
-	const orig = md.renderer.render.bind(md.renderer.render)
+	const orig = md.renderer.render.bind(md.renderer)
+
 	md.renderer.render = (tokens, options, env) => {
-		// if (env?.frontmatter && env.frontmatter.layout === 'doc') {
-		for (let i = 0; i < tokens.length; i++) {
-			if (tokens[i].tag === 'h1' && tokens[i].type === 'heading_open') {
-				for (let j = i + 1; j < tokens.length; j++) {
-					if (tokens[j].tag === 'h1' && tokens[j].type === 'heading_close') {
-						const htmlToken = new Token('html_block', '', 0)
-						htmlToken.content = `<${componentName} />`
-						tokens.splice(j + 1, 0, htmlToken)
-						break
-					}
+		const len = tokens.length
+
+		for (let i = 0; i < len; i++) {
+			const open = tokens[i]
+			if (open?.tag === 'h1' && open.type === 'heading_open') {
+				const closeIndex = tokens.findIndex((t, j) => j > i && t.tag === 'h1' && t.type === 'heading_close')
+				if (closeIndex !== -1) {
+					const htmlToken = new Token('html_block', '', 0)
+					htmlToken.content = `<${componentName} />`
+					tokens.splice(closeIndex + 1, 0, htmlToken)
 				}
 				break
 			}
 		}
-		// }
+
 		return orig(tokens, options, env)
 	}
 }

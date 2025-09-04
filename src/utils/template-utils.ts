@@ -128,6 +128,6 @@ export function generateMetadata(
 ): { url: string; description?: string } {
 	return {
 		url: generateLink(stripExtPosix(filePath), domain, linksExtension ?? '.md', base),
-		...(sourceFile.data?.description && { description: sourceFile.data.description }),
+		...(sourceFile.data?.['description'] && { description: sourceFile.data['description'] }),
 	}
 }

@@ -9,5 +9,5 @@ import markdownTitle from 'markdown-title'
  * @returns The extracted title, or `undefined` if no title is found.
  */
 export function extractTitle(file: GrayMatterFile<Input>): string | undefined {
-	return file.data?.title || file.data?.titleTemplate || markdownTitle(file.content)
+	return file.data?.['title'] || file.data?.['titleTemplate'] || markdownTitle(file.content)
 }
