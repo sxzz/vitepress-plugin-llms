@@ -14,11 +14,12 @@ const COMMITLINT_HELP_URL =
  * if the rule passed, and the second is an optional error message.
  */
 const subjectLowercaseFirst: Rule = async (parsed: Commit) => {
-	const subject = parsed.header.split(': ')[1]
+	// Find the first alphabetic character
+	const match = parsed.subject.match(/[a-z]/i)
+	const firstLetter = match[0]
 	if (
-		subject &&
-		subject[0] === subject[0].toUpperCase() &&
-		subject.slice(1) === subject.slice(1).toLowerCase()
+		match &&
+		firstLetter === firstLetter.toUpperCase()
 	) {
 		return [false, 'Subject must start with a lowercase letter']
 	}
