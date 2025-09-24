@@ -17,10 +17,7 @@ const subjectLowercaseFirst: Rule = async (parsed: Commit) => {
 	// Find the first alphabetic character
 	const match = parsed.subject.match(/[a-z]/i)
 	const firstLetter = match[0]
-	if (
-		match &&
-		firstLetter === firstLetter.toUpperCase()
-	) {
+	if (match && firstLetter === firstLetter.toUpperCase()) {
 		return [false, 'Subject must start with a lowercase letter']
 	}
 	return [true]
