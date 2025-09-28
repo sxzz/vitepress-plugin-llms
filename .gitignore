@@ -45,3 +45,5 @@ dist
 
 .temp
 .cache
+.vitepress/
+package-lock.json

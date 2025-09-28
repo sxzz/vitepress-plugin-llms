@@ -82,10 +82,16 @@ function downloadMarkdown() {
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	transition: background 0.2s, border 0.2s;
+	padding: 8px 16px;
+	border: 1px solid var(--vp-button-alt-border);
+	color: var(--vp-button-alt-text);
+	background-color: var(--vp-button-alt-bg);
+	transition: background 0.2s, border 0.2s, color 0.2s;
 }
 .markdown-copy-buttons button:hover {
-	color: white;
+	border-color: var(--vp-button-alt-hover-border);
+	color: var(--vp-button-alt-hover-text);
+	background-color: var(--vp-button-alt-hover-bg);
 }
 .markdown-copy-buttons img {
 	vertical-align: middle;
